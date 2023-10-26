@@ -181,7 +181,7 @@ const Diagnostic_CenterModal = () => {
                         style={{
                             fontFamily: fontFamily.semiBold,
                             fontSize: textScale(16),
-                            color: colors.blackColor,
+                            color: colors.pinkColor2,
                         }}>
                         Diagnostic
                     </Text>

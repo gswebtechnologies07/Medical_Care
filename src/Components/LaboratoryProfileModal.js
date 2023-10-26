@@ -169,12 +169,16 @@ const LaboratoryProfileModal = () => {
                         style={{
                             fontFamily: fontFamily.semiBold,
                             fontSize: textScale(16),
-                            color: colors.blackColor,
+                            color: colors.pinkColor2,
                         }}>
                         Laboratory
                     </Text>
                     <MaterialIcons name="keyboard-arrow-right" color={colors.pinkColor2} size={22} />
                 </TouchableOpacity>
+                <View style={{
+                    height: 1,
+                    backgroundColor: colors.pinkColor,
+                }} />
             </View>
             <View>
                 <ModalComp

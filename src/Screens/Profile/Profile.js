@@ -198,78 +198,12 @@ const Profile = ({ navigation }) => {
                 />
               )}></Button>
             {expanded && (
-              <View
-                style={{
-                  position: 'absolute',
-                  zIndex: 999,
-                  top: moderateScale(30),
-                  right: moderateScale(10),
-                }}>
-                <View style={styles.chemistPageView}>
-                  <View>
-                    <ChemistProfileModal />
-                    {/* <TouchableOpacity
-                      onPress={chemistPage}
-                      style={styles.chemistPagebtn}>
-                      <Text
-                        style={{
-                          fontFamily: fontFamily.semiBold,
-                          fontSize: textScale(16),
-                          color: colors.blackColor,
-                        }}>
-                        Chemist
-                      </Text>
-                      <MaterialIcons name="keyboard-arrow-right" color={colors.pinkColor2} size={22} />
-                    </TouchableOpacity> */}
-                    <View
-                      style={{
-                        borderWidth: 0.6,
-                        backgroundColor: colors.pinkColor,
-                      }}
-                    />
-
-                    <DoctorProfileModal />
-                    {/* <TouchableOpacity
-                      onPress={doctorPage}
-                      style={styles.doctorPageBtn}>
-                      <Text
-                        style={{
-                          fontFamily: fontFamily.semiBold,
-                          fontSize: textScale(16),
-                          color: colors.blackColor,
-                        }}>
-                        Doctor
-                      </Text>
-                      <MaterialIcons name="keyboard-arrow-right" color={colors.pinkColor2} size={22} />
-                    </TouchableOpacity> */}
-                    <View
-                      style={{
-                        borderWidth: 0.6,
-                        backgroundColor: colors.pinkColor,
-                      }}
-                    />
-
-                    <PhysiotherapistProfileModal />
-                    {/* <TouchableOpacity
-                      onPress={physiotherepistPage}
-                      style={styles.physiotherepistPageBtn}>
-                      <Text
-                        style={{
-                          fontFamily: fontFamily.semiBold,
-                          fontSize: textScale(16),
-                          color: colors.blackColor,
-                        }}>
-                        Physiotherapist
-                      </Text>
-                      <MaterialIcons name="keyboard-arrow-right" color={colors.pinkColor2} size={22} />
-                    </TouchableOpacity> */}
-                    <View style={{ borderWidth: 0.6, backgroundColor: colors.pinkColor }} />
-                    <LaboratoryProfileModal />
-
-                    <View style={{ borderWidth: 0.6, backgroundColor: colors.pinkColor }} />
-                    <Diagnostic_CenterModal />
-                  </View>
-                </View>
+              <View style={styles.menu}>
+                <ChemistProfileModal />
+                <DoctorProfileModal />
+                <PhysiotherapistProfileModal />
+                <LaboratoryProfileModal />
+                <Diagnostic_CenterModal />
               </View>
             )}
           </View>
@@ -284,7 +218,7 @@ const Profile = ({ navigation }) => {
               size={35}
               style={{ alignSelf: 'center', top: moderateScale(3) }}
             />
-            <Text style={styles.signOutText}> Sign out</Text>
+            <Text style={styles.signOutText}>Sign out</Text>
           </View>
           <TouchableOpacity style={{ alignSelf: 'center' }}>
             <MaterialIcons
@@ -296,8 +230,6 @@ const Profile = ({ navigation }) => {
           </TouchableOpacity>
         </TouchableOpacity>
       </View>
-
-
       <ModalComp
         isVisible={isVisible}
         onBackdropPress={() => setIsVisible(false)}
@@ -326,6 +258,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: moderateScale(20),
     paddingVertical: moderateScaleVertical(30),
+  },
+  menu: {
+    position: 'absolute',
+    zIndex: 999,
+    top: moderateScale(30),
+    right: moderateScale(10),
+    width: moderateScale(150),
+    height: moderateScale(190),
+    justifyContent: 'center',
+    backgroundColor: "#E5E4E2",
+    borderRadius: 20,
+    shadowOffset: { width: 10, height: 10, },
+    shadowColor: 'black',
+    shadowOpacity: 1.0,
+    elevation: 1
   },
   historyText: {
     fontSize: textScale(18),
