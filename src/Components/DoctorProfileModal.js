@@ -110,7 +110,7 @@ const DoctorProfileModal = () => {
     }
     return (
         <>
-            <View style={{}}>
+            <View>
                 <TouchableOpacity
                     onPress={() => setIsVisible(true)} activeOpacity={0.7}
                     style={styles.doctorPageBtn}>
@@ -118,12 +118,16 @@ const DoctorProfileModal = () => {
                         style={{
                             fontFamily: fontFamily.semiBold,
                             fontSize: textScale(16),
-                            color: colors.blackColor,
+                            color: colors.pinkColor2,
                         }}>
                         Doctor
                     </Text>
                     <MaterialIcons name="keyboard-arrow-right" color={colors.pinkColor2} size={22} />
                 </TouchableOpacity>
+                <View style={{
+                    height: 1,
+                    backgroundColor: colors.pinkColor,
+                }} />
             </View>
 
             <View>

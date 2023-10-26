@@ -18,22 +18,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 const Login = (props) => {
-    console.log("NAVIDFGHJ", props);
-
     const dispatch = useDispatch();
-    // const [email, setEmail] = useState('')
-    // const [password, setPassword] = useState('')
     const [secureText, setSecureText] = useState(false)
     const [userToken, setUserToken] = useState(null);
     const [loader, setLoader] = useState(false);
     // {console.log(userToken,'userTokenuserTokenuserToken')}
 
-
     const [state, setState] = useState({
         email: '',
         password: '',
     })
-
 
     const { email, password } = state
     const updateState = (data) => setState(() => ({ ...state, ...data }))
@@ -54,7 +48,6 @@ const Login = (props) => {
         return true
     }
     const onLogin = async () => {
-
         const checkValid = isValidData()
         if (checkValid) {
             LoginData();

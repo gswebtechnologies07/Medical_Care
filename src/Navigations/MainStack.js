@@ -60,6 +60,11 @@ export default function (Stack) {
                 component={Screens.EditLaboratoryProfileModal}
                 options={{ headerShown: false }}
             />
+            <Stack.Screen
+                name={navigationStrings.ProfileCreate}
+                component={Screens.profileCreate}
+                options={{ headerShown: false }}
+            />
         </>
     );
 }

@@ -19,5 +19,6 @@ export default {
     DIAGNOSTIC_PROFILE: "Diagnostic_Profile",
     EDIT_LABORATORY_PROFILE_MODAL: "EditLaboratoryProfileModal",
     EditDoctorProfile: "EditdoctorProfile",
+    ProfileCreate: "profileCreate",
 
 };

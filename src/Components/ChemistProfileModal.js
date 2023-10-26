@@ -25,25 +25,11 @@ const options = [
 ];
 
 const ChemistProfileModal = () => {
-
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [isVisible, setIsVisible] = useState(false);
-
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
-    const toggleModal = () => {
-        console.log("toggleModal")
-        setModalVisible(!isModalVisible);
-    };
-
-    const toggleOption = (value) => {
-        const updatedOptions = selectedOptions.includes(value)
-            ? selectedOptions.filter((option) => option !== value)
-            : [...selectedOptions, value];
-        setSelectedOptions(updatedOptions);
-    };
-
     const [input, setInput] = useState({
         name: '',
         owner_name: '',
@@ -61,6 +47,17 @@ const ChemistProfileModal = () => {
         desc: ''
     })
 
+    const toggleModal = () => {
+        console.log("toggleModal")
+        setModalVisible(!isModalVisible);
+    };
+
+    const toggleOption = (value) => {
+        const updatedOptions = selectedOptions.includes(value)
+            ? selectedOptions.filter((option) => option !== value)
+            : [...selectedOptions, value];
+        setSelectedOptions(updatedOptions);
+    };
 
     const { nameOfFirm, Degree, mobileNum, State, district, city, sector, address, regNumber, desc, gstNumber, Drug_license_number, owner_name } = input
     const updateState = (data) => setInput(() => ({ ...input, ...data }))
@@ -99,7 +96,6 @@ const ChemistProfileModal = () => {
     }
 
     const saveData = () => {
-
         const payload = {
             name_of_firm: input.nameOfFirm,
             owner_name: input.owner_name,
@@ -154,26 +150,34 @@ const ChemistProfileModal = () => {
     //     });
     //   };
 
+    const onChemist = () => {
+        navigation.navigate(navigationStrings.ProfileCreate)
+    }
 
     return (
 
         <>
-            <View style={{}}>
+
+            <View>
                 <TouchableOpacity
-                    onPress={() => setIsVisible(true)} activeOpacity={0.7}
+                    onPress={() => onChemist()} activeOpacity={0.7}
                     style={styles.doctorPageBtn}>
                     <Text
                         style={{
                             fontFamily: fontFamily.semiBold,
                             fontSize: textScale(16),
-                            color: colors.blackColor,
+                            color: colors.pinkColor2,
                         }}>
                         Chemist
                     </Text>
                     <MaterialIcons name="keyboard-arrow-right" color={colors.pinkColor2} size={22} />
                 </TouchableOpacity>
+                <View style={{
+                    height: 1,
+                    backgroundColor: colors.pinkColor,
+                }} />
             </View>
-            <View>
+            {/* <View>
                 <ModalComp
                     isVisible={isVisible}
                     onBackdropPress={() => setIsVisible(false)}
@@ -290,7 +294,7 @@ const ChemistProfileModal = () => {
                                 <View style={styles.container}>
                                     <TouchableOpacity onPress={toggleModal} style={styles.dropdownButton}>
                                         {/* <Text>Open Dropdown</Text> */}
-                                        <Icon name="caret-down" size={20} />
+            {/* <Icon name="caret-down" size={20} />
                                     </TouchableOpacity>
                                     <Modal isVisible={isModalVisible}>
                                         <View style={styles.modalContent}>
@@ -344,7 +348,7 @@ const ChemistProfileModal = () => {
                         </KeyboardAwareScrollView>
                     </View>
                 </ModalComp>
-            </View>
+            </View> */}
         </>
     )
 }
@@ -352,12 +356,12 @@ const ChemistProfileModal = () => {
 export default ChemistProfileModal
 
 const styles = StyleSheet.create({
-    // doctorPageBtn: {
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-between',
-    //     paddingHorizontal: moderateScale(10),
-    //     paddingVertical: moderateScaleVertical(5),
-    // },
+    doctorPageBtn: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: moderateScale(10),
+        paddingVertical: moderateScaleVertical(5),
+    },
 
     chemistPagebtn: {
         flexDirection: 'row',
@@ -406,8 +410,3 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
 })
-
-
-
-
-
