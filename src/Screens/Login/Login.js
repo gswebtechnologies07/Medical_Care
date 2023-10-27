@@ -1,4 +1,4 @@
-import { StyleSheet, Text, KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, TouchableOpacity, View, Alert } from 'react-native'
+import { StyleSheet, Text, KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import fontFamily from '../../styles/fontFamily'
 import WrapperContainer from '../../Components/WrapperContainer'
@@ -9,26 +9,20 @@ import { height, moderateScale, moderateScaleVertical, textScale } from '../../s
 import navigationStrings from '../../Navigations/navigationStrings'
 import colors from '../../styles/colors'
 import validator from '../../Utils/validations';
-import { showError } from '../../Utils/helperFunction';
+import { showError, showSucess } from '../../Utils/helperFunction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux'
 import { LoginAction } from '../../redux/Action/LoginAction';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-
-
 const Login = (props) => {
     const dispatch = useDispatch();
     const [secureText, setSecureText] = useState(false)
-    const [userToken, setUserToken] = useState(null);
     const [loader, setLoader] = useState(false);
-    // {console.log(userToken,'userTokenuserTokenuserToken')}
-
     const [state, setState] = useState({
         email: '',
         password: '',
     })
-
     const { email, password } = state
     const updateState = (data) => setState(() => ({ ...state, ...data }))
 
@@ -47,11 +41,11 @@ const Login = (props) => {
         }
         return true
     }
+
     const onLogin = async () => {
         const checkValid = isValidData()
         if (checkValid) {
             LoginData();
-            // navigation.navigate(navigationStrings.TAB_ROUTES);
         }
     }
 
@@ -61,17 +55,12 @@ const Login = (props) => {
             email: state.email,
             password: state.password,
         }
-        // var formData = new FormData();
-        // formData.append({
-        //     "LoginData": JSON.stringify(payload),
-        // });
         dispatch(LoginAction(data)).then(async (response) => {
-            console.log(data, "response_inlogins", response)
+            console.log(data, "response_inlogins", response?.user)
             if (response?.success === true) {
                 setLoader(false);
                 await AsyncStorage.setItem("token", response?.token);
-                Alert.alert("Login success")
-                // props?.navigation?.navigate(navigationStrings.TAB_ROUTES);
+                showSucess("Login success")
             } else {
                 setLoader(false);
                 console.log("email_passwordemail", response);
@@ -97,7 +86,6 @@ const Login = (props) => {
                             <TextInputComp
                                 value={email}
                                 placeholder='Enter Your Email Address'
-                                // onChangeText={(value) => setEmail(value)}
                                 onChangeText={(email) => updateState({ email })}
                             />
 
@@ -106,7 +94,6 @@ const Login = (props) => {
                                     value={password}
                                     maxLength={10}
                                     placeholder='Password'
-                                    // onChangeText={(value) => setPassword(value)}
                                     onChangeText={(password) => updateState({ password })}
                                     secureTextEntry={!secureText}
                                 />
@@ -117,9 +104,15 @@ const Login = (props) => {
                             </View>
 
                             <TouchableOpacity style={{ top: moderateScale(30) }} onPress={onLogin} activeOpacity={0.7}>
-                                <ButtonComp
-                                    text='Log in'
-                                />
+                                {loader ?
+                                    <View style={styles.loaderView}>
+                                        <ActivityIndicator
+                                            size={'small'}
+                                            color={colors.blackColor} />
+                                    </View> :
+                                    <ButtonComp
+                                        text='Log in'
+                                    />}
                             </TouchableOpacity>
                         </View>
 
@@ -152,7 +145,6 @@ export default Login
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // height:'100%',
         backgroundColor: '#fff'
     },
     accText: {
@@ -182,5 +174,14 @@ const styles = StyleSheet.create({
         fontSize: textScale(12),
         color: 'black',
         fontFamily: fontFamily.regular
-    }
+    },
+    loaderView: {
+        backgroundColor: colors.blueColor,
+        paddingHorizontal: moderateScale(40),
+        paddingVertical: moderateScale(7),
+        borderRadius: moderateScale(15),
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },
 })

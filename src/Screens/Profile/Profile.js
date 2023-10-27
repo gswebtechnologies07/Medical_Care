@@ -29,7 +29,6 @@ import * as Types from '../../redux/Types/Types'
 import Diagnostic_CenterModal from '../../Components/Diagnostic_CenterModal';
 import { setToken } from '../../redux/Action/LoginAction'
 
-
 // const ProfileData =[
 // {
 //   id: 1,
@@ -56,11 +55,8 @@ import { setToken } from '../../redux/Action/LoginAction'
 const Profile = ({ navigation }) => {
   // console.log(navigation,'navigationnavigationnavigationnavigation')
   const [expanded, setExpanded] = useState(false);
-  const [isVisible, setIsVisible] = useState(false)
-
-
-  // const token = useSelector((state) => state)
-  // console.log("tokentoken", token)
+  const [isVisible, setIsVisible] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const dispatch = useDispatch();
   const handlePress = () => {
@@ -87,24 +83,20 @@ const Profile = ({ navigation }) => {
 
 
   const handleLogout = async () => {
+    setLoader(true);
     try {
-      // dispatch(setToken([]))
       dispatch({
         type: Types.LOGIN,
         payload: []
       })
-      // await AsyncStorage.removeItem('token'); // Clear user token from AsyncStorage
       await AsyncStorage.removeItem('token');
-      // const hello = await AsyncStorage.getItem('token');
-      // console.log(hello, "hellohello")
-      // Navigate the user to the login screen or any other screen after logout
-      // navigation?.navigate(navigationStrings?.LOGIN)
-
+      setLoader(false);
     } catch (error) {
+      setLoader(false);
       console.error('Error_during_logout:', error);
     }
-
   }
+
   return (
     <WrapperContainer>
       <HeaderComp2 text="Profile" />
@@ -211,23 +203,33 @@ const Profile = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.signOutmainView} onPress={handleLogout}>
-          <View style={{ flexDirection: 'row' }}>
-            <Ionicons
-              name="log-out"
-              color={colors.pinkColor2}
-              size={35}
-              style={{ alignSelf: 'center', top: moderateScale(3) }}
-            />
-            <Text style={styles.signOutText}>Sign out</Text>
-          </View>
-          <TouchableOpacity style={{ alignSelf: 'center' }}>
-            <MaterialIcons
-              name="navigate-next"
-              color={colors.blackColor}
-              size={32}
-              style={{ alignSelf: 'center', top: moderateScale(2) }}
-            />
-          </TouchableOpacity>
+          {
+            loader ?
+              (<View style={styles.loaderView}>
+                <ActivityIndicator
+                  size={'small'}
+                  color={colors.blackColor} />
+              </View>) :
+              <>
+                <View style={{ flexDirection: 'row' }}>
+                  <Ionicons
+                    name="log-out"
+                    color={colors.pinkColor2}
+                    size={35}
+                    style={{ alignSelf: 'center', top: moderateScale(3) }}
+                  />
+                  <Text style={styles.signOutText}>Sign out</Text>
+                </View>
+                <TouchableOpacity style={{ alignSelf: 'center' }}>
+                  <MaterialIcons
+                    name="navigate-next"
+                    color={colors.blackColor}
+                    size={32}
+                    style={{ alignSelf: 'center', top: moderateScale(2) }}
+                  />
+                </TouchableOpacity>
+              </>
+          }
         </TouchableOpacity>
       </View>
       <ModalComp
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'red',
   },
   mainContainer: {
     flexDirection: 'row',
