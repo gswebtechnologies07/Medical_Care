@@ -13,9 +13,7 @@ import { showError } from '../../Utils/helperFunction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux'
 import { LoginAction } from '../../redux/Action/LoginAction';
-import AsyncStorage from "@react-native-async-storage/async-storage"
-
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = (props) => {
     const dispatch = useDispatch();
@@ -61,19 +59,16 @@ const Login = (props) => {
             email: state.email,
             password: state.password,
         }
-        // var formData = new FormData();
-        // formData.append({
-        //     "LoginData": JSON.stringify(payload),
-        // });
         dispatch(LoginAction(data)).then(async (response) => {
             console.log(data, "response_inlogins", response)
             if (response?.success === true) {
                 setLoader(false);
                 await AsyncStorage.setItem("token", response?.token);
-                Alert.alert("Login success")
+                // Alert.alert("Login success")
                 // props?.navigation?.navigate(navigationStrings.TAB_ROUTES);
             } else {
-                setLoader(false);
+                setLoader(true);
+                Alert.alert("Invalid Email or password")
                 console.log("email_passwordemail", response);
             }
         })
@@ -116,10 +111,8 @@ const Login = (props) => {
                                 </TouchableOpacity>
                             </View>
 
-                            <TouchableOpacity style={{ top: moderateScale(30) }} onPress={onLogin} activeOpacity={0.7}>
-                                <ButtonComp
-                                    text='Log in'
-                                />
+                            <TouchableOpacity style={{ justifyContent: 'center', bottom: moderateScale(10), alignSelf: "center", top: moderateScale(30) }} activeOpacity={0.7} onPress={() => onLogin()}>
+                                <Text style={{ paddingHorizontal: moderateScale(35), paddingVertical: moderateScaleVertical(10), backgroundColor: colors.blueColor, borderRadius: moderateScale(10), color: colors.whiteColor, fontSize: moderateScale(16) }}>Log in</Text>
                             </TouchableOpacity>
                         </View>
 

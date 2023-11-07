@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, FlatList, TextInput, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, FlatList, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import WrapperContainer from '../../Components/WrapperContainer'
 import HeaderComp from '../../Components/HeaderComp'
 import { height, moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
@@ -8,6 +8,10 @@ import fontFamily from '../../styles/fontFamily'
 import imagePath from '../../constants/imagePath'
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import navigationStrings from '../../Navigations/navigationStrings'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllChemistProfile } from '../../redux/Action/ChemistProfileAction';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 const AllTabs = [
@@ -18,27 +22,27 @@ const AllTabs = [
 ];
 
 
-const Homecards = [
-  {
-    id: 1,
-    title: 'Bawa Medical Hall',
-    subTitle: 'Zirakpur HO,Zirakpur',
-    subTitle2: 'Open unit 9:30 pm',
-    image: imagePath.icRectangle,
-    image2: imagePath.icLocation,
-    image3: imagePath.icClock,
-  },
-  {
-    id: 2,
-    title: 'Bawa Medical Hall',
-    subTitle: 'Zirakpur HO,Zirakpur',
-    subTitle2: 'Open unit 9:30 pm',
-    image: imagePath.icRectangle,
-    image2: imagePath.icLocation,
-    image3: imagePath.icClock,
-  }
+// const Homecards = [
+//   {
+//     id: 1,
+//     title: 'Bawa Medical Hall',
+//     subTitle: 'Zirakpur HO,Zirakpur',
+//     subTitle2: 'Open unit 9:30 pm',
+//     image: imagePath.icRectangle,
+//     image2: imagePath.icLocation,
+//     image3: imagePath.icClock,
+//   },
+//   {
+//     id: 2,
+//     title: 'Bawa Medical Hall',
+//     subTitle: 'Zirakpur HO,Zirakpur',
+//     subTitle2: 'Open unit 9:30 pm',
+//     image: imagePath.icRectangle,
+//     image2: imagePath.icLocation,
+//     image3: imagePath.icClock,
+//   }
 
-];
+// ];
 
 
 
@@ -56,16 +60,48 @@ const TopServicesData = [
 
 ];
 
-const Home = () => {
+const Home = (props) => {
+  console.log(props,'propspropsHome')
+
+  const dispatch = useDispatch();
+
   const [searchText, setSearchText] = useState('');
 
   const handleSearch = () => {
     onSearch(searchText);
   };
 
+
   const seeAll = () => {
+    props.navigation.navigate(navigationStrings.Nearby_Medical, { mapData: mapData })
 
   }
+
+  const [data, setData] = useState('')
+  console.log(data, 'datadatadatadatadatarrrr')
+
+
+
+  // const useSelector =((state)=>state)
+  const mapData = useSelector((state) => state?.getAllChemistProfileReducer?.GetAllChemistProfile?.chemist)
+  console.log(mapData, 'mapDatamapData')
+
+  useEffect(() => {
+    dispatch(getAllChemistProfile()).then(async (response) => {
+      console.log(response, "response_ChemistProfileActionsss")
+
+      setData(response?.chemist)
+      // setData(data)
+
+      // console.log(data,'datadatadata')
+
+    });
+  }, [])
+
+
+
+
+
 
   const renderItem = ({ item }) => {
     return (
@@ -82,20 +118,25 @@ const Home = () => {
 
   return (
     <WrapperContainer>
-      <HeaderComp />
-
+      <View style={{ flexDirection: 'row', paddingHorizontal: moderateScale(5) }}>
+        <HeaderComp />
+        <TouchableOpacity onPress={() => props?.navigation?.navigate(navigationStrings.ProfileCreate)} style={{ justifyContent: 'center', left: moderateScale(65), top: moderateScale(5) }}>
+          <FontAwesome5 name={"edit"}
+            size={28} color={colors.blackColor} style={{}} />
+        </TouchableOpacity>
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
       >
         <View style={{ flex: 0.65 }}>
           <View style={{ marginHorizontal: moderateScale(15) }}>
-            <Text>Deliver to <Text style={styles.headerText}>Patiala, Punjab, 140603</Text></Text>
+            <Text style={styles.headerText}>Deliver to <Text style={styles.headerText}>Patiala, Punjab, 140603</Text></Text>
           </View>
           <View style={styles.searchBarmainView}>
             <TextInput
-              style={{ width: '90%' }}
-              placeholder="Search medicine, doctor, lab tests &... "
+              style={{ width: '90%', placeholderTextColor: "#00000", }}
+              placeholder="Search medicine, doctor, lab tests &..."
               onChangeText={text => setSearchText(text)}
               value={searchText}
             />
@@ -126,24 +167,27 @@ const Home = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{ flexDirection: 'row' }}>
-            {Homecards?.map((item) => {
+            {mapData?.map((item) => {
               return (
-                <View>
+                <TouchableOpacity onPress={() => props.navigation.navigate(navigationStrings.Medical_Profile, { data: item })}>
                   <View style={styles.cardView}>
-                    <Image source={item?.image} style={{ height: moderateScale(100), width: moderateScale(200), right: moderateScale(10)}} />
-                    <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(16), color: colors.blackColor, alignSelf: 'center' }}>{item?.title}</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: moderateScale(10),paddingVertical:moderateScaleVertical(4),right:moderateScale(10)  }}>
-                      <View style={{ flexDirection: 'row',justifyContent:'center' }}>
+                    <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/chemist/${item?.img}` }} style={{ height: moderateScale(100), width: moderateScale(180) }} />
+                    <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(16), color: colors.blackColor, alignSelf: 'center' }}>{item?.name_of_firm}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: moderateScale(10), paddingVertical: moderateScaleVertical(4), right: moderateScale(10) }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <EvilIcons name="location" color={colors.blackColor} size={13} style={{ alignSelf: 'center' }} />
-                        <Text style={{ fontFamily: fontFamily.regular, fontSize: textScale(8), color: colors.blackColor }}>{item?.subTitle}</Text>
+                        <Text style={{ fontFamily: fontFamily.regular, fontSize: textScale(8), color: colors.blackColor }}>{item?.city}</Text>
                       </View>
-                      <View style={{ flexDirection: 'row'}}>
+                      <View style={{ flexDirection: 'row' }}>
                         <Ionicons name="time" color={colors.grayColor} size={13} style={{ alignSelf: 'center' }} />
-                        <Text style={{ fontFamily: fontFamily.regular, fontSize: textScale(8), color: colors.blackColor }}>{item?.subTitle2}</Text>
+                        <Text style={{ fontFamily: fontFamily.regular, fontSize: textScale(8), color: colors.blackColor }}>
+                          {/* {item?.subTitle2} */}
+                          Open unit 9:30 pm
+                        </Text>
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             })}
           </ScrollView>
@@ -160,7 +204,7 @@ const Home = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{ flexDirection: 'row' }}>
-            { TopServicesData?.map((item) => {
+            {TopServicesData?.map((item) => {
               return (
                 <View>
                   <View style={styles.cardView}>
@@ -217,7 +261,9 @@ const styles = StyleSheet.create({
     fontSize: textScale(12),
     fontFamily: fontFamily.bold,
     alignSelf: 'center',
-    top: moderateScale(10)
+    top: moderateScale(10),
+    color: colors.blackColor,
+
   },
   headerText: {
     color: colors.blackColor,

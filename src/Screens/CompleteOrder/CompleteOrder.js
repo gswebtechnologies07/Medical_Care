@@ -1,6 +1,6 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import HeaderComp2 from '../../Components/HeaderComp2'
+import HeaderComp from '../../Components/HeaderComp'
 import WrapperContainer from '../../Components/WrapperContainer'
 import fontFamily from '../../styles/fontFamily'
 import { moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
@@ -14,59 +14,6 @@ const upComingData = [
   {
     id: 1,
     mainText: '#ghhhh678ca',
-    mainText2: 'Upcoming',
-    mainText3: 'INR 350.00',
-    mainText4: '7 items',
-    title: 'Today at 12:30 PM',
-    title2: 'Multivitamin X 1',
-    title3: 'Bextram Gold X 2'
-  },
-  {
-    id: 2,
-    mainText: '#ghhhh678ca',
-    mainText2: 'Upcoming',
-    mainText3: 'INR 350.00',
-    mainText4: '7 items',
-    title: 'Today at 12:30 PM',
-    title2: 'Multivitamin X 1',
-    title3: 'Bextram Gold X 2'
-  },
-  {
-    id: 3,
-    mainText: '#ghhhh678ca',
-    mainText2: 'Upcoming',
-    mainText3: 'INR 350.00',
-    mainText4: '7 items',
-    title: 'Today at 12:30 PM',
-    title2: 'Multivitamin X 1',
-    title3: 'Bextram Gold X 2'
-  },
-  {
-    id: 4,
-    mainText: '#ghhhh678ca',
-    mainText2: 'Upcoming',
-    mainText3: 'INR 350.00',
-    mainText4: '7 items',
-    title: 'Today at 12:30 PM',
-    title2: 'Multivitamin X 1',
-    title3: 'Bextram Gold X 2'
-  },
-  {
-    id: 5,
-    mainText: '#ghhhh678ca',
-    mainText2: 'Upcoming',
-    mainText3: 'INR 350.00',
-    mainText4: '7 items',
-    title: 'Today at 12:30 PM',
-    title2: 'Multivitamin X 1',
-    title3: 'Bextram Gold X 2'
-  }
-];
-
-const completedData = [
-  {
-    id: 1,
-    mainText: '#ghhhh678ca',
     mainText2: 'Completed',
     mainText3: 'INR 350.00',
     mainText4: '7 items',
@@ -116,11 +63,7 @@ const completedData = [
   }
 ];
 
-
-const MyOrder = ({ navigation }) => {
-
-  const [selectedTab, setSelectedTab] = useState(0);
-
+const CompleteOrder = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     return (
@@ -131,7 +74,7 @@ const MyOrder = ({ navigation }) => {
             <Text style={styles.mainText2}>{item?.title}</Text>
           </View>
 
-          <View>
+          <View style={{ justifyContent: 'center', alignItems: 'center', right: moderateScale(35) }}>
             <Text style={styles.mainText3}>{item?.mainText2}</Text>
           </View>
         </View>
@@ -152,21 +95,10 @@ const MyOrder = ({ navigation }) => {
                 text='Order details'
                 textStyle={styles.cardButtonText}
                 Img2={imagePath.icBack2}
-                imgStyle={{top:moderateScale(1),right:moderateScale(2)}}
+                imgStyle={{ top: moderateScale(1), right: moderateScale(2) }}
               />
-
-              {/* <TouchableOpacity style={styles.cardButton}>
-                <Text style={styles.cardButtonText}> Order details</Text>
-                <AntDesign
-                  name="right"
-                  size={11}
-                  color={colors.whiteColor} 
-                  style={{top:moderateScale(1),right:moderateScale(2)}}
-                  />
-              </TouchableOpacity> */}
             </View>
           </View>
-
         </View>
       </View>
     )
@@ -180,69 +112,32 @@ const MyOrder = ({ navigation }) => {
 
   return (
     <WrapperContainer>
-      <HeaderComp2
-        text='My order'
-      />
-      <View style={{ flex: 0.20, justifyContent: 'center' }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
+      <HeaderComp />
 
 
-          <TouchableOpacity onPress={() => { setSelectedTab(0) }} style={{
-            backgroundColor: selectedTab == 0 ? colors.blueColor : colors.whiteColor,
-            borderRadius: 8, justifyContent: 'center', alignItems: 'center'
-          }}>
-            <Text style={{
-              color: selectedTab == 0 ? colors.whiteColor : colors.blackColor, fontSize: textScale(16), alignSelf: 'center',
-              fontFamily: fontFamily.semiBold, paddingHorizontal: moderateScale(12), paddingVertical: moderateScaleVertical(5)
-            }}>Pending</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { setSelectedTab(1) }} style={{
-            backgroundColor: selectedTab == 1 ? colors.blueColor : colors.whiteColor,
-            borderRadius: 8, justifyContent: 'center', alignItems: 'center'
-          }}>
-            <Text style={{
-              color: selectedTab == 1 ? colors.whiteColor : colors.blackColor, fontSize: textScale(16), alignSelf: 'center',
-              fontFamily: fontFamily.semiBold, paddingHorizontal: moderateScale(12), paddingVertical: moderateScaleVertical(5)
-            }}>Completed</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={upComingData}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={separatorComponent}
+        />
       </View>
-      {selectedTab == 0 ? (
 
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={upComingData}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={separatorComponent}
-          />
-        </View>
-      ) : (<View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={completedData}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={separatorComponent}
-          />
-        </View>
-      </View>)}
 
     </WrapperContainer>
   )
 }
 
-export default MyOrder
+export default CompleteOrder
 
 const styles = StyleSheet.create({
   containerView: {
     flexDirection: "row",
     justifyContent: 'space-between',
     width: '90%',
-    alignSelf: "center"
+    alignSelf: "center",
   },
   mainView: {
     justifyContent: 'center',
@@ -260,11 +155,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   mainText3: {
-    fontFamily: fontFamily.regular,
+    fontFamily: fontFamily.bold,
     fontSize: textScale(14),
     color: colors.blackColor,
-    alignSelf: 'center',
-    paddingRight: moderateScale(10)
+    alignSelf: 'center'
   },
   titleMainView: {
     flex: 0.22,
@@ -292,7 +186,7 @@ const styles = StyleSheet.create({
   },
   cardButton: {
     flexDirection: "row",
-    paddingHorizontal:moderateScale(10),
+    paddingHorizontal: moderateScale(10),
     paddingVertical: moderateScaleVertical(4),
     // backgroundColor: colors.blueColor,
     borderRadius: 8,

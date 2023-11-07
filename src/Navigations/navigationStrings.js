@@ -20,5 +20,10 @@ export default {
     EDIT_LABORATORY_PROFILE_MODAL: "EditLaboratoryProfileModal",
     EditDoctorProfile: "EditdoctorProfile",
     ProfileCreate: "profileCreate",
+    PAYMENT: "Payment",
+    UPLOAD_PRESCIPTION: "Upload_Presciption",
+    HomeChemist: "HomeChemist",
+    CompleteOrder: "CompleteOrder",
+    PendingOrder: "PendingOrder",
 
 };

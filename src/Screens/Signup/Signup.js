@@ -13,11 +13,28 @@ import validator from '../../Utils/validations';
 import { showError } from '../../Utils/helperFunction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { useDispatch } from 'react-redux';
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { SignupAction } from '../../redux/Action/SignupAction'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SignupAction } from '../../redux/Action/SignupAction';
+import { List } from 'react-native-paper';
 
 
 const Signup = (props) => {
+
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handlePress = () => setExpanded(!expanded);
+
+  const [value, setValue] = useState('')
+  console.log(value, 'valuevalue')
+
+  const sendDataToOtherPage = (data) => {
+    console.log(data, 'datadata')
+    setValue(data)
+    // Navigate to the other page and pass the data
+    // navigation.navigate('OtherPage', { data });
+  };
+
 
   const dispatch = useDispatch();
   const [secureText, setSecureText] = useState(false)
@@ -28,7 +45,7 @@ const Signup = (props) => {
     mobile: '',
     email: '',
     password: '',
-    password_confirmation: '',
+    // password_confirmation: '',
   })
 
   const { name, email, password, password_confirmation, mobile, } = state
@@ -45,7 +62,7 @@ const Signup = (props) => {
       mobile,
       email,
       password,
-      password_confirmation
+      // password_confirmation
     })
     if (error) {
       showError(error)
@@ -70,15 +87,17 @@ const Signup = (props) => {
       mobile: state.mobile,
       email: state.email,
       password: state.password,
-      password_confirmation: state.password_confirmation,
+      user_type: value
+      // password_confirmation: state.password_confirmation,
     }
+    console.log(data, 'datadatadata')
     dispatch(SignupAction(data)).then(async (response) => {
-      console.log( "response_in_signup", response)
+      console.log("response_in_signup", response)
       if (response?.status === "success") {
         setLoader(false);
-        await AsyncStorage.setItem("token",response?.token);
+        await AsyncStorage.setItem("token", response?.token);
         Alert.alert("Signup success")
-       props?. navigation?.navigate(navigationStrings.LOGIN);
+        props?.navigation?.navigate(navigationStrings.LOGIN);
       } else {
         setLoader(false);
         // console.log("email_passwordemail_passwordemail_password", response);
@@ -92,7 +111,7 @@ const Signup = (props) => {
       <HeaderComp />
 
       <KeyboardAwareScrollView>
-        <View style={{ height: height / 1.05 }}>
+        <View style={{ height: height / .75 }}>
           <View style={styles.container}>
             <Text style={styles.mainText}>Registration </Text>
             <Text style={styles.mainText2}>For the easiest healthcare & consultation let's</Text>
@@ -103,7 +122,6 @@ const Signup = (props) => {
             <TextInputComp
               value={name}
               placeholder='Name'
-              // onChangeText={(value) => setName(value)}
               onChangeText={(name) => updateState({ name })}
 
             />
@@ -111,14 +129,12 @@ const Signup = (props) => {
             <TextInputComp
               value={mobile}
               placeholder='Mobile Number'
-              // onChangeText={(value) => setMobileNum(value)}
               onChangeText={(mobile) => updateState({ mobile })}
             />
 
             <TextInputComp
               value={email}
               placeholder='Email Address'
-              // onChangeText={(value) => setEmail(value)}
               onChangeText={(email) => updateState({ email })}
             />
 
@@ -128,7 +144,6 @@ const Signup = (props) => {
                 value={password}
                 maxLength={10}
                 placeholder='Password'
-                // onChangeText={(value) => setPassword(value)}
                 onChangeText={(password) => updateState({ password })}
               />
               <TouchableOpacity onPress={togglePasswordVisibility} style={{ right: moderateScale(40) }}>
@@ -136,19 +151,60 @@ const Signup = (props) => {
                   size={24} color={colors.blackColor} style={{ top: moderateScale(12) }} />
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row', left: moderateScale(20) }}>
+
+
+            <View style={{
+              width: '90%', backgroundColor: "#fff", justifyContent: 'center', alignSelf: 'center', borderColor: colors.blueColor, borderWidth: moderateScale(1), borderRadius: moderateScale(10), padding: moderateScale(2)
+            }}>
+              {/* <List.Section title="Dropdown Section"> */}
+              <List.Accordion
+                title="Account Type"
+                // left={(props) => <List.Icon {...props} icon="folder" />}
+                expanded={expanded}
+                onPress={handlePress}
+                style={{ backgroundColor: "#fff", borderRadius: moderateScale(20), borderColor: colors.whiteColor, borderWidth: moderateScale(1) }}
+              >
+                <List.Item
+                  title="Other"
+                  onPress={() => sendDataToOtherPage("Other")}
+                />
+                <List.Item
+                  title="Chemist"
+                  onPress={() => sendDataToOtherPage('Chemist')}
+                />
+                <List.Item
+                  title="Doctor"
+                  onPress={() => sendDataToOtherPage('Doctor')}
+                />
+                <List.Item
+                  title="Physiotherapist"
+                  onPress={() => sendDataToOtherPage('Physiotherapist')}
+                />
+                <List.Item
+                  title="Laboratory"
+                  onPress={() => sendDataToOtherPage('Laboratory')}
+                />
+                <List.Item
+                  title="Diagnostic"
+                  onPress={() => sendDataToOtherPage('Diagnostic')}
+                />
+              </List.Accordion>
+              {/* </List.Section> */}
+            </View>
+
+
+            {/* <View style={{ flexDirection: 'row', left: moderateScale(20) }}>
               <TextInputComp
                 value={password_confirmation}
                 maxLength={10}
                 placeholder='Confirm Password'
-                // onChangeText={(value) => setPassword(value)}
                 onChangeText={(password_confirmation) => updateState({ password_confirmation })}
               />
               <TouchableOpacity onPress={togglePasswordVisibility} style={{ right: moderateScale(40) }}>
                 <FontAwesome name={secureText ? "eye" : "eye-slash"}
                   size={24} color={colors.blackColor} style={{ top: moderateScale(12) }} />
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             <View style={{ top: moderateScale(30) }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -166,14 +222,16 @@ const Signup = (props) => {
                   <View style={{ height: 1, backgroundColor: colors.blueColor, marginLeft: moderateScale(8) }} />
                 </TouchableOpacity>
               </View>
+
+              <TouchableOpacity style={{ justifyContent: 'center', bottom: moderateScale(10), alignSelf: "center", top: moderateScale(40) }} activeOpacity={0.7} onPress={() => onSignup()}>
+                <Text style={{ paddingHorizontal: moderateScale(35), paddingVertical: moderateScaleVertical(10), backgroundColor: colors.blueColor, borderRadius: moderateScale(10), color: colors.whiteColor, fontSize: moderateScale(16) }}>Sign up</Text>
+              </TouchableOpacity>
+
             </View>
           </View>
-          <TouchableOpacity style={{ flex: 0.2, justifyContent: 'center', bottom: moderateScale(10) }} activeOpacity={0.7} onPress={onSignup}>
-            <ButtonComp
-              text='Sign up'
-            />
-          </TouchableOpacity>
+
         </View>
+
       </KeyboardAwareScrollView>
 
     </WrapperContainer >

@@ -23,11 +23,13 @@ const ButtonComp = ({
             style={{ ...styles.container, ...style }}
             start={{ x: 0.25, y: 0 }}
             end={{ x: 1.3, y: 1 }}
+           
         >
             <Image source={Img} style={imgStyle}/>
             <TouchableOpacity
-                onPress={onPress}
-                activeOpacity={0.7}>
+                 onPress={onPress}
+                 activeOpacity={0.7}
+                >
                 <Text style={{ ...styles.textStyle, ...textStyle }}>{text}</Text>
                 <View />
             </TouchableOpacity>

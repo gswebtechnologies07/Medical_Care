@@ -2,7 +2,6 @@ import React from "react";
 import navigationStrings from "./navigationStrings";
 import * as Screens from '../Screens';
 import TabRoutes from './TabRoutes';
-import EditPhysiotherepist_Profile from '../Screens/EditPhysiotherepist_Profile/EditPhysiotherepist_Profile';
 
 export default function (Stack) {
     return (
@@ -20,11 +19,11 @@ export default function (Stack) {
             />
 
 
-            <Stack.Screen
+            {/* <Stack.Screen
                 name={navigationStrings.Physiotherepist_Profile}
                 component={Screens.Physiotherepist_Profile}
                 options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
                 name={navigationStrings.EditPhysiotherepist_Profile}
                 component={Screens.EditPhysiotherepist_Profile}
@@ -63,6 +62,16 @@ export default function (Stack) {
             <Stack.Screen
                 name={navigationStrings.ProfileCreate}
                 component={Screens.profileCreate}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={navigationStrings.PAYMENT}
+                component={Screens.Payment}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={navigationStrings.UPLOAD_PRESCIPTION}
+                component={Screens.Upload_Presciption}
                 options={{ headerShown: false }}
             />
         </>

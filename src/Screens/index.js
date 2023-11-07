@@ -19,4 +19,10 @@ export { default as EditDoctorProfile } from './EditDoctorProfile/EditDoctorProf
 export { default as Laboratory_Profile } from './Laboratory_Profile/Laboratory_Profile'
 export { default as Diagnostic_Profile } from './Diagnostic_Profile/Diagnostic_Profile'
 export { default as Chemist_Profile } from './Chemist_Profile/Chemist_Profile'
+export { default as Upload_Presciption } from './Upload_Presciption/Upload_Presciption'
+export { default as Payment } from './Payment/Payment'
+export { default as HomeChemist } from './HomeChemist/HomeChemist'
+export { default as CompleteOrder } from './CompleteOrder/CompleteOrder'
+export { default as PendingOrder } from './PendingOrder/PendingOrder'
 export { default as profileCreate } from '../Components/ProfileCreate'
+

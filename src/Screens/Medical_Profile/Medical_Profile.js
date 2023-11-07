@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import WrapperContainer from '../../Components/WrapperContainer'
 import { height, moderateScale, textScale, width, moderateScaleVertical } from '../../styles/responsiveSize'
 import fontFamily from '../../styles/fontFamily'
@@ -9,21 +9,53 @@ import ButtonComp from '../../Components/ButtonComp'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import HeaderComp from '../../Components/HeaderComp'
+import navigationStrings from '../../Navigations/navigationStrings'
+import { useDispatch, useSelector } from 'react-redux'
+import { GetChemistProfileAction } from '../../redux/Action/ChemistProfileAction'
+import { useNavigation } from '@react-navigation/native';
 
-const Medical_Profile = ({ navigation }) => {
+const Medical_Profile = (props) => {
+    console.log(props, 'propsMedical_Profile')
+
+    const medicalData = props?.route?.params?.data
+    // console.log(medicalData, 'medicalDatamedicalData')
+
+    const id = props?.route?.params?.data?.id
+
+
+    const navigation = useNavigation()
+    const dispatch = useDispatch();
+    const getChemistData = useSelector((state) => state)
+    console.log(getChemistData, 'getChemistDatagetChemistDatagetChemistData')
+
+    // useEffect(() => {
+    // dispatch(GetChemistProfileAction()).then(async (response) => {
+    //     console.log("GetChemistProfileActionsss", response)
+
+    //   })
+    // }, [])
+
     return (
         <WrapperContainer>
             <View style={{ flex: 1 }}>
 
+                <HeaderComp />
+
                 <View style={{ flex: 0.3 }}>
                     <View style={{ flex: 2, justifyContent: 'center' }}>
                         <View style={{ paddingHorizontal: moderateScale(15), top: moderateScale(10) }}>
-                            <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(20), color: colors.blackColor }}>Bawa Medical Hall</Text>
+                            <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(20), color: colors.blackColor }}>
+                                {medicalData?.name_of_firm}
+                                {/* Medical */}
+                            </Text>
                         </View>
                     </View>
                     <View style={{ flex: 3, padding: moderateScale(20), flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ justifyContent: 'center', top: moderateScale(10) }}>
-                            <Image source={imagePath.icRectangle1} style={styles.swiperImage1} />
+
+                            <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/chemist/${medicalData?.img}` }} style={styles.swiperImage1} />
+                            {/* <Image source={imagePath.icRectangle1} style={styles.swiperImage1} /> */}
                         </View>
 
                         <View style={{ justifyContent: 'center' }}>
@@ -33,11 +65,16 @@ const Medical_Profile = ({ navigation }) => {
                             </View>
                             <View style={{ flexDirection: "row", top: moderateScale(3) }}>
                                 <EvilIcons name="location" color={colors.blackColor} size={15} style={{ alignSelf: 'center' }} />
-                                <Text style={{ fontFamily: fontFamily.regular, fontSize: textScale(12), color: colors.blackColor, left: moderateScale(3) }}>800m, Zirakpur HO, Zirakpur</Text>
+                                <Text style={{ fontFamily: fontFamily.regular, fontSize: textScale(12), color: colors.blackColor, left: moderateScale(3) }}>
+                                    {medicalData?.city}
+                                    {/* Chandigrah */}
+                                </Text>
                             </View>
 
                             <View style={{ top: moderateScale(10) }}>
-                                <ButtonComp text='123-456-7890'
+                                <ButtonComp text=
+                                    // '9876543210'
+                                    {medicalData.mobile}
                                     style={{ borderRadius: moderateScale(6), flexDirection: 'row', paddingHorizontal: moderateScale(10), paddingVertical: moderateScale(4) }}
                                     Img={imagePath.icPhone}
                                     imgStyle={{ right: moderateScale(5) }}
@@ -51,9 +88,12 @@ const Medical_Profile = ({ navigation }) => {
                     <View style={{ paddingHorizontal: moderateScale(20), justifyContent: 'center', paddingVertical: moderateScale(5) }}>
                         <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(18), color: colors.blackColor }}>About</Text>
                         <View>
-                            <Text style={{ top: moderateScale(3), fontFamily: fontFamily.regular, fontSize: textScale(12), color: colors.blackColor }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            <Text style={{ top: moderateScale(3), fontFamily: fontFamily.regular, fontSize: textScale(12), color: colors.blackColor }}>
+                                {medicalData.desc}
+                                {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                                 when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
-                                but also the leap into electronic typesetting, remaining essentially unchanged.</Text>
+                                but also the leap into electronic typesetting, remaining essentially unchanged. */}
+                            </Text>
                         </View>
                     </View>
 
@@ -76,13 +116,10 @@ const Medical_Profile = ({ navigation }) => {
                         </View>
                     </View>
 
-                    <TouchableOpacity style={{ padding: moderateScale(20) }} activeOpacity={0.7}>
-                        <ButtonComp
-                            text='Place an order'
-                            style={{ borderRadius: moderateScale(10), paddingHorizontal: moderateScale(20) }}
-                            textStyle={{ fontSize: textScale(18), fontFamily: fontFamily.semiBold }}
-                        />
+                    <TouchableOpacity style={{ justifyContent: 'center', bottom: moderateScale(10), alignSelf: "center", top: moderateScale(30) }} activeOpacity={0.7} onPress={() => props?.navigation?.navigate(navigationStrings.UPLOAD_PRESCIPTION, { id: id })}>
+                        <Text style={{ paddingHorizontal: moderateScale(20), paddingVertical: moderateScaleVertical(10), backgroundColor: colors.blueColor, borderRadius: moderateScale(10), color: colors.whiteColor, fontSize: moderateScale(16) }}>Place an order</Text>
                     </TouchableOpacity>
+
                 </View>
             </View>
         </WrapperContainer>
@@ -111,7 +148,7 @@ const styles = StyleSheet.create({
 
     },
     swiperImage1: {
-        height:moderateScale(110),
+        height: moderateScale(110),
         width: moderateScale(110),
         alignSelf: 'center',
         borderRadius: moderateScale(55)

@@ -38,6 +38,24 @@
 import * as Types from '../Types/Types'
 import AXIOS_INSTANCE from '../../../AxiosInstance/Axios';
 
+
+export const getAllChemistProfile = (data) => {
+    return async (dispatch) => {
+        return AXIOS_INSTANCE.get('/get/chemist', data).then((response) => {
+            console.log(data, "getChemistProfileAction", response)
+            dispatch({
+                type: Types.GET_ALL_CHEMIST_PROFILE,
+                payload: response?.data
+            })
+            return response?.data;
+        }).catch((error) => {
+            console.log("error_in_getChemistProfileAction", error);
+            // return error?.response?.data?.message
+        })
+    }
+}
+
+
 export const Chemist_ProfileAction = (data) => {
     return async (dispatch) => {
         return AXIOS_INSTANCE.post('/add/chemist', data).then((response) => {

@@ -27,7 +27,6 @@ import { useSelector } from 'react-redux';
 import * as Types from '../../redux/Types/Types'
 // import * as Types from '../../redux/Types/Types'
 import Diagnostic_CenterModal from '../../Components/Diagnostic_CenterModal';
-import { setToken } from '../../redux/Action/LoginAction'
 
 
 // const ProfileData =[
@@ -88,17 +87,11 @@ const Profile = ({ navigation }) => {
 
   const handleLogout = async () => {
     try {
-      // dispatch(setToken([]))
       dispatch({
         type: Types.LOGIN,
         payload: []
       })
-      // await AsyncStorage.removeItem('token'); // Clear user token from AsyncStorage
       await AsyncStorage.removeItem('token');
-      // const hello = await AsyncStorage.getItem('token');
-      // console.log(hello, "hellohello")
-      // Navigate the user to the login screen or any other screen after logout
-      // navigation?.navigate(navigationStrings?.LOGIN)
 
     } catch (error) {
       console.error('Error_during_logout:', error);

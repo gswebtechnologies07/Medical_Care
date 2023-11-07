@@ -9,10 +9,11 @@ AXIOS_INSTANCE.interceptors.request.use(
     let request = config;
     // request.baseURL = "http://192.168.1.3:3000";  //LOCAL
     request.baseURL = "https://demogswebtech.com/medicalcare/api";  //DEV
-    request.headers = {
-      Accept: 'application/json',
-      "Content-Type": "application/json",
-    };
+    // request.headers = {
+    //   Accept: 'application/json',
+    //   "Content-Type": "application/json",
+    // };
+   
     request.url = config.url;
     // console.log("kjhgfghjkl", request)
     return request;

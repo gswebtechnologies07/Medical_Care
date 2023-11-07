@@ -1,8 +1,21 @@
 const initialState = {
     ChemistProfileRegister: [],
     GetChemistProfile: [],
-    EditChemistProfile :[]
+    EditChemistProfile :[],
+    GetAllChemistProfile:[]
 
+}
+
+export const getAllChemistProfileReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case 'GET_ALL_CHEMIST_PROFILE':
+            return {
+                ...state,
+                GetAllChemistProfile: action.payload
+            }
+        default:
+            return state
+    }
 }
 export const ChemistProfileReducer = (state = initialState, action) => {
     switch (action.type) {
