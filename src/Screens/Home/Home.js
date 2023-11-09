@@ -61,7 +61,7 @@ const TopServicesData = [
 ];
 
 const Home = (props) => {
-  console.log(props,'propspropsHome')
+  console.log(props, 'propspropsHome')
 
   const dispatch = useDispatch();
 
@@ -83,14 +83,14 @@ const Home = (props) => {
 
 
   // const useSelector =((state)=>state)
-  const mapData = useSelector((state) => state?.getAllChemistProfileReducer?.GetAllChemistProfile?.chemist)
+  const mapData = useSelector((state) => state?.getAllChemistProfileReducer?.GetAllChemistProfile?.order)
   console.log(mapData, 'mapDatamapData')
 
   useEffect(() => {
     dispatch(getAllChemistProfile()).then(async (response) => {
       console.log(response, "response_ChemistProfileActionsss")
 
-      setData(response?.chemist)
+      setData(response?.order)
       // setData(data)
 
       // console.log(data,'datadatadata')
@@ -119,11 +119,9 @@ const Home = (props) => {
   return (
     <WrapperContainer>
       <View style={{ flexDirection: 'row', paddingHorizontal: moderateScale(5) }}>
-        <HeaderComp />
-        <TouchableOpacity onPress={() => props?.navigation?.navigate(navigationStrings.ProfileCreate)} style={{ justifyContent: 'center', left: moderateScale(65), top: moderateScale(5) }}>
-          <FontAwesome5 name={"edit"}
-            size={28} color={colors.blackColor} style={{}} />
-        </TouchableOpacity>
+        <View style={styles.HeaderContainer}>
+          <Image source={imagePath.icLogo} style={{}} />
+        </View>
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -171,7 +169,7 @@ const Home = (props) => {
               return (
                 <TouchableOpacity onPress={() => props.navigation.navigate(navigationStrings.Medical_Profile, { data: item })}>
                   <View style={styles.cardView}>
-                    <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/chemist/${item?.img}` }} style={{ height: moderateScale(100), width: moderateScale(180) }} />
+                    <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/user/${item?.img}` }} style={{ height: moderateScale(100), width: moderateScale(180) }} />
                     <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(16), color: colors.blackColor, alignSelf: 'center' }}>{item?.name_of_firm}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: moderateScale(10), paddingVertical: moderateScaleVertical(4), right: moderateScale(10) }}>
                       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -296,5 +294,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.21,
     shadowRadiusBottom: 7.68,
     elevation: 5,
-  }
+  },
+  HeaderContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginHorizontal: moderateScale(10),
+    marginVertical:moderateScaleVertical(20),
+    alignItems: 'center',
+    marginTop: moderateScale(10)
+  },
 })

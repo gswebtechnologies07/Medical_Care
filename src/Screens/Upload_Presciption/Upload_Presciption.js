@@ -79,6 +79,7 @@ const Upload_Presciption = (props) => {
             }
         });
     }
+
     const imageUpload = (items) => {
 
         const formData = new FormData()
@@ -94,7 +95,6 @@ const Upload_Presciption = (props) => {
         formData.append('chemist_id', id);
         formData.append('user_id', userId);
 
-
         dispatch(OrderPlaceAction(formData)).then(async (response) => {
             console.log("responseresponseresponse", response)
             if (response?.status === "Order created successfully") {
@@ -104,7 +104,7 @@ const Upload_Presciption = (props) => {
                     [
                         { text: 'OK', onPress: () => { } },
                     ]);
-                    props?.navigation?.navigate(navigationStrings.MY_ORDER)
+                props?.navigation?.navigate(navigationStrings.MY_ORDER)
             } else {
                 Alert.alert(
                     'Order Creation Failed',
@@ -116,8 +116,9 @@ const Upload_Presciption = (props) => {
                 console.log("email_passwordemail", response);
             }
         })
-    }
 
+
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <HeaderComp />
@@ -155,3 +156,7 @@ const Upload_Presciption = (props) => {
 export default Upload_Presciption
 
 const styles = StyleSheet.create({})
+
+
+
+

@@ -19,7 +19,7 @@ const Medical_Profile = (props) => {
     console.log(props, 'propsMedical_Profile')
 
     const medicalData = props?.route?.params?.data
-    // console.log(medicalData, 'medicalDatamedicalData')
+    console.log(medicalData, 'medicalDatamedicalData')
 
     const id = props?.route?.params?.data?.id
 
@@ -54,7 +54,7 @@ const Medical_Profile = (props) => {
                     <View style={{ flex: 3, padding: moderateScale(20), flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ justifyContent: 'center', top: moderateScale(10) }}>
 
-                            <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/chemist/${medicalData?.img}` }} style={styles.swiperImage1} />
+                            <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/user/${medicalData?.img}` }} style={styles.swiperImage1} />
                             {/* <Image source={imagePath.icRectangle1} style={styles.swiperImage1} /> */}
                         </View>
 
@@ -89,7 +89,7 @@ const Medical_Profile = (props) => {
                         <Text style={{ fontFamily: fontFamily.semiBold, fontSize: textScale(18), color: colors.blackColor }}>About</Text>
                         <View>
                             <Text style={{ top: moderateScale(3), fontFamily: fontFamily.regular, fontSize: textScale(12), color: colors.blackColor }}>
-                                {medicalData.desc}
+                                {medicalData.description}
                                 {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                                 when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
                                 but also the leap into electronic typesetting, remaining essentially unchanged. */}

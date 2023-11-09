@@ -41,7 +41,7 @@ import AXIOS_INSTANCE from '../../../AxiosInstance/Axios';
 
 export const getAllChemistProfile = (data) => {
     return async (dispatch) => {
-        return AXIOS_INSTANCE.get('/get/chemist', data).then((response) => {
+        return AXIOS_INSTANCE.get('/get/all-chemists', data).then((response) => {
             console.log(data, "getChemistProfileAction", response)
             dispatch({
                 type: Types.GET_ALL_CHEMIST_PROFILE,

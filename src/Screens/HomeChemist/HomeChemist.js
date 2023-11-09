@@ -1,167 +1,187 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import HeaderComp from '../../Components/HeaderComp'
 import WrapperContainer from '../../Components/WrapperContainer'
 import fontFamily from '../../styles/fontFamily'
 import { moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
 import colors from '../../styles/colors'
 import imagePath from '../../constants/imagePath'
-import ButtonComp from '../../Components/ButtonComp'
 import { useDispatch, useSelector } from 'react-redux'
+import { GetCompletedOrderAction, GetPendingOrderAction } from '../../redux/Action/HomeChemistAction'
 
 
-const upComingData = [
-    {
-        id: 1,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Upcoming',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 2,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Upcoming',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 3,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Upcoming',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 4,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Upcoming',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 5,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Upcoming',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    }
-];
+// const upComingData = [
+//     {
+//         id: 1,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Upcoming',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 2,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Upcoming',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 3,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Upcoming',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 4,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Upcoming',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 5,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Upcoming',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     }
+// ];
 
-const completedData = [
-    {
-        id: 1,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Completed',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 2,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Completed',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 3,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Completed',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 4,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Completed',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    },
-    {
-        id: 5,
-        mainText: '#ghhhh678ca',
-        mainText2: 'Completed',
-        mainText3: 'INR 350.00',
-        mainText4: '7 items',
-        title: 'Today at 12:30 PM',
-        title2: 'Multivitamin X 1',
-        title3: 'Bextram Gold X 2'
-    }
-];
+// const completedData = [
+//     {
+//         id: 1,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Completed',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 2,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Completed',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 3,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Completed',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 4,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Completed',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     },
+//     {
+//         id: 5,
+//         mainText: '#ghhhh678ca',
+//         mainText2: 'Completed',
+//         mainText3: 'INR 350.00',
+//         mainText4: '7 items',
+//         title: 'Today at 12:30 PM',
+//         title2: 'Multivitamin X 1',
+//         title3: 'Bextram Gold X 2'
+//     }
+// ];
 
 
 const HomeChemist = (props) => {
-    console.log(props,'propspropsHome')
+    console.log(props, 'propspropsHome')
 
     const dispatch = useDispatch();
+    const [pendingOrder, setPendingOrder] = useState("")
+    // console.log(pendingOrder, 'pendingOrderpendingOrder')
+    const [completeOrder, setCompleteOrder] = useState("")
+    console.log(completeOrder, 'completeOrdercompleteOrder')
 
     const profileId = useSelector((state) => state?.LoginReducer?.Login.user?.id)
-    console.log("profileIdprofileId", profileId)
+    // console.log("profileIdprofileId", profileId)
+
+
+    const id = profileId
+    // console.log(id,'ididid')
+
+    useEffect(() => {
+        dispatch(GetPendingOrderAction(id)).then(async (response) => {
+            console.log(response, "GetPendingOrderActionGetPendingOrderActionid")
+            setPendingOrder(response.order)
+
+        })
+    }, [])
+
+    useEffect(() => {
+        dispatch(GetCompletedOrderAction(id)).then(async (response) => {
+            console.log(response, "GetCompletedOrderAction")
+            setCompleteOrder(response.order)
+
+        })
+    }, [])
 
 
     const [selectedTab, setSelectedTab] = useState(0);
 
 
     const renderItem = ({ item }) => {
+        console.log(item, 'itemitemitemitemitemitemitem')
         return (
             <View style={{ paddingVertical: moderateScaleVertical(20) }}>
                 <View style={styles.containerView}>
                     <View style={styles.mainView}>
-                        <Text style={styles.mainText}>{item?.mainText}</Text>
+                        <Text style={styles.mainText}>{item?.order_id}</Text>
                         <Text style={styles.mainText2}>{item?.title}</Text>
                     </View>
 
                     <View>
-                        <Text style={styles.mainText3}>{item?.mainText2}</Text>
+                        <Text style={styles.mainText3}>{item?.order_status}</Text>
                     </View>
                 </View>
 
                 <View style={styles.titleMainView}>
                     <View style={{ justifyContent: 'center' }}>
-                        <Text style={styles.titleText}>{item?.mainText4}</Text>
-                        <Text style={styles.titleText2}>{item?.title2}</Text>
+                        <View>
+                            <Image source={item.prescription === "" ? imagePath.icMedical : { uri: `https://demogswebtech.com/medicalcare/public/images/order/${item?.prescription}` }} style={{ height: moderateScale(70), width: moderateScale(120), borderRadius: moderateScale(10) }} />
+                        </View>
+                        <Text style={styles.titleText2}>{item?.order_detail}</Text>
                         <Text style={styles.titleText2}>{item?.title3}</Text>
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={styles.mainText4}>{item?.mainText3}</Text>
-                        <View style={{}}>
+                        <Text style={styles.mainText4}>{item?.total_amount}</Text>
 
-
-                            <ButtonComp
-                                style={styles.cardButton}
-                                text='Order details'
-                                textStyle={styles.cardButtonText}
-                                Img2={imagePath.icBack2}
-                                imgStyle={{ top: moderateScale(1), right: moderateScale(2) }}
-                            />
-                        </View>
+                        <TouchableOpacity style={styles.cardButton} activeOpacity={0.7}>
+                            <Text style={styles.cardButtonText}>Order details</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -176,7 +196,9 @@ const HomeChemist = (props) => {
 
     return (
         <WrapperContainer>
-            <HeaderComp />
+            <View style={styles.HeaderContainer}>
+                <Image source={imagePath.icLogo} style={{}} />
+            </View>
             <View style={{ flex: 0.20, justifyContent: 'center' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
 
@@ -205,9 +227,9 @@ const HomeChemist = (props) => {
 
                 <View style={{ flex: 1 }}>
                     <FlatList
-                        data={upComingData}
+                        data={pendingOrder}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id.toString()}
                         showsVerticalScrollIndicator={false}
                         ItemSeparatorComponent={separatorComponent}
                     />
@@ -215,9 +237,9 @@ const HomeChemist = (props) => {
             ) : (<View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                     <FlatList
-                        data={completedData}
+                        data={completeOrder}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id.toString()}
                         showsVerticalScrollIndicator={false}
                         ItemSeparatorComponent={separatorComponent}
                     />
@@ -253,8 +275,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     mainText3: {
-        fontFamily: fontFamily.regular,
-        fontSize: textScale(14),
+        fontFamily: fontFamily.semiBold,
+        fontSize: textScale(18),
         color: colors.blackColor,
         alignSelf: 'center',
         paddingRight: moderateScale(10)
@@ -273,8 +295,8 @@ const styles = StyleSheet.create({
         color: colors.blackColor
     },
     titleText2: {
-        fontFamily: fontFamily.medium,
-        fontSize: textScale(10),
+        fontFamily: fontFamily.semiBold,
+        fontSize: textScale(12),
         color: colors.blackColor
     },
     mainText4: {
@@ -287,7 +309,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         paddingHorizontal: moderateScale(10),
         paddingVertical: moderateScaleVertical(4),
-        // backgroundColor: colors.blueColor,
+        backgroundColor: colors.blueColor,
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
@@ -300,6 +322,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingHorizontal: moderateScale(8),
         paddingVertical: moderateScaleVertical(4)
-    }
+    },
+    HeaderContainer: {
+        width: '100%',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginHorizontal: moderateScale(10),
+        marginVertical:moderateScaleVertical(20),
+        alignItems: 'center',
+        marginTop: moderateScale(10)
+    },
 
 })

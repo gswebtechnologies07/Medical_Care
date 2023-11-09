@@ -31,4 +31,5 @@ export default {
     icPhone: require('../assets/images/Phone.png'),
     icBack2: require('../assets/images/back2.png'),
     icBack3: require('../assets/images/back(3).png'),
+    icMedical: require('../assets/images/medicalImage.jpeg'),
   };

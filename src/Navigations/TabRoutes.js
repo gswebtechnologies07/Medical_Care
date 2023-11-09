@@ -1,6 +1,6 @@
 // import React from 'react';
 // import { createBottomTabNavigator, BottomTabBar } from '@react-navigation/bottom-tabs';
-// import { StyleSheet, View, Text } from 'react-native';
+// import { StyleSheet, View, Text, Platform } from 'react-native';
 // import * as Screens from '../Screens';
 // import navigationStrings from './navigationStrings';
 // import { moderateScale, textScale } from '../styles/responsiveSize';
@@ -10,7 +10,7 @@
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 // import AntDesign from 'react-native-vector-icons/AntDesign';
-// import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux';
 
 // const BottomTab = createBottomTabNavigator();
 
@@ -18,8 +18,39 @@
 
 //     const dispatch = useDispatch();
 
-//     const getHomeChemistData = useSelector((state) => state?.LoginReducer?.Login.user?.user_type)
-//     console.log(getHomeChemistData, 'getHomeChemistData')
+//     const getHomeChemistData = useSelector((state) => state?.LoginReducer?.Login.user?.user_type);
+//     console.log(getHomeChemistData, 'getHomeChemistData');
+
+//     let homeScreenComponent;
+
+//     if (getHomeChemistData === "other") {
+//         homeScreenComponent = Screens.Home;
+//     } else if (getHomeChemistData === "Chemist") {
+//         homeScreenComponent = Screens.HomeChemist;
+//     } else {
+//         homeScreenComponent = Screens.Home;
+//     }
+
+//     let MyOrderScreen;
+
+//     if (getHomeChemistData === "other") {
+//         MyOrderScreen = Screens.MyOrder;
+//     } else if (getHomeChemistData === "Chemist") {
+//         MyOrderScreen = Screens.PendingOrder;
+//     } else {
+//         MyOrderScreen = Screens.MyOrder;
+//     }
+
+
+//     let NearbyMedicalScreen;
+
+//     if (getHomeChemistData === "other") {
+//         NearbyMedicalScreen = Screens.Nearby_Medical;
+//     } else if (getHomeChemistData === "Chemist") {
+//         NearbyMedicalScreen = Screens.CompleteOrder;
+//     } else {
+//         NearbyMedicalScreen = Screens.Nearby_Medical;
+//     }
 
 
 //     return (
@@ -33,70 +64,19 @@
 
 //             screenOptions={{
 //                 headerShown: false,
-//                 // style:{padd}
 //                 style: styles.customBottomtabsStyle,
 //                 tabBarInactiveTintColor: 'gray',
 //                 tabBarHideOnKeyboard: true,
 //                 tabBarStyle: { backgroundColor: '#3F6791', height: Platform.OS === 'ios' ? 80 : 60, paddingBottom: Platform.OS === 'ios' ? 25 : 10 },
 //                 tabBarShowLabel: false
-
 //             }}>
 
-
-//             if (getHomeChemistData === "other") {
-//                 <BottomTab.Screen
-//                     name={navigationStrings.HOME}
-//                     component={Screens.Home}
-//                     options={{
-//                         tabBarIcon: ({ focused }) => {
-//                             return (
-
-//                                 <View style={{ justifyContent: 'center' }}>
-//                                     <Ionicons name="home-outline" color={colors.whiteColor} size={25} style={{ alignSelf: 'center' }} />
-//                                     <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor }}>Home</Text>
-//                                     <View style={{ borderTopColor: focused ? colors.whiteColor : colors.blueColor, borderTopWidth: moderateScale(2.5), top: moderateScale(5) }} />
-//                                 </View>
-//                             );
-//                         },
-//                     }}
-//                 />;
-//   } else if (getHomeChemistData === "Chemist") {
-//                 <BottomTab.Screen
-//                     name={navigationStrings.HomeChemist}
-//                     component={Screens.HomeChemist}
-//                     options={{
-//                         tabBarIcon: ({ focused }) => {
-//                             return (
-
-//                                 <View style={{ justifyContent: 'center' }}>
-//                                     <Ionicons name="home-outline" color={colors.whiteColor} size={25} style={{ alignSelf: 'center' }} />
-//                                     <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor }}>Home</Text>
-//                                     <View style={{ borderTopColor: focused ? colors.whiteColor : colors.blueColor, borderTopWidth: moderateScale(2.5), top: moderateScale(5) }} />
-//                                 </View>
-//                             );
-//                         },
-//                     }}
-//                 />;
-//   } 
-//    {/* else {
-//                 displayText = 'Default Case';
-//   } */}
-
-
-
-
-
-
-
-
-
-//             {/* <BottomTab.Screen
+//             <BottomTab.Screen
 //                 name={navigationStrings.HOME}
-//                 component={Screens.Home}
+//                 component={homeScreenComponent}
 //                 options={{
 //                     tabBarIcon: ({ focused }) => {
 //                         return (
-
 //                             <View style={{ justifyContent: 'center' }}>
 //                                 <Ionicons name="home-outline" color={colors.whiteColor} size={25} style={{ alignSelf: 'center' }} />
 //                                 <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor }}>Home</Text>
@@ -106,47 +86,30 @@
 //                     },
 //                 }}
 //             />
-//             <BottomTab.Screen
-//                 name={navigationStrings.HomeChemist}
-//                 component={Screens.HomeChemist}
-//                 options={{
-//                     tabBarIcon: ({ focused }) => {
-//                         return (
-
-//                             <View style={{ justifyContent: 'center' }}>
-//                                 <Ionicons name="home-outline" color={colors.whiteColor} size={25} style={{ alignSelf: 'center' }} />
-//                                 <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor }}>Home</Text>
-//                                 <View style={{ borderTopColor: focused ? colors.whiteColor : colors.blueColor, borderTopWidth: moderateScale(2.5), top: moderateScale(5) }} />
-//                             </View>
-//                         );
-//                     },
-//                 }}
-//             /> */}
-
-
-
-
-
 
 //             <BottomTab.Screen
 //                 name={navigationStrings.MY_ORDER}
-//                 component={Screens.MyOrder}
+//                 component={MyOrderScreen}
 //                 options={{
 //                     tabBarIcon: ({ focused }) => {
 //                         return (
 //                             <View style={{ justifyContent: 'center' }}>
 //                                 <MaterialIcons name="add-shopping-cart" color={colors.whiteColor} size={28} style={{ alignSelf: 'center' }} />
+//                                 if(getHomeChemistData === "other"){
+//                                    <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor, alignSelf: 'center', alignItems: 'center' }}>My orders</Text>  
+//                                 }else{
+//                                     <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor, alignSelf: 'center', alignItems: 'center' }}>Pending Order</Text>
+//                                 }
 //                                 <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor, alignSelf: 'center', alignItems: 'center' }}>My orders</Text>
 //                                 <View style={{ borderTopColor: focused ? colors.whiteColor : colors.blueColor, borderTopWidth: moderateScale(2.5), top: moderateScale(5) }} />
 //                             </View>
 //                         );
-
 //                     },
 //                 }}
 //             />
 //             <BottomTab.Screen
 //                 name={navigationStrings.Nearby_Medical}
-//                 component={Screens.Nearby_Medical}
+//                 component={NearbyMedicalScreen}
 //                 options={{
 //                     tabBarIcon: ({ focused }) => {
 //                         return (
@@ -180,14 +143,12 @@
 // };
 
 // const styles = StyleSheet.create({
-//     //     customBottomtabsStyle: {
-//     //  top:10
-//     //     },
-
+//     // customBottomtabsStyle: {
+//     //     top: 10
+//     // },
 // });
 
-// export default TabRoutes
-
+// export default TabRoutes;
 
 
 import React from 'react';
@@ -214,36 +175,22 @@ const TabRoutes = (props) => {
     console.log(getHomeChemistData, 'getHomeChemistData');
 
     let homeScreenComponent;
-
-    if (getHomeChemistData === "other") {
-        homeScreenComponent = Screens.Home;
-    } else if (getHomeChemistData === "Chemist") {
-        homeScreenComponent = Screens.HomeChemist;
-    } else {
-        homeScreenComponent = Screens.Home;
-    }
-
     let MyOrderScreen;
-
-    if (getHomeChemistData === "other") {
-        MyOrderScreen = Screens.MyOrder;
-    } else if (getHomeChemistData === "Chemist") {
-        MyOrderScreen = Screens.PendingOrder;
-    } else {
-        MyOrderScreen = Screens.MyOrder;
-    }
-
-
     let NearbyMedicalScreen;
 
     if (getHomeChemistData === "other") {
+        homeScreenComponent = Screens.Home;
+        MyOrderScreen = Screens.MyOrder;
         NearbyMedicalScreen = Screens.Nearby_Medical;
     } else if (getHomeChemistData === "Chemist") {
+        homeScreenComponent = Screens.HomeChemist;
+        MyOrderScreen = Screens.PendingOrder;
         NearbyMedicalScreen = Screens.CompleteOrder;
     } else {
+        homeScreenComponent = Screens.Home;
+        MyOrderScreen = Screens.MyOrder;
         NearbyMedicalScreen = Screens.Nearby_Medical;
     }
-
 
     return (
         <BottomTab.Navigator
@@ -287,7 +234,9 @@ const TabRoutes = (props) => {
                         return (
                             <View style={{ justifyContent: 'center' }}>
                                 <MaterialIcons name="add-shopping-cart" color={colors.whiteColor} size={28} style={{ alignSelf: 'center' }} />
-                                <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor, alignSelf: 'center', alignItems: 'center' }}>My orders</Text>
+                                <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor, alignSelf: 'center', alignItems: 'center' }}>
+                                    {getHomeChemistData === "Chemist" ? "Pending Order" : "My orders"}
+                                </Text>
                                 <View style={{ borderTopColor: focused ? colors.whiteColor : colors.blueColor, borderTopWidth: moderateScale(2.5), top: moderateScale(5) }} />
                             </View>
                         );
@@ -302,7 +251,9 @@ const TabRoutes = (props) => {
                         return (
                             <View style={{ justifyContent: 'center' }}>
                                 <FontAwesome6 name="house-chimney-medical" color={colors.whiteColor} size={25} style={{ alignSelf: 'center' }} />
-                                <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor }}>Nearby medical</Text>
+                                <Text style={{ fontSize: textScale(10), fontFamily: fontFamily.medium, color: colors.whiteColor }}>
+                                    {getHomeChemistData === "Chemist" ? "Complete Order" : "Nearby medical"}
+                                </Text>
                                 <View style={{ borderTopColor: focused ? colors.whiteColor : colors.blueColor, borderTopWidth: moderateScale(2.5), top: moderateScale(5) }} />
                             </View>
                         );

@@ -74,6 +74,11 @@ export default function (Stack) {
                 component={Screens.Upload_Presciption}
                 options={{ headerShown: false }}
             />
+            <Stack.Screen
+                name={navigationStrings.OrderDetails}
+                component={Screens.OrderDetails}
+                options={{ headerShown: false }}
+            />
         </>
     );
 }

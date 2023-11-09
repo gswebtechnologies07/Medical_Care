@@ -16,17 +16,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import navigationStrings from '../../Navigations/navigationStrings';
 import ModalComp from '../../Components/ModalComp';
 // import EditProfileModal from '../../Components/EditProfileModal';ß
-import ChemistProfileModal from '../../Components/ChemistProfileModal';
-import DoctorProfileModal from '../../Components/DoctorProfileModal';
-import PhysiotherapistProfileModal from '../../Components/PhysiotherapistProfileModal';
-import LaboratoryProfileModal from '../../Components/LaboratoryProfileModal';
+// import ChemistProfileModal from '../../Components/ChemistProfileModal';
+// import DoctorProfileModal from '../../Components/DoctorProfileModal';
+// import PhysiotherapistProfileModal from '../../Components/PhysiotherapistProfileModal';
+// import LaboratoryProfileModal from '../../Components/LaboratoryProfileModal';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useDispatch } from 'react-redux';
 // import { LogoutAction } from '../../redux/Action/LogoutAction';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import * as Types from '../../redux/Types/Types'
 // import * as Types from '../../redux/Types/Types'
-import Diagnostic_CenterModal from '../../Components/Diagnostic_CenterModal';
+// import Diagnostic_CenterModal from '../../Components/Diagnostic_CenterModal';
 
 
 // const ProfileData =[
@@ -62,9 +62,9 @@ const Profile = ({ navigation }) => {
   // console.log("tokentoken", token)
 
   const dispatch = useDispatch();
-  const handlePress = () => {
-    setExpanded(!expanded);
-  };
+  // const handlePress = () => {
+  //   setExpanded(!expanded);
+  // };
 
   const orderHistory = () => {
     navigation.navigate(navigationStrings.MY_ORDER);
@@ -102,11 +102,11 @@ const Profile = ({ navigation }) => {
     <WrapperContainer>
       <HeaderComp2 text="Profile" />
       <View style={{ flex: 1 }}>
-        {/* <>
-          <EditProfileModal />
-        </> */}
-        <View
-          style={styles.mainContainer}>
+
+
+
+        <TouchableOpacity
+          style={styles.signOutmainView} onPress={orderHistory}>
           <View style={{ flexDirection: 'row' }}>
             <MaterialIcons
               name="add-shopping-cart"
@@ -114,25 +114,20 @@ const Profile = ({ navigation }) => {
               size={35}
               style={{ alignSelf: 'center', top: moderateScale(3) }}
             />
-            <Text
-              style={styles.historyText}>
-              Order history
-            </Text>
+            <Text style={styles.signOutText}>Edit Profile</Text>
           </View>
-          <TouchableOpacity
-            style={{ alignSelf: 'center' }}
-            onPress={orderHistory}>
+          <View style={{ alignSelf: 'center' }}>
             <MaterialIcons
               name="navigate-next"
               color={colors.blackColor}
               size={32}
               style={{ alignSelf: 'center', top: moderateScale(2) }}
             />
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
 
-        <View
-          style={styles.medicalView}>
+        <TouchableOpacity
+          style={styles.signOutmainView} onPress={medicalStores}>
           <View style={{ flexDirection: 'row' }}>
             <FontAwesome6
               name="house-chimney-medical"
@@ -140,30 +135,21 @@ const Profile = ({ navigation }) => {
               size={35}
               style={{ alignSelf: 'center', top: moderateScale(3) }}
             />
-            <Text
-              style={styles.medicalText}>
-              Medical stores
-            </Text>
+            <Text style={styles.signOutText}>Medical stores</Text>
           </View>
-          <TouchableOpacity
-            style={{ alignSelf: 'center' }}
-            onPress={medicalStores}>
+          <View style={{ alignSelf: 'center' }}>
             <MaterialIcons
               name="navigate-next"
               color={colors.blackColor}
               size={32}
               style={{ alignSelf: 'center', top: moderateScale(2) }}
             />
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: moderateScale(20),
-            paddingVertical: moderateScaleVertical(30),
-          }}>
+
+        <TouchableOpacity
+          style={styles.signOutmainView} onPress={() => navigation?.navigate(navigationStrings.ProfileCreate)}>
           <View style={{ flexDirection: 'row' }}>
             <FontAwesome5
               name="user-alt"
@@ -171,36 +157,17 @@ const Profile = ({ navigation }) => {
               size={35}
               style={{ alignSelf: 'center', top: moderateScale(3) }}
             />
-            <Text
-              style={styles.createProfileText}>
-              Create Profile
-            </Text>
+            <Text style={styles.signOutText}>Edit Profile</Text>
           </View>
-
-          <View style={{}}>
-            <Button
-              onPress={handlePress}
-              icon={() => (
-                <Icon
-                  name={
-                    expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-right'
-                  }
-                  color={colors.blackColor}
-                  size={32}
-                  style={{ top: moderateScale(2), left: moderateScale(25) }}
-                />
-              )}></Button>
-            {expanded && (
-              <View style={styles.menu}>
-                <ChemistProfileModal />
-                <DoctorProfileModal />
-                <PhysiotherapistProfileModal />
-                <LaboratoryProfileModal />
-                <Diagnostic_CenterModal />
-              </View>
-            )}
+          <View style={{ alignSelf: 'center' }}>
+            <MaterialIcons
+              name="navigate-next"
+              color={colors.blackColor}
+              size={32}
+              style={{ alignSelf: 'center', top: moderateScale(2) }}
+            />
           </View>
-        </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.signOutmainView} onPress={handleLogout}>
@@ -213,14 +180,14 @@ const Profile = ({ navigation }) => {
             />
             <Text style={styles.signOutText}>Sign out</Text>
           </View>
-          <TouchableOpacity style={{ alignSelf: 'center' }}>
+          <View style={{ alignSelf: 'center' }}>
             <MaterialIcons
               name="navigate-next"
               color={colors.blackColor}
               size={32}
               style={{ alignSelf: 'center', top: moderateScale(2) }}
             />
-          </TouchableOpacity>
+          </View>
         </TouchableOpacity>
       </View>
       <ModalComp

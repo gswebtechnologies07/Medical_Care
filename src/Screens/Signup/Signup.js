@@ -22,17 +22,35 @@ const Signup = (props) => {
 
 
   const [expanded, setExpanded] = useState(false);
+  // const [selectedValue, setSelectedValue] = useState(null);
 
-  const handlePress = () => setExpanded(!expanded);
+  // const handlePress = () => setExpanded(!expanded);
 
   const [value, setValue] = useState('')
   console.log(value, 'valuevalue')
 
+
+  // const [expanded, setExpanded] = useState(false);
+  // const sendDataToOtherPage = (data) => {
+  //   console.log(data, 'datadata')
+  //   setValue(data)
+  //   // Navigate to the other page and pass the data
+  //   // navigation.navigate('OtherPage', { data });
+  // };
+
+  const handlePress = () => {
+    setExpanded(!expanded);
+  };
+
   const sendDataToOtherPage = (data) => {
+
     console.log(data, 'datadata')
+    // Add your code to handle the selected value
+    // ...
+
+    // After handling the selected value, close the dropdown
     setValue(data)
-    // Navigate to the other page and pass the data
-    // navigation.navigate('OtherPage', { data });
+    setExpanded(false);
   };
 
 
@@ -88,7 +106,6 @@ const Signup = (props) => {
       email: state.email,
       password: state.password,
       user_type: value
-      // password_confirmation: state.password_confirmation,
     }
     console.log(data, 'datadatadata')
     dispatch(SignupAction(data)).then(async (response) => {
@@ -100,7 +117,6 @@ const Signup = (props) => {
         props?.navigation?.navigate(navigationStrings.LOGIN);
       } else {
         setLoader(false);
-        // console.log("email_passwordemail_passwordemail_password", response);
         Alert.alert("Email already exists")
       }
     })
@@ -152,22 +168,20 @@ const Signup = (props) => {
               </TouchableOpacity>
             </View>
 
-
-            <View style={{
-              width: '90%', backgroundColor: "#fff", justifyContent: 'center', alignSelf: 'center', borderColor: colors.blueColor, borderWidth: moderateScale(1), borderRadius: moderateScale(10), padding: moderateScale(2)
-            }}>
-              {/* <List.Section title="Dropdown Section"> */}
+            <View
+              style={styles.AccordionMainView}
+            >
               <List.Accordion
-                title="Account Type"
-                // left={(props) => <List.Icon {...props} icon="folder" />}
+                title={`${value || 'Select your Type'}`}
                 expanded={expanded}
                 onPress={handlePress}
-                style={{ backgroundColor: "#fff", borderRadius: moderateScale(20), borderColor: colors.whiteColor, borderWidth: moderateScale(1) }}
+                style={styles.AccordionListView}
               >
                 <List.Item
                   title="Other"
                   onPress={() => sendDataToOtherPage("Other")}
                 />
+
                 <List.Item
                   title="Chemist"
                   onPress={() => sendDataToOtherPage('Chemist')}
@@ -189,22 +203,8 @@ const Signup = (props) => {
                   onPress={() => sendDataToOtherPage('Diagnostic')}
                 />
               </List.Accordion>
-              {/* </List.Section> */}
             </View>
 
-
-            {/* <View style={{ flexDirection: 'row', left: moderateScale(20) }}>
-              <TextInputComp
-                value={password_confirmation}
-                maxLength={10}
-                placeholder='Confirm Password'
-                onChangeText={(password_confirmation) => updateState({ password_confirmation })}
-              />
-              <TouchableOpacity onPress={togglePasswordVisibility} style={{ right: moderateScale(40) }}>
-                <FontAwesome name={secureText ? "eye" : "eye-slash"}
-                  size={24} color={colors.blackColor} style={{ top: moderateScale(12) }} />
-              </TouchableOpacity>
-            </View> */}
 
             <View style={{ top: moderateScale(30) }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -224,7 +224,7 @@ const Signup = (props) => {
               </View>
 
               <TouchableOpacity style={{ justifyContent: 'center', bottom: moderateScale(10), alignSelf: "center", top: moderateScale(40) }} activeOpacity={0.7} onPress={() => onSignup()}>
-                <Text style={{ paddingHorizontal: moderateScale(35), paddingVertical: moderateScaleVertical(10), backgroundColor: colors.blueColor, borderRadius: moderateScale(10), color: colors.whiteColor, fontSize: moderateScale(16) }}>Sign up</Text>
+                <Text style={styles.signUpBtn}>Sign up</Text>
               </TouchableOpacity>
 
             </View>
@@ -286,6 +286,30 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: textScale(16),
     fontFamily: fontFamily.semiBold
+  },
+  AccordionMainView: {
+    width: '90%',
+    backgroundColor: "#fff",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderColor: colors.blueColor,
+    borderWidth: moderateScale(1),
+    borderRadius: moderateScale(10),
+    padding: moderateScale(2)
+  },
+  AccordionListView: {
+    backgroundColor: "#fff",
+    borderRadius: moderateScale(20),
+    borderColor: colors.whiteColor,
+    borderWidth: moderateScale(1)
+  },
+  signUpBtn: {
+    paddingHorizontal: moderateScale(35),
+    paddingVertical: moderateScaleVertical(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16)
   },
 })
 

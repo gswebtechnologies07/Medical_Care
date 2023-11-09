@@ -72,14 +72,14 @@ const Nearby_Medical = (props) => {
 
   const [data, setData] = useState('')
 
-  const ChemistData = useSelector((state) => state?.getAllChemistProfileReducer?.GetAllChemistProfile?.chemist)
+  const ChemistData = useSelector((state) => state?.getAllChemistProfileReducer?.GetAllChemistProfile?.order)
   console.log(ChemistData, 'ChemistDataChemistData')
 
   useEffect(() => {
     dispatch(getAllChemistProfile()).then(async (response) => {
       console.log(response, "response_ChemistProfileActionsss")
 
-      setData(response?.chemist)
+      setData(response?.order)
       // setData(data)
 
     });
@@ -97,7 +97,7 @@ const Nearby_Medical = (props) => {
       <View style={{ flex: 1, flexDirection: 'row', padding: moderateScale(20), justifyContent: "space-between" }}>
 
         <View style={{ flexDirection: 'row' }}>
-          <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/chemist/${item?.img}` }} style={{ height: moderateScale(80), width: moderateScale(120), borderRadius: moderateScale(10) }} />
+          <Image source={{ uri: `https://demogswebtech.com/medicalcare/public/images/user/${item?.img}` }} style={{ height: moderateScale(80), width: moderateScale(120), borderRadius: moderateScale(10) }} />
           <View style={{ marginLeft: moderateScale(12) }}>
             <Text style={{ fontFamily: fontFamily.medium, fontSize: textScale(16), color: colors.blackColor, width: moderateScale(150) }}>{item?.name_of_firm}</Text>
             <View style={{ flexDirection: "row" }}>

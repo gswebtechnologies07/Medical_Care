@@ -1,5 +1,5 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeaderComp from '../../Components/HeaderComp'
 import WrapperContainer from '../../Components/WrapperContainer'
 import fontFamily from '../../styles/fontFamily'
@@ -7,7 +7,8 @@ import { moderateScale, moderateScaleVertical, textScale } from '../../styles/re
 import colors from '../../styles/colors'
 import imagePath from '../../constants/imagePath'
 import ButtonComp from '../../Components/ButtonComp'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { GetPendingOrderAction } from '../../redux/Action/HomeChemistAction';
 
 
 const upComingData = [
@@ -65,40 +66,56 @@ const upComingData = [
 
 const PendingOrder = ({ navigation }) => {
 
+  const dispatch = useDispatch();
+  const [pendingOrders, setPendingOrders] = useState("")
+  console.log(pendingOrders, 'pendingOrderpendingOrder')
+
+  const profilesId = useSelector((state) => state?.LoginReducer?.Login.user?.id)
+  console.log("profilesIdprofilesId", profilesId)
+
+  const id = profilesId
+
+  useEffect(() => {
+    dispatch(GetPendingOrderAction(id)).then(async (response) => {
+      console.log(response, "GetPendingOrderActionGetPendingOrderActionid")
+      setPendingOrders(response.order)
+
+    })
+  }, [])
+
   const renderItem = ({ item }) => {
     return (
       <View style={{ paddingVertical: moderateScaleVertical(20) }}>
         <View style={styles.containerView}>
           <View style={styles.mainView}>
-            <Text style={styles.mainText}>{item?.mainText}</Text>
-            <Text style={styles.mainText2}>{item?.title}</Text>
+            <Text style={styles.mainText}>{item?.order_id}</Text>
+            {/* <Text style={styles.mainText2}>{item?.title}</Text> */}
           </View>
 
-          <View style={{justifyContent:'center',alignItems:'center',right:moderateScale(35)}}>
-            <Text style={styles.mainText3}>{item?.mainText2}</Text>
+          <View>
+            <Text style={styles.mainText3}>{item?.order_status}</Text>
           </View>
         </View>
 
         <View style={styles.titleMainView}>
           <View style={{ justifyContent: 'center' }}>
-            <Text style={styles.titleText}>{item?.mainText4}</Text>
-            <Text style={styles.titleText2}>{item?.title2}</Text>
-            <Text style={styles.titleText2}>{item?.title3}</Text>
+            {/* <Text style={styles.titleText}>{item?.mainText4}</Text> */}
+
+            <View>
+              <Image source={item.prescription === "" ? imagePath.icMedical : { uri: `https://demogswebtech.com/medicalcare/public/images/order/${item?.prescription}` }} style={{ height: moderateScale(70), width: moderateScale(120), borderRadius: moderateScale(10) }} />
+            </View>
+
+            <Text style={styles.titleText2}>{item?.order_detail}</Text>
+            {/* <Text style={styles.titleText2}>{item?.title3}</Text> */}
           </View>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.mainText4}>{item?.mainText3}</Text>
-            <View style={{}}>
+            <Text style={styles.mainText4}>{item?.total_amount}</Text>
 
-
-              <ButtonComp
-                style={styles.cardButton}
-                text='Order details'
-                textStyle={styles.cardButtonText}
-                Img2={imagePath.icBack2}
-                imgStyle={{ top: moderateScale(1), right: moderateScale(2) }}
-              />
-            </View>
+            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7}>
+              <Text style={styles.cardButtonText}>Order details</Text>
+            </TouchableOpacity>
           </View>
+
         </View>
       </View>
     )
@@ -117,7 +134,7 @@ const PendingOrder = ({ navigation }) => {
 
       <View style={{ flex: 1 }}>
         <FlatList
-          data={upComingData}
+          data={pendingOrders}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
@@ -189,6 +206,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(10),
     paddingVertical: moderateScaleVertical(4),
     // backgroundColor: colors.blueColor,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: moderateScale(5)
+  },
+  cardButtonText: {
+    fontFamily: fontFamily.regular,
+    fontSize: textScale(12),
+    color: colors.whiteColor,
+    alignSelf: 'center',
+    paddingHorizontal: moderateScale(8),
+    paddingVertical: moderateScaleVertical(4)
+  },
+  cardButton: {
+    flexDirection: "row",
+    paddingHorizontal: moderateScale(10),
+    paddingVertical: moderateScaleVertical(4),
+    backgroundColor: colors.blueColor,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',

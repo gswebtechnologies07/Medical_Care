@@ -1,4 +1,4 @@
-import { StyleSheet, Text, KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, TouchableOpacity, View, Alert } from 'react-native'
+import { StyleSheet, Text, Image, KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, TouchableOpacity, View, Alert } from 'react-native'
 import React, { useState } from 'react'
 import fontFamily from '../../styles/fontFamily'
 import WrapperContainer from '../../Components/WrapperContainer'
@@ -14,6 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux'
 import { LoginAction } from '../../redux/Action/LoginAction';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import imagePath from '../../constants/imagePath'
 
 const Login = (props) => {
     const dispatch = useDispatch();
@@ -76,7 +77,9 @@ const Login = (props) => {
 
     return (
         <WrapperContainer>
-            <HeaderComp />
+            <View style={styles.HeaderContainer}>
+                <Image source={imagePath.icLogo} style={{}} />
+            </View>
             <KeyboardAvoidingView
                 style={{ flex: 1, margin: moderateScale(16) }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -175,5 +178,14 @@ const styles = StyleSheet.create({
         fontSize: textScale(12),
         color: 'black',
         fontFamily: fontFamily.regular
+    },
+    HeaderContainer: {
+        width: '100%',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginHorizontal: moderateScale(10),
+        marginVertical: moderateScaleVertical(20),
+        alignItems: 'center',
+        marginTop: moderateScale(10)
     }
 })
