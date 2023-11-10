@@ -25,6 +25,7 @@ export default {
     HomeChemist: "HomeChemist",
     CompleteOrder: "CompleteOrder",
     PendingOrder: "PendingOrder",
-    OrderDetails: "OrderDetails",
+    UserOrderDetails: "UserOrderDetails",
+    ChemistOrderDetails: "ChemistOrderDetails",
 
 };

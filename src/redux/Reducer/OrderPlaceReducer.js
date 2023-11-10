@@ -1,5 +1,6 @@
 const initialState = {
-    GetOrderPlace: []
+    GetOrderPlace: [],
+    EditOrderProfile: []
 }
 
 export const OrderPlaceReducer = (state = initialState, action) => {
@@ -8,6 +9,18 @@ export const OrderPlaceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 GetOrderPlace: action.payload
+            }
+        default:
+            return state
+    }
+}
+
+export const EditOrderPlaceReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case 'EDIT_ORDER_PLACE':
+            return {
+                ...state,
+                EditOrderProfile: action.payload
             }
         default:
             return state

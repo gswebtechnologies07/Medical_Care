@@ -75,8 +75,13 @@ export default function (Stack) {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name={navigationStrings.OrderDetails}
-                component={Screens.OrderDetails}
+                name={navigationStrings.UserOrderDetails}
+                component={Screens.UserOrderDetails}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={navigationStrings.ChemistOrderDetails}
+                component={Screens.ChemistOrderDetails}
                 options={{ headerShown: false }}
             />
         </>

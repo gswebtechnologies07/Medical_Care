@@ -184,7 +184,7 @@ const MyOrder = ({ navigation }) => {
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.mainText4}>{item?.total_amount}</Text>
 
-            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7} onPress={()=>navigation.navigate(navigationStrings.OrderDetails,{item:item})}>
+            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7} onPress={()=>navigation.navigate(navigationStrings.UserOrderDetails,{item:item})}>
               <Text style={styles.cardButtonText}>Order details</Text>
             </TouchableOpacity>
           </View>

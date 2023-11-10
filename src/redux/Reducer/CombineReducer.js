@@ -7,7 +7,7 @@ import { Diaganostic_ProfileReducer, GetDiaganosticProfileReducer, EditDiaganost
 import { GetProfileReducer } from './GetProfileReducer';
 import { GetLaboratoryProfileReducer, Laboratory_ProfileReducer, EditLaboratoryProfileReducer } from './Laboratory_ProfileReducer';
 import { Physiotherapist_ProfileReducer, GetPhysiotherapistProfileReducer, EditPhysiotherapistProfileReducer } from './PhysiotherapistProfileReducer';
-import { OrderPlaceReducer } from './OrderPlaceReducer';
+import { OrderPlaceReducer, EditOrderPlaceReducer } from './OrderPlaceReducer';
 import { HomeChemistReducer } from './HomeChemistReducer';
 //
 export const combineReducer = ({
@@ -32,10 +32,10 @@ export const combineReducer = ({
     EditPhysiotherapistProfileReducer,
     getAllChemistProfileReducer,
     OrderPlaceReducer,
+    EditOrderPlaceReducer,
 
 
-
-    HomeChemistReducer
+    HomeChemistReducer,
 
 
 

@@ -11,7 +11,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import navigationStrings from '../../Navigations/navigationStrings'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllChemistProfile } from '../../redux/Action/ChemistProfileAction';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 const AllTabs = [

@@ -9,6 +9,7 @@ import imagePath from '../../constants/imagePath'
 import ButtonComp from '../../Components/ButtonComp'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetCompletedOrderAction } from '../../redux/Action/HomeChemistAction'
+import navigationStrings from '../../Navigations/navigationStrings'
 
 
 // const upComingData = [
@@ -114,7 +115,7 @@ const CompleteOrder = ({ navigation }) => {
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.mainText4}>{item?.total_amount}</Text>
 
-            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7}>
+            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7} onPress={() => navigation.navigate(navigationStrings.UserOrderDetails, { item: item })}>
               <Text style={styles.cardButtonText}>Order details</Text>
             </TouchableOpacity>
           </View>

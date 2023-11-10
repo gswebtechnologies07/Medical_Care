@@ -6,7 +6,7 @@ import { height, moderateScale, textScale } from '../../styles/responsiveSize';
 import fontFamily from '../../styles/fontFamily';
 import colors from '../../styles/colors';
 
-const OrderDetails = (props) => {
+const UserOrderDetails = (props) => {
     console.log(props, 'OrderDetailsOrderDetailsprops');
 
     const navigation = useNavigation();
@@ -88,8 +88,7 @@ const OrderDetails = (props) => {
         </View>
     );
 }
-
-export default OrderDetails;
+export default UserOrderDetails;
 
 const styles = StyleSheet.create({
     imgView: {

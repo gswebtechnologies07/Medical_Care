@@ -8,6 +8,7 @@ import colors from '../../styles/colors'
 import imagePath from '../../constants/imagePath'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetCompletedOrderAction, GetPendingOrderAction } from '../../redux/Action/HomeChemistAction'
+import navigationStrings from '../../Navigations/navigationStrings'
 
 
 // const upComingData = [
@@ -179,7 +180,7 @@ const HomeChemist = (props) => {
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={styles.mainText4}>{item?.total_amount}</Text>
 
-                        <TouchableOpacity style={styles.cardButton} activeOpacity={0.7}>
+                        <TouchableOpacity style={styles.cardButton} activeOpacity={0.7} onPress={() => props?.navigation?.navigate(navigationStrings.ChemistOrderDetails, { data: item })}>
                             <Text style={styles.cardButtonText}>Order details</Text>
                         </TouchableOpacity>
                     </View>
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         marginHorizontal: moderateScale(10),
-        marginVertical:moderateScaleVertical(20),
+        marginVertical: moderateScaleVertical(20),
         alignItems: 'center',
         marginTop: moderateScale(10)
     },

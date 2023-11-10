@@ -117,7 +117,6 @@ const Upload_Presciption = (props) => {
             }
         })
 
-
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -125,7 +124,7 @@ const Upload_Presciption = (props) => {
             <KeyboardAwareScrollView>
                 <View style={{ height: height / 2.6, paddingHorizontal: moderateScale(20) }}>
                     <Text style={{ fontSize: textScale(20), fontFamily: fontFamily.bold, color: colors.blackColor }}>Upload  Prescription</Text>
-                    <View style={{ justifyContent: 'center', height: moderateScale(230), backgroundColor: colors.grayColor03, top: moderateScale(15), borderRadius: moderateScale(10) }}>
+                    <View style={{ justifyContent: 'center', height: moderateScale(230), backgroundColor: colors.grayColor03, top: moderateScale(25), borderRadius: moderateScale(10) }}>
                         <TouchableOpacity style={{ alignSelf: "center", alignItems: 'center' }} onPress={() => onSelectImage()}>
                             {!image ? <AntDesign name="camera" color={colors.grayColor} size={50} /> : <Image source={{ uri: image }} style={{ height: height / 3.1, width: width / 1.12, borderRadius: 10 }} />}
                         </TouchableOpacity>

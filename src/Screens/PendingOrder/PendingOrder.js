@@ -6,9 +6,9 @@ import fontFamily from '../../styles/fontFamily'
 import { moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
 import colors from '../../styles/colors'
 import imagePath from '../../constants/imagePath'
-import ButtonComp from '../../Components/ButtonComp'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetPendingOrderAction } from '../../redux/Action/HomeChemistAction';
+import navigationStrings from '../../Navigations/navigationStrings'
 
 
 const upComingData = [
@@ -65,6 +65,7 @@ const upComingData = [
 ];
 
 const PendingOrder = ({ navigation }) => {
+  console.log(navigation, 'navigationnavigation')
 
   const dispatch = useDispatch();
   const [pendingOrders, setPendingOrders] = useState("")
@@ -111,7 +112,7 @@ const PendingOrder = ({ navigation }) => {
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.mainText4}>{item?.total_amount}</Text>
 
-            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7}>
+            <TouchableOpacity style={styles.cardButton} activeOpacity={0.7} onPress={() => navigation.navigate(navigationStrings.UserOrderDetails, { item: item })}>
               <Text style={styles.cardButtonText}>Order details</Text>
             </TouchableOpacity>
           </View>
