@@ -60,7 +60,7 @@ const specialityOptions = [
   {label: 'Other', value: 'Other'},
 ];
 
-const ProfileCreate = props => {
+const DoctorCreate = props => {
   const [userData, setUserData] = useState({});
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([options[0].value]);
@@ -91,7 +91,7 @@ const ProfileCreate = props => {
     Drug_license_number: '',
     gstNumber: '',
     regNumber: '',
-    //    img:'',
+    img: '',
     description: '',
   });
   useEffect(() => {
@@ -481,7 +481,129 @@ const ProfileCreate = props => {
           />
         </View>
 
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={{color: colors.grayColor}}>Deals in</Text>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity
+              onPress={toggleModal}
+              style={styles.dropdownButton}>
+              <Icon name="caret-down" size={20} />
+            </TouchableOpacity>
+            <Modal isVisible={isModalVisible}>
+              <View style={styles.modalContent}>
+                {options.map(option => (
+                  <TouchableOpacity
+                    key={option.value}
+                    onPress={() => toggleOptionDealsIn(option.value)}
+                    style={styles.option}>
+                    <Text>{option.label}</Text>
+                    {selectedOptions.includes(option.value) && (
+                      <Icon name="check" size={20} color={colors.blueColor} />
+                    )}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  onPress={toggleModal}
+                  style={styles.closeButton}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+          <View style={{marginLeft: 10}}>
+            {/* Display the selected options */}
+            {selectedOptions.map(selectedOption => (
+              <Text
+                key={selectedOption}
+                style={{
+                  color: colors.blueColor,
+                  // backgroundColor: 'red',
+
+                  padding: 20,
+                }}>
+                {selectedOption}
+              </Text>
+            ))}
+          </View>
+        </View>
+
+        <View
+          style={{
+            borderBottomColor: colors.grayColor,
+            borderBottomWidth: 1,
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={{color: colors.grayColor}}>Speciality</Text>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity
+              onPress={toggleSpecialityModal}
+              style={styles.dropdownButton}>
+              <Icon name="caret-down" size={20} />
+            </TouchableOpacity>
+            <Modal isVisible={isSpecialityModalVisible}>
+              <View style={styles.modalContent}>
+                <ScrollView>
+                  {specialityOptions.map(option => (
+                    <TouchableOpacity
+                      key={option.value}
+                      onPress={() => toggleSpec(option.value)}
+                      style={styles.option}>
+                      <Text>{option.label}</Text>
+                      {selectedSpecialities.includes(option.value) && (
+                        <Icon name="check" size={20} color={colors.blueColor} />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+                <TouchableOpacity
+                  onPress={toggleSpecialityModal}
+                  style={styles.closeButton}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+          <View style={{marginLeft: 10}}>
+            {/* Display the selected options */}
+            {selectedSpecialities.map(selectedOption => (
+              <Text
+                key={selectedOption}
+                style={{
+                  color: colors.blueColor,
+                  // backgroundColor: 'red',
+
+                  padding: 20,
+                }}>
+                {selectedOption}
+              </Text>
+            ))}
+          </View>
+        </View>
+
         <View>
+          <View
+            style={{
+              borderBottomColor: colors.grayColor,
+              borderBottomWidth: 1,
+            }}
+          />
           <View
             style={{
               flexDirection: 'row',
@@ -530,6 +652,50 @@ const ProfileCreate = props => {
             }}
           />
         </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={{color: colors.grayColor}}>Sales Promoter</Text>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity onPress={toggleSalesPromoterModal}>
+              <Icon name="caret-down" size={20} />
+            </TouchableOpacity>
+            <Modal isVisible={isSalesPromoterModalVisible}>
+              <View style={styles.modalContent}>
+                {salesPromoters.map(salesPromoter => (
+                  <TouchableOpacity
+                    key={salesPromoter.id}
+                    onPress={() => toggleOption(salesPromoter)}
+                    style={styles.option}>
+                    <Text>{salesPromoter.name}</Text>
+                    {selectedSalesPromoter &&
+                      selectedSalesPromoter.id === salesPromoter.id && (
+                        <Icon name="check" size={20} color={colors.blueColor} />
+                      )}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  onPress={toggleSalesPromoterModal}
+                  style={styles.closeButton}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+          <View style={{marginLeft: 10}}>
+            {selectedSalesPromoter && (
+              <Text style={{color: colors.blueColor, padding: 20}}>
+                {selectedSalesPromoter.name}
+              </Text>
+            )}
+          </View>
+        </View>
 
         <View style={{height: moderateScale(100), justifyContent: 'center'}}>
           <TouchableOpacity activeOpacity={0.7} onPress={UpdateChemistProfile}>
@@ -543,7 +709,7 @@ const ProfileCreate = props => {
   );
 };
 
-export default ProfileCreate;
+export default DoctorCreate;
 
 const styles = StyleSheet.create({
   doctorPageBtn: {

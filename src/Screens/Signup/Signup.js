@@ -44,7 +44,7 @@ const Signup = (props) => {
 
   const sendDataToOtherPage = (data) => {
 
-    console.log(data, 'datadata')
+    console.log(data, 'woooohhooo')
     // Add your code to handle the selected value
     // ...
 
@@ -214,7 +214,7 @@ const Signup = (props) => {
               </View>
 
               <View style={styles.bottomText}>
-                <Text style={styles.accText}>Don't have an account?</Text>
+                <Text style={styles.accText}>Already have an account?</Text>
                 <TouchableOpacity
                   onPress={() => props?.navigation?.navigate(navigationStrings.LOGIN)}
                 >

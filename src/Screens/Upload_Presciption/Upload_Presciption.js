@@ -81,42 +81,38 @@ const Upload_Presciption = (props) => {
     }
 
     const imageUpload = (items) => {
+      const formData = new FormData();
+      formData.append('prescription', {
+        uri: items.uri,
+        type: items.type,
+        name: items.name,
+      });
+      formData.append('user_name', username);
+      formData.append('user_email', userEmail);
+      formData.append('user_mobile', userMobile);
+      formData.append('order_detail', state.name);
+      formData.append('chemist_id', id);
+      formData.append('user_id', userId);
 
-        const formData = new FormData()
-        formData.append('prescription', {
-            uri: items.uri,
-            type: items.type,
-            name: items.name
-        });
-        formData.append('user_name', username);
-        formData.append('user_email', userEmail);
-        formData.append('user_mobile', userMobile);
-        formData.append('order_detail', state.name);
-        formData.append('chemist_id', id);
-        formData.append('user_id', userId);
-
-        dispatch(OrderPlaceAction(formData)).then(async (response) => {
-            console.log("responseresponseresponse", response)
-            if (response?.status === "Order created successfully") {
-                Alert.alert(
-                    'Order Created',
-                    'Your order has been successfully created!',
-                    [
-                        { text: 'OK', onPress: () => { } },
-                    ]);
-                props?.navigation?.navigate(navigationStrings.MY_ORDER)
-            } else {
-                Alert.alert(
-                    'Order Creation Failed',
-                    'There was an error while creating your order. Please try again later.',
-                    [
-                        { text: 'OK', onPress: () => { } },
-                    ]
-                );
-                console.log("email_passwordemail", response);
-            }
-        })
-
+      dispatch(OrderPlaceAction(formData)).then(async response => {
+        console.log(' responseresponseresponse', response);
+        if (response?.status === 'Order created successfully') {
+          Alert.alert(
+            'Order Created',
+            'Your order has been successfully created!',
+            [{text: 'OK', onPress: () => {}}],
+          );
+          props?.navigation?.navigate(navigationStrings.MY_ORDER);
+        } else {
+          console.log('Order creation failed. Response:', response);
+          Alert.alert(
+            'Order Creation Failed',
+            'There was an error while creating your order. Please try again later.',
+            [{text: 'OK', onPress: () => {}}],
+          );
+          console.log('email_passwordemail', response);
+        }
+      });
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>

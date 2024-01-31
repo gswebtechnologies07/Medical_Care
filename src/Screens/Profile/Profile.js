@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import React, { useState } from 'react';
-import { Button } from 'react-native-paper';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
+import React, {useState} from 'react';
+import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import HeaderComp2 from '../../Components/HeaderComp2';
 import WrapperContainer from '../../Components/WrapperContainer';
 import {
-  height, moderateScale, moderateScaleVertical, textScale,
+  height,
+  moderateScale,
+  moderateScaleVertical,
+  textScale,
 } from '../../styles/responsiveSize';
 import fontFamily from '../../styles/fontFamily';
 import colors from '../../styles/colors';
@@ -20,14 +23,13 @@ import ModalComp from '../../Components/ModalComp';
 // import DoctorProfileModal from '../../Components/DoctorProfileModal';
 // import PhysiotherapistProfileModal from '../../Components/PhysiotherapistProfileModal';
 // import LaboratoryProfileModal from '../../Components/LaboratoryProfileModal';
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
 // import { LogoutAction } from '../../redux/Action/LogoutAction';
-// import { useSelector } from 'react-redux';
-import * as Types from '../../redux/Types/Types'
+import {useSelector} from 'react-redux';
+import * as Types from '../../redux/Types/Types';
 // import * as Types from '../../redux/Types/Types'
 // import Diagnostic_CenterModal from '../../Components/Diagnostic_CenterModal';
-
 
 // const ProfileData =[
 // {
@@ -52,11 +54,14 @@ import * as Types from '../../redux/Types/Types'
 // },
 // ]
 
-const Profile = ({ navigation }) => {
+const Profile = ({navigation}) => {
   // console.log(navigation,'navigationnavigationnavigationnavigation')
   const [expanded, setExpanded] = useState(false);
-  const [isVisible, setIsVisible] = useState(false)
-
+  const [isVisible, setIsVisible] = useState(false);
+  const getHomeChemistData = useSelector(
+    state => state?.LoginReducer?.Login.user?.user_type,
+  );
+  console.log(getHomeChemistData, 'getHomeChemistData');
 
   // const token = useSelector((state) => state)
   // console.log("tokentoken", token)
@@ -73,119 +78,298 @@ const Profile = ({ navigation }) => {
   const medicalStores = () => {
     navigation.navigate(navigationStrings.Nearby_Medical);
   };
-
-  // const onLogoutAlert = () => {
-  //   Alert.alert(
-  //     'Logout',
-  //     'Are you sure, yout want to logout from this device',
-  //     [{ text: 'yest', onPress: logout }, { text: 'No', }],
-  //     { cancelable: true }
-  //   )
-  // }s
-
-
-
   const handleLogout = async () => {
     try {
       dispatch({
         type: Types.LOGIN,
-        payload: []
-      })
+        payload: [],
+      });
       await AsyncStorage.removeItem('token');
-
     } catch (error) {
       console.error('Error_during_logout:', error);
     }
-
-  }
+  };
   return (
     <WrapperContainer>
       <HeaderComp2 text="Profile" />
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
+        {getHomeChemistData !== 'Doctor' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Diagnostic' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={orderHistory}>
+              <View style={{flexDirection: 'row'}}>
+                <MaterialIcons
+                  name="add-shopping-cart"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>My Order</Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+        {getHomeChemistData !== 'Doctor' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Chemist' &&
+          getHomeChemistData !== 'Diagnostic' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={medicalStores}>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome6
+                  name="house-chimney-medical"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>Medical stores</Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+        {getHomeChemistData !== 'Other' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Diagnostic' &&
+          getHomeChemistData !== 'Doctor' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.ChemistCreate)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="user-alt"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>Edit Profile </Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
 
+        {getHomeChemistData !== 'Other' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Chemist' &&
+          getHomeChemistData !== 'Doctor' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.ProfileCreateDiagnos)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="user-alt"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>Edit Profile </Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
 
+        {getHomeChemistData !== 'Other' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Chemist' &&
+          getHomeChemistData !== 'Diagnostic' &&
+          getHomeChemistData !== 'Doctor' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.ProfileCreateLab)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="user-alt"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}> Profile </Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
 
-        <TouchableOpacity
-          style={styles.signOutmainView} onPress={orderHistory}>
-          <View style={{ flexDirection: 'row' }}>
-            <MaterialIcons
-              name="add-shopping-cart"
-              color={colors.pinkColor2}
-              size={35}
-              style={{ alignSelf: 'center', top: moderateScale(3) }}
-            />
-            <Text style={styles.signOutText}>Edit Profile</Text>
-          </View>
-          <View style={{ alignSelf: 'center' }}>
-            <MaterialIcons
-              name="navigate-next"
-              color={colors.blackColor}
-              size={32}
-              style={{ alignSelf: 'center', top: moderateScale(2) }}
-            />
-          </View>
-        </TouchableOpacity>
+        {getHomeChemistData !== 'Other' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Diagnostic' &&
+          getHomeChemistData !== 'Chemist' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.DoctorCreate)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="user-alt"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>Edit Profile </Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
 
-        <TouchableOpacity
-          style={styles.signOutmainView} onPress={medicalStores}>
-          <View style={{ flexDirection: 'row' }}>
-            <FontAwesome6
-              name="house-chimney-medical"
-              color={colors.pinkColor2}
-              size={35}
-              style={{ alignSelf: 'center', top: moderateScale(3) }}
-            />
-            <Text style={styles.signOutText}>Medical stores</Text>
-          </View>
-          <View style={{ alignSelf: 'center' }}>
-            <MaterialIcons
-              name="navigate-next"
-              color={colors.blackColor}
-              size={32}
-              style={{ alignSelf: 'center', top: moderateScale(2) }}
-            />
-          </View>
-        </TouchableOpacity>
+        {getHomeChemistData !== 'Other' &&
+          getHomeChemistData !== 'Doctor' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Diagnostic' &&
+          getHomeChemistData !== 'Chemist' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.ProfileCreatePhysio)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="user-alt"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>Edit Profile </Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+        {getHomeChemistData !== 'Doctor' &&
+          getHomeChemistData !== 'Chemist' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Diagnostic' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.ProfileCreate)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="user-alt"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}>Edit Profile</Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+        {getHomeChemistData !== 'Doctor' &&
+          getHomeChemistData !== 'Physiotherapist' &&
+          getHomeChemistData !== 'Laboratory' &&
+          getHomeChemistData !== 'Diagnostic' &&
+          getHomeChemistData !== 'Other' && (
+            <TouchableOpacity
+              style={styles.signOutmainView}
+              onPress={() =>
+                navigation?.navigate(navigationStrings.ChemistBankDetails)
+              }>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome5
+                  name="money-check"
+                  color={colors.pinkColor2}
+                  size={35}
+                  style={{alignSelf: 'center', top: moderateScale(3)}}
+                />
+                <Text style={styles.signOutText}> Bank Details</Text>
+              </View>
+              <View style={{alignSelf: 'center'}}>
+                <MaterialIcons
+                  name="navigate-next"
+                  color={colors.blackColor}
+                  size={32}
+                  style={{alignSelf: 'center', top: moderateScale(2)}}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
 
-
-        <TouchableOpacity
-          style={styles.signOutmainView} onPress={() => navigation?.navigate(navigationStrings.ProfileCreate)}>
-          <View style={{ flexDirection: 'row' }}>
-            <FontAwesome5
-              name="user-alt"
-              color={colors.pinkColor2}
-              size={35}
-              style={{ alignSelf: 'center', top: moderateScale(3) }}
-            />
-            <Text style={styles.signOutText}>Edit Profile</Text>
-          </View>
-          <View style={{ alignSelf: 'center' }}>
-            <MaterialIcons
-              name="navigate-next"
-              color={colors.blackColor}
-              size={32}
-              style={{ alignSelf: 'center', top: moderateScale(2) }}
-            />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.signOutmainView} onPress={handleLogout}>
-          <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity style={styles.signOutmainView} onPress={handleLogout}>
+          <View style={{flexDirection: 'row'}}>
             <Ionicons
               name="log-out"
               color={colors.pinkColor2}
               size={35}
-              style={{ alignSelf: 'center', top: moderateScale(3) }}
+              style={{alignSelf: 'center', top: moderateScale(3)}}
             />
             <Text style={styles.signOutText}>Sign out</Text>
           </View>
-          <View style={{ alignSelf: 'center' }}>
+          <View style={{alignSelf: 'center'}}>
             <MaterialIcons
               name="navigate-next"
               color={colors.blackColor}
               size={32}
-              style={{ alignSelf: 'center', top: moderateScale(2) }}
+              style={{alignSelf: 'center', top: moderateScale(2)}}
             />
           </View>
         </TouchableOpacity>
@@ -193,13 +377,21 @@ const Profile = ({ navigation }) => {
       <ModalComp
         isVisible={isVisible}
         onBackdropPress={() => setIsVisible(false)}
-        style={{ justifyContent: 'center', paddigHorizontal: moderateScale(10), paddingVertical: moderateScale(120), top: moderateScale(30) }}
-      >
-        <View style={{ flex: 1, backgroundColor: colors.whiteColor, borderRadius: (25) }}>
+        style={{
+          justifyContent: 'center',
+          paddigHorizontal: moderateScale(10),
+          paddingVertical: moderateScale(120),
+          top: moderateScale(30),
+        }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.whiteColor,
+            borderRadius: 25,
+          }}>
           <Text>WERTYUI</Text>
         </View>
       </ModalComp>
-
     </WrapperContainer>
   );
 };
@@ -227,12 +419,12 @@ const styles = StyleSheet.create({
     width: moderateScale(150),
     height: moderateScale(190),
     justifyContent: 'center',
-    backgroundColor: "#E5E4E2",
+    backgroundColor: '#E5E4E2',
     borderRadius: 20,
-    shadowOffset: { width: 10, height: 10, },
+    shadowOffset: {width: 10, height: 10},
     shadowColor: 'black',
     shadowOpacity: 1.0,
-    elevation: 1
+    elevation: 1,
   },
   historyText: {
     fontSize: textScale(18),
@@ -262,7 +454,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(20),
     borderWidth: 0.7,
     borderColor: colors.pinkColor,
-    bottom: moderateScale(220)
+    bottom: moderateScale(220),
   },
   // chemistPagebtn: {
   //   flexDirection: 'row',
@@ -323,5 +515,4 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     marginBottom: moderateScaleVertical(12),
   },
-
 });

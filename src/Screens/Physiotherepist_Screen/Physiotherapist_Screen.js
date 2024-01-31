@@ -16,10 +16,10 @@ import ButtonComp from '../../Components/ButtonComp';
 import colors from '../../styles/colors';
 import {useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
-const Doctor_Profile = () => {
+
+const Physiotherapist_Screen = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const LoginData = useSelector(state => state?.LoginReducer?.Login);
 
   useEffect(() => {
@@ -38,6 +38,7 @@ const Doctor_Profile = () => {
 
     fetchProfileData();
   }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       // This function will be called when the component is focused
@@ -172,7 +173,7 @@ const Doctor_Profile = () => {
   );
 };
 
-export default Doctor_Profile;
+export default Physiotherapist_Screen;
 
 const styles = StyleSheet.create({
   container: {

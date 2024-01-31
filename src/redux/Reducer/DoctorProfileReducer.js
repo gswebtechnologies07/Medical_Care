@@ -27,6 +27,18 @@ export const GetDoctorProfileReducer = (state = initialState, action) => {
             return state
     }
 }
+
+export const getProfileAction = (state = initialState, action) => {
+  switch (action.type) {
+    case 'GET_DOCTOR_PROFILE':
+      return {
+        ...state,
+        GetDoctorProfile: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 export const EditDoctorProfileReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'EDIT_DOCTOR_PROFILE':

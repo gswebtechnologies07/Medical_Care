@@ -35,45 +35,20 @@ const options = [
   {label: 'Homeopathic', value: 'Homeopathic'},
   {label: 'Other', value: 'Other'},
 ];
-const specialityOptions = [
-  {label: 'Neurologist', value: 'Neurologist'},
-  {label: 'Generalpractitioner', value: 'General practitioner'},
-  {label: 'Psychiatrist', value: 'Psychiatrist'},
-  {label: 'Surgeon', value: 'Surgeon'},
-  {label: 'Dermatologist', value: 'Dermatologist'},
-  {label: 'Pediatrician', value: 'Pediatrician'},
-  {label: 'Oncologist', value: 'Oncologist'},
-  {label: 'Cardiologist', value: 'Cardiologist'},
-  {label: 'Radiologist', value: 'Radiologist'},
-  {label: 'Pathologist', value: 'Pathologist'},
-  {label: 'Gastroenterologist', value: 'Gastroenterologist'},
-  {label: 'Pulmonologist', value: 'Pulmonologist'},
-  {label: 'Endocrinologist', value: 'Endocrinologist'},
-  {label: 'Orthopaedist', value: 'Orthopaedist'},
-  {label: 'Dentist', value: 'Dentist'},
-  {label: 'Ophthalmologist', value: 'Ophthalmologist'},
-  {label: 'Allergist', value: 'Allergist'},
-  {label: 'Gynecologist', value: 'Gynecologist'},
-  {label: 'Neurology', value: 'Neurology'},
-  {label: 'Ophthalmology', value: 'Ophthalmology'},
-  {label: 'Hematologist', value: 'Hematologist'},
-  {label: 'Other', value: 'Other'},
-];
 
-const ProfileCreate = props => {
+const ChemistCreate = props => {
   const [userData, setUserData] = useState({});
   const [isModalVisible, setModalVisible] = useState(false);
+  // const [error, setError] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([options[0].value]);
 
   const [salesPromoters, setSalesPromoters] = useState([]);
   const [selectedSalesPromoter, setSelectedSalesPromoter] = useState(null);
   const [isSalesPromoterModalVisible, setSalesPromoterModalVisible] =
     useState(false);
-  const [isSpecialityModalVisible, setSpecialityModalVisible] = useState(false);
+
   const [isImageUploaded, setIsImageUploaded] = useState(false);
-  const [selectedSpecialities, setSelectedSpecialities] = useState([
-    specialityOptions[0].value,
-  ]);
+
   const LoginData = useSelector(state => state?.LoginReducer?.Login);
 
   const [input, setInput] = useState({
@@ -92,7 +67,7 @@ const ProfileCreate = props => {
     gstNumber: '',
     regNumber: '',
     //    img:'',
-    description: '',
+    desc: '',
   });
   useEffect(() => {
     fetchDataFromSalesAPI();
@@ -142,8 +117,7 @@ const ProfileCreate = props => {
           address: data?.user?.address || '',
           gstNumber: data?.user?.gst_number || '',
           regNumber: data?.user?.reg_number || '',
-
-          description: data?.user?.description || '',
+          desc: data?.user?.description || '',
         }));
         console.log('inputData', input);
       } else {
@@ -154,40 +128,6 @@ const ProfileCreate = props => {
     }
   };
 
-  // const fetchSalesPromoters = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       'https://demogswebtech.com/medicalcare/api/get/sales',
-  //     );
-  //     console.log('__sales api called');
-  //     const data = await response.json();
-  //     if (data.status === 200) {
-  //       // setSalesPromoters(data.sales);
-  //       setUserData(data);
-  //       setInput({
-  //         ...input,
-  //         nameOfFirm: data?.sales[0]?.name,
-  //         email: data?.sales[0]?.email,
-  //         owner_name: data?.sales[0]?.name_of_firm,
-  //         Degree: data?.sales[0]?.degree,
-  //         mobileNum: data?.sales[0]?.mobile,
-  //         district: data?.sales[0]?.dist,
-  //         State: data?.sales[0]?.state,
-  //         city: data?.sales[0]?.city,
-  //         sector: data?.sales[0]?.sector,
-  //         address: data?.sales[0]?.address,
-  //         gstNumber: data?.sales[0]?.gst_number,
-  //         regNumber: data?.sales[0]?.reg_number,
-  //       });
-  //     } else {
-  //       // Handle error
-  //       console.error('Failed to fetch sales promoters data');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching sales promoters data', error);
-  //   }
-  // };
-
   const toggleOption = salesPromoter => {
     setSelectedSalesPromoter(
       selectedSalesPromoter === salesPromoter ? null : salesPromoter,
@@ -197,19 +137,12 @@ const ProfileCreate = props => {
     setSelectedOptions([selectedOption]);
   };
 
-  const toggleSpec = selectedSpec => {
-    setSelectedSpecialities([selectedSpec]);
-  };
-
   const toggleModal = () => {
     // console.log('toggleModal');
     setModalVisible(!isModalVisible);
   };
   const toggleSalesPromoterModal = () => {
     setSalesPromoterModalVisible(!isSalesPromoterModalVisible);
-  };
-  const toggleSpecialityModal = () => {
-    setSpecialityModalVisible(!isSpecialityModalVisible);
   };
 
   const UpdateChemistProfile = async () => {
@@ -219,8 +152,7 @@ const ProfileCreate = props => {
       const formData = new FormData();
 
       if (selectedOptions.length) formData.append('deals_in', selectedOptions);
-      if (selectedSpecialities.length)
-        formData.append('speciality', selectedSpecialities);
+
       if (gstNumber.length) formData.append('gst_number', gstNumber);
       if (regNumber.length) formData.append('reg_number', regNumber);
       if (Degree.length) formData.append('degree', Degree);
@@ -229,15 +161,13 @@ const ProfileCreate = props => {
       if (city.length) formData.append('city', city);
       if (sector.length) formData.append('sector', sector);
       if (address.length) formData.append('address', address);
-      if (description.length) formData.append('description', description);
       if (gallary) formData.append('img', gallary);
       formData.append('name_of_firm', nameOfFirm);
       formData.append('name', owner_name);
       formData.append('mobile', mobileNum);
       formData.append('email', email);
-      if (Drug_license_number.length)
-        formData.append('drug_license_number', Drug_license_number);
-      // formData.append('desc', desc);
+      formData.append('drug_license_number', Drug_license_number);
+      formData.append('desc', desc);
       formData.append('open_time', 9);
       formData.append('close_time', 5);
       const userId = LoginData?.user?.id;
@@ -281,7 +211,7 @@ const ProfileCreate = props => {
     sector,
     address,
     regNumber,
-    description,
+    desc,
     gstNumber,
     Drug_license_number,
     owner_name,
@@ -335,7 +265,7 @@ const ProfileCreate = props => {
         {/* <KeyboardAwareScrollView> */}
         <View>
           <TextInput
-            value={nameOfFirm}
+            value={input.nameOfFirm}
             placeholder="Name"
             onChangeText={nameOfFirm => updateState({nameOfFirm})}
             style={{
@@ -357,7 +287,7 @@ const ProfileCreate = props => {
         </View>
         <View>
           <TextInput
-            value={Degree}
+            value={input.Degree}
             placeholder="Degree"
             onChangeText={Degree => updateState({Degree})}
             style={{
@@ -481,7 +411,67 @@ const ProfileCreate = props => {
           />
         </View>
 
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={{color: colors.grayColor}}>Deals in</Text>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity
+              onPress={toggleModal}
+              style={styles.dropdownButton}>
+              <Icon name="caret-down" size={20} />
+            </TouchableOpacity>
+            <Modal isVisible={isModalVisible}>
+              <View style={styles.modalContent}>
+                {options.map(option => (
+                  <TouchableOpacity
+                    key={option.value}
+                    onPress={() => toggleOptionDealsIn(option.value)}
+                    style={styles.option}>
+                    <Text>{option.label}</Text>
+                    {selectedOptions.includes(option.value) && (
+                      <Icon name="check" size={20} color={colors.blueColor} />
+                    )}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  onPress={toggleModal}
+                  style={styles.closeButton}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+          <View style={{marginLeft: 10}}>
+            {/* Display the selected options */}
+            {selectedOptions.map(selectedOption => (
+              <Text
+                key={selectedOption}
+                style={{
+                  color: colors.blueColor,
+                  // backgroundColor: 'red',
+
+                  padding: 20,
+                }}>
+                {selectedOption}
+              </Text>
+            ))}
+          </View>
+        </View>
+
         <View>
+          <View
+            style={{
+              borderBottomColor: colors.grayColor,
+              borderBottomWidth: 1,
+            }}
+          />
           <View
             style={{
               flexDirection: 'row',
@@ -521,14 +511,58 @@ const ProfileCreate = props => {
 
         <View>
           <TextInput
-            value={description}
+            value={desc}
             placeholder="AboutYourSelf"
-            onChangeText={description => updateState({description})}
+            onChangeText={desc => updateState({desc})}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
             }}
           />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={{color: colors.grayColor}}>Sales Promoter</Text>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity onPress={toggleSalesPromoterModal}>
+              <Icon name="caret-down" size={20} />
+            </TouchableOpacity>
+            <Modal isVisible={isSalesPromoterModalVisible}>
+              <View style={styles.modalContent}>
+                {salesPromoters.map(salesPromoter => (
+                  <TouchableOpacity
+                    key={salesPromoter.id}
+                    onPress={() => toggleOption(salesPromoter)}
+                    style={styles.option}>
+                    <Text>{salesPromoter.name}</Text>
+                    {selectedSalesPromoter &&
+                      selectedSalesPromoter.id === salesPromoter.id && (
+                        <Icon name="check" size={20} color={colors.blueColor} />
+                      )}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  onPress={toggleSalesPromoterModal}
+                  style={styles.closeButton}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+          <View style={{marginLeft: 10}}>
+            {selectedSalesPromoter && (
+              <Text style={{color: colors.blueColor, padding: 20}}>
+                {selectedSalesPromoter.name}
+              </Text>
+            )}
+          </View>
         </View>
 
         <View style={{height: moderateScale(100), justifyContent: 'center'}}>
@@ -543,7 +577,7 @@ const ProfileCreate = props => {
   );
 };
 
-export default ProfileCreate;
+export default ChemistCreate;
 
 const styles = StyleSheet.create({
   doctorPageBtn: {

@@ -29,41 +29,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {androidCameraPermission} from '../../permissions';
 import {useSelector} from 'react-redux';
 
-const options = [
-  {label: 'Alophatic', value: 'Alophatic'},
-  {label: 'Ayurvedic', value: 'Ayurvedic'},
-  {label: 'Homeopathic', value: 'Homeopathic'},
-  {label: 'Other', value: 'Other'},
-];
-const specialityOptions = [
-  {label: 'Neurologist', value: 'Neurologist'},
-  {label: 'Generalpractitioner', value: 'General practitioner'},
-  {label: 'Psychiatrist', value: 'Psychiatrist'},
-  {label: 'Surgeon', value: 'Surgeon'},
-  {label: 'Dermatologist', value: 'Dermatologist'},
-  {label: 'Pediatrician', value: 'Pediatrician'},
-  {label: 'Oncologist', value: 'Oncologist'},
-  {label: 'Cardiologist', value: 'Cardiologist'},
-  {label: 'Radiologist', value: 'Radiologist'},
-  {label: 'Pathologist', value: 'Pathologist'},
-  {label: 'Gastroenterologist', value: 'Gastroenterologist'},
-  {label: 'Pulmonologist', value: 'Pulmonologist'},
-  {label: 'Endocrinologist', value: 'Endocrinologist'},
-  {label: 'Orthopaedist', value: 'Orthopaedist'},
-  {label: 'Dentist', value: 'Dentist'},
-  {label: 'Ophthalmologist', value: 'Ophthalmologist'},
-  {label: 'Allergist', value: 'Allergist'},
-  {label: 'Gynecologist', value: 'Gynecologist'},
-  {label: 'Neurology', value: 'Neurology'},
-  {label: 'Ophthalmology', value: 'Ophthalmology'},
-  {label: 'Hematologist', value: 'Hematologist'},
-  {label: 'Other', value: 'Other'},
-];
-
-const ProfileCreate = props => {
+const ProfileCreatePhysio = props => {
   const [userData, setUserData] = useState({});
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([options[0].value]);
 
   const [salesPromoters, setSalesPromoters] = useState([]);
   const [selectedSalesPromoter, setSelectedSalesPromoter] = useState(null);
@@ -71,9 +38,7 @@ const ProfileCreate = props => {
     useState(false);
   const [isSpecialityModalVisible, setSpecialityModalVisible] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
-  const [selectedSpecialities, setSelectedSpecialities] = useState([
-    specialityOptions[0].value,
-  ]);
+
   const LoginData = useSelector(state => state?.LoginReducer?.Login);
 
   const [input, setInput] = useState({
@@ -91,7 +56,7 @@ const ProfileCreate = props => {
     Drug_license_number: '',
     gstNumber: '',
     regNumber: '',
-    //    img:'',
+    img: '',
     description: '',
   });
   useEffect(() => {
@@ -193,23 +158,9 @@ const ProfileCreate = props => {
       selectedSalesPromoter === salesPromoter ? null : salesPromoter,
     );
   };
-  const toggleOptionDealsIn = selectedOption => {
-    setSelectedOptions([selectedOption]);
-  };
 
-  const toggleSpec = selectedSpec => {
-    setSelectedSpecialities([selectedSpec]);
-  };
-
-  const toggleModal = () => {
-    // console.log('toggleModal');
-    setModalVisible(!isModalVisible);
-  };
   const toggleSalesPromoterModal = () => {
     setSalesPromoterModalVisible(!isSalesPromoterModalVisible);
-  };
-  const toggleSpecialityModal = () => {
-    setSpecialityModalVisible(!isSpecialityModalVisible);
   };
 
   const UpdateChemistProfile = async () => {
@@ -218,9 +169,6 @@ const ProfileCreate = props => {
     if (checkValid) {
       const formData = new FormData();
 
-      if (selectedOptions.length) formData.append('deals_in', selectedOptions);
-      if (selectedSpecialities.length)
-        formData.append('speciality', selectedSpecialities);
       if (gstNumber.length) formData.append('gst_number', gstNumber);
       if (regNumber.length) formData.append('reg_number', regNumber);
       if (Degree.length) formData.append('degree', Degree);
@@ -484,6 +432,12 @@ const ProfileCreate = props => {
         <View>
           <View
             style={{
+              borderBottomColor: colors.grayColor,
+              borderBottomWidth: 1,
+            }}
+          />
+          <View
+            style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               paddingVertical: moderateScaleVertical(8),
@@ -530,6 +484,50 @@ const ProfileCreate = props => {
             }}
           />
         </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={{color: colors.grayColor}}>Sales Promoter</Text>
+          </View>
+
+          <View style={styles.container}>
+            <TouchableOpacity onPress={toggleSalesPromoterModal}>
+              <Icon name="caret-down" size={20} />
+            </TouchableOpacity>
+            <Modal isVisible={isSalesPromoterModalVisible}>
+              <View style={styles.modalContent}>
+                {salesPromoters.map(salesPromoter => (
+                  <TouchableOpacity
+                    key={salesPromoter.id}
+                    onPress={() => toggleOption(salesPromoter)}
+                    style={styles.option}>
+                    <Text>{salesPromoter.name}</Text>
+                    {selectedSalesPromoter &&
+                      selectedSalesPromoter.id === salesPromoter.id && (
+                        <Icon name="check" size={20} color={colors.blueColor} />
+                      )}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  onPress={toggleSalesPromoterModal}
+                  style={styles.closeButton}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+          <View style={{marginLeft: 10}}>
+            {selectedSalesPromoter && (
+              <Text style={{color: colors.blueColor, padding: 20}}>
+                {selectedSalesPromoter.name}
+              </Text>
+            )}
+          </View>
+        </View>
 
         <View style={{height: moderateScale(100), justifyContent: 'center'}}>
           <TouchableOpacity activeOpacity={0.7} onPress={UpdateChemistProfile}>
@@ -543,7 +541,7 @@ const ProfileCreate = props => {
   );
 };
 
-export default ProfileCreate;
+export default ProfileCreatePhysio;
 
 const styles = StyleSheet.create({
   doctorPageBtn: {

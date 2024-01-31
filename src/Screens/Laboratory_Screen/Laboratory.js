@@ -16,7 +16,8 @@ import ButtonComp from '../../Components/ButtonComp';
 import colors from '../../styles/colors';
 import {useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
-const Doctor_Profile = () => {
+
+const Laboratory_Screen = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -67,7 +68,6 @@ const Doctor_Profile = () => {
       };
     }, []),
   );
-
   return (
     <>
       <View>
@@ -172,7 +172,7 @@ const Doctor_Profile = () => {
   );
 };
 
-export default Doctor_Profile;
+export default Laboratory_Screen;
 
 const styles = StyleSheet.create({
   container: {
