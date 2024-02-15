@@ -5,7 +5,7 @@ import WrapperContainer from '../../Components/WrapperContainer'
 import ButtonComp from '../../Components/ButtonComp'
 import HeaderComp from '../../Components/HeaderComp'
 import TextInputComp from '../../Components/TextInputComp'
-import { height, moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
+import { height, moderateScale, textScale } from '../../styles/responsiveSize'
 import navigationStrings from '../../Navigations/navigationStrings'
 import colors from '../../styles/colors'
 
@@ -63,7 +63,6 @@ export default Confirm_Password
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // height:'100%',
     backgroundColor: '#fff'
   },
   accText: {

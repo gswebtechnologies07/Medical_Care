@@ -1,4 +1,4 @@
-import { StyleSheet, Text, KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, TouchableOpacity, View, Alert } from 'react-native'
+import { StyleSheet, Text, KeyboardAvoidingView, Keyboard, Platform, TouchableWithoutFeedback, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import fontFamily from '../../styles/fontFamily'
 import WrapperContainer from '../../Components/WrapperContainer'
@@ -14,10 +14,11 @@ import { useDispatch } from 'react-redux';
 import { ForgotPasswordAction } from '../../redux/Action/ForgotPasswordAction'
 
 const Forgot_Password = (props) => {
-  console.log(props,"ppropspropspropsprops")
+  console.log(props, "ppropspropspropsprops")
 
   // const [email, setEmail] = useState('')
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     email: '',
   })
@@ -45,15 +46,18 @@ const Forgot_Password = (props) => {
   }
 
   const ForgotPasswordData = () => {
+    setLoading(true);
     const data = {
       email: state.email,
     }
     dispatch(ForgotPasswordAction(data)).then(async (response) => {
       console.log(response, 'eresponseresponse')
+      setLoading(false);
       if (response?.success === true) {
         console.log('trueee')
-        props?. navigation?.navigate(navigationStrings.OTP_VERIFICATION)
+        props?.navigation?.navigate(navigationStrings.OTP_VERIFICATION)
       } else {
+        setLoader(false);
         Alert.alert("Invalid Email")
       }
     })
@@ -79,10 +83,12 @@ const Forgot_Password = (props) => {
                 // onChangeText={(value) => setEmail(value)}
                 onChangeText={(email) => updateState({ email })}
               />
-              <TouchableOpacity style={{ top: moderateScale(30) }} onPress={onOtpVerify} activeOpacity={0.7}>
-                <ButtonComp
-                  text='Send Code '
-                />
+              <TouchableOpacity style={{ top: moderateScale(30), alignSelf: "center" }} onPress={onOtpVerify} activeOpacity={0.7}>
+                {loading ? (
+                  <ActivityIndicator size="large" color={colors.blackColor} />
+                ) : (
+                  <Text style={styles.signUpBtn}>Send Code</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -114,5 +120,13 @@ const styles = StyleSheet.create({
     fontSize: textScale(32),
     color: colors.blackColor,
     fontFamily: fontFamily.semiBold
-  }
+  },
+  signUpBtn: {
+    paddingHorizontal: moderateScale(35),
+    paddingVertical: moderateScaleVertical(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16)
+  },
 })

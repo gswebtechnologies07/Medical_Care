@@ -13,8 +13,8 @@ import { GetProfileReducer } from './GetProfileReducer';
 import { GetLaboratoryProfileReducer, Laboratory_ProfileReducer, EditLaboratoryProfileReducer } from './Laboratory_ProfileReducer';
 import { Physiotherapist_ProfileReducer, GetPhysiotherapistProfileReducer, EditPhysiotherapistProfileReducer } from './PhysiotherapistProfileReducer';
 import { OrderPlaceReducer, EditOrderPlaceReducer } from './OrderPlaceReducer';
-import { HomeChemistReducer } from './HomeChemistReducer';
-//
+// import { HomeChemistReducer } from './HomeChemistReducer';
+
 export const combineReducer = {
   LoginReducer,
   SignupReducer,
@@ -40,5 +40,5 @@ export const combineReducer = {
   EditOrderPlaceReducer,
   getProfileAction,
 
-  HomeChemistReducer,
+  // HomeChemistReducer,
 };

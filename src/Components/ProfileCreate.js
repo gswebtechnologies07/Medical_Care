@@ -6,58 +6,51 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  Image,
+  ActivityIndicator
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderComp2 from './HeaderComp2';
 import {
-  height,
   moderateScale,
   moderateScaleVertical,
   textScale,
-  width,
 } from '../styles/responsiveSize';
 import colors from '../styles/colors';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Modal from 'react-native-modal';
 import fontFamily from '../styles/fontFamily';
-import ButtonComp from './ButtonComp';
-import {UpdateDoctorProfileAction} from '../redux/Action/DoctorProfileAction';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {androidCameraPermission} from '../../permissions';
-import {useSelector} from 'react-redux';
+import { androidCameraPermission } from '../../permissions';
+import { useSelector } from 'react-redux';
 
 const options = [
-  {label: 'Alophatic', value: 'Alophatic'},
-  {label: 'Ayurvedic', value: 'Ayurvedic'},
-  {label: 'Homeopathic', value: 'Homeopathic'},
-  {label: 'Other', value: 'Other'},
+  { label: 'Alophatic', value: 'Alophatic' },
+  { label: 'Ayurvedic', value: 'Ayurvedic' },
+  { label: 'Homeopathic', value: 'Homeopathic' },
+  { label: 'Other', value: 'Other' },
 ];
 const specialityOptions = [
-  {label: 'Neurologist', value: 'Neurologist'},
-  {label: 'Generalpractitioner', value: 'General practitioner'},
-  {label: 'Psychiatrist', value: 'Psychiatrist'},
-  {label: 'Surgeon', value: 'Surgeon'},
-  {label: 'Dermatologist', value: 'Dermatologist'},
-  {label: 'Pediatrician', value: 'Pediatrician'},
-  {label: 'Oncologist', value: 'Oncologist'},
-  {label: 'Cardiologist', value: 'Cardiologist'},
-  {label: 'Radiologist', value: 'Radiologist'},
-  {label: 'Pathologist', value: 'Pathologist'},
-  {label: 'Gastroenterologist', value: 'Gastroenterologist'},
-  {label: 'Pulmonologist', value: 'Pulmonologist'},
-  {label: 'Endocrinologist', value: 'Endocrinologist'},
-  {label: 'Orthopaedist', value: 'Orthopaedist'},
-  {label: 'Dentist', value: 'Dentist'},
-  {label: 'Ophthalmologist', value: 'Ophthalmologist'},
-  {label: 'Allergist', value: 'Allergist'},
-  {label: 'Gynecologist', value: 'Gynecologist'},
-  {label: 'Neurology', value: 'Neurology'},
-  {label: 'Ophthalmology', value: 'Ophthalmology'},
-  {label: 'Hematologist', value: 'Hematologist'},
-  {label: 'Other', value: 'Other'},
+  { label: 'Neurologist', value: 'Neurologist' },
+  { label: 'Generalpractitioner', value: 'General practitioner' },
+  { label: 'Psychiatrist', value: 'Psychiatrist' },
+  { label: 'Surgeon', value: 'Surgeon' },
+  { label: 'Dermatologist', value: 'Dermatologist' },
+  { label: 'Pediatrician', value: 'Pediatrician' },
+  { label: 'Oncologist', value: 'Oncologist' },
+  { label: 'Cardiologist', value: 'Cardiologist' },
+  { label: 'Radiologist', value: 'Radiologist' },
+  { label: 'Pathologist', value: 'Pathologist' },
+  { label: 'Gastroenterologist', value: 'Gastroenterologist' },
+  { label: 'Pulmonologist', value: 'Pulmonologist' },
+  { label: 'Endocrinologist', value: 'Endocrinologist' },
+  { label: 'Orthopaedist', value: 'Orthopaedist' },
+  { label: 'Dentist', value: 'Dentist' },
+  { label: 'Ophthalmologist', value: 'Ophthalmologist' },
+  { label: 'Allergist', value: 'Allergist' },
+  { label: 'Gynecologist', value: 'Gynecologist' },
+  { label: 'Neurology', value: 'Neurology' },
+  { label: 'Ophthalmology', value: 'Ophthalmology' },
+  { label: 'Hematologist', value: 'Hematologist' },
+  { label: 'Other', value: 'Other' },
 ];
 
 const ProfileCreate = props => {
@@ -75,6 +68,7 @@ const ProfileCreate = props => {
     specialityOptions[0].value,
   ]);
   const LoginData = useSelector(state => state?.LoginReducer?.Login);
+  const [loading, setLoading] = useState(false);
 
   const [input, setInput] = useState({
     name: '',
@@ -216,6 +210,7 @@ const ProfileCreate = props => {
     const checkValid = true;
     // isValidData() ? isValidData() :
     if (checkValid) {
+      setLoading(true);
       const formData = new FormData();
 
       if (selectedOptions.length) formData.append('deals_in', selectedOptions);
@@ -255,6 +250,7 @@ const ProfileCreate = props => {
         console.log('Update Profile Response:', data);
 
         if (data.status === 200) {
+
           console.log('Profile Updated Successfully');
         }
       } catch (error) {
@@ -286,7 +282,7 @@ const ProfileCreate = props => {
     Drug_license_number,
     owner_name,
   } = input;
-  const updateState = data => setInput(() => ({...input, ...data}));
+  const updateState = data => setInput(() => ({ ...input, ...data }));
   const [gallary, setGallary] = useState('');
   const [image, setImage] = useState('');
 
@@ -295,8 +291,8 @@ const ProfileCreate = props => {
     if (permissionStatus || Platform.OS == 'android') {
       Alert.alert('Profile Picture', 'Choose an option', [
         // { text: 'Camera', onPress: onCamera },
-        {text: 'Gallery', onPress: onGallery()},
-        {text: 'Cancel', onPress: () => {}},
+        { text: 'Gallery', onPress: onGallery() },
+        { text: 'Cancel', onPress: () => { } },
       ]);
     }
   };
@@ -331,13 +327,13 @@ const ProfileCreate = props => {
     <>
       <HeaderComp2 text="Edit Profile" />
 
-      <ScrollView style={{paddingHorizontal: 10}}>
+      <ScrollView style={{ paddingHorizontal: 10 }}>
         {/* <KeyboardAwareScrollView> */}
         <View>
           <TextInput
             value={nameOfFirm}
             placeholder="Name"
-            onChangeText={nameOfFirm => updateState({nameOfFirm})}
+            onChangeText={nameOfFirm => updateState({ nameOfFirm })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -348,7 +344,7 @@ const ProfileCreate = props => {
           <TextInput
             value={owner_name}
             placeholder="Owner Name"
-            onChangeText={owner_name => updateState({owner_name})}
+            onChangeText={owner_name => updateState({ owner_name })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -359,7 +355,7 @@ const ProfileCreate = props => {
           <TextInput
             value={Degree}
             placeholder="Degree"
-            onChangeText={Degree => updateState({Degree})}
+            onChangeText={Degree => updateState({ Degree })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -371,7 +367,7 @@ const ProfileCreate = props => {
             value={mobileNum}
             placeholder="Mobile Number"
             maxLength={10}
-            onChangeText={mobileNum => updateState({mobileNum})}
+            onChangeText={mobileNum => updateState({ mobileNum })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -382,7 +378,7 @@ const ProfileCreate = props => {
           <TextInput
             value={email}
             placeholder="Email"
-            onChangeText={email => updateState({email})}
+            onChangeText={email => updateState({ email })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -393,7 +389,7 @@ const ProfileCreate = props => {
           <TextInput
             value={State}
             placeholder="State"
-            onChangeText={State => updateState({State})}
+            onChangeText={State => updateState({ State })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -404,7 +400,7 @@ const ProfileCreate = props => {
           <TextInput
             value={district}
             placeholder="District"
-            onChangeText={district => updateState({district})}
+            onChangeText={district => updateState({ district })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -415,7 +411,7 @@ const ProfileCreate = props => {
           <TextInput
             value={city}
             placeholder="city"
-            onChangeText={city => updateState({city})}
+            onChangeText={city => updateState({ city })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -426,7 +422,7 @@ const ProfileCreate = props => {
           <TextInput
             value={sector}
             placeholder="Sector"
-            onChangeText={sector => updateState({sector})}
+            onChangeText={sector => updateState({ sector })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -438,7 +434,7 @@ const ProfileCreate = props => {
           <TextInput
             value={address}
             placeholder="Address"
-            onChangeText={address => updateState({address})}
+            onChangeText={address => updateState({ address })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -449,7 +445,7 @@ const ProfileCreate = props => {
           <TextInput
             value={gstNumber}
             placeholder="GST Number"
-            onChangeText={gstNumber => updateState({gstNumber})}
+            onChangeText={gstNumber => updateState({ gstNumber })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -461,7 +457,7 @@ const ProfileCreate = props => {
             value={Drug_license_number}
             placeholder="Drug_license_number"
             onChangeText={Drug_license_number =>
-              updateState({Drug_license_number})
+              updateState({ Drug_license_number })
             }
             style={{
               borderBottomColor: colors.grayColor,
@@ -473,7 +469,7 @@ const ProfileCreate = props => {
           <TextInput
             value={regNumber}
             placeholder="Registration Number"
-            onChangeText={regNumber => updateState({regNumber})}
+            onChangeText={regNumber => updateState({ regNumber })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -488,7 +484,7 @@ const ProfileCreate = props => {
               justifyContent: 'space-between',
               paddingVertical: moderateScaleVertical(8),
             }}>
-            <View style={{justifyContent: 'center'}}>
+            <View style={{ justifyContent: 'center' }}>
               <Text
                 style={{
                   alignSelf: 'center',
@@ -523,7 +519,7 @@ const ProfileCreate = props => {
           <TextInput
             value={description}
             placeholder="AboutYourSelf"
-            onChangeText={description => updateState({description})}
+            onChangeText={description => updateState({ description })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -531,12 +527,30 @@ const ProfileCreate = props => {
           />
         </View>
 
-        <View style={{height: moderateScale(100), justifyContent: 'center'}}>
+        {/* <View style={{height: moderateScale(100), justifyContent: 'center'}}>
           <TouchableOpacity activeOpacity={0.7} onPress={UpdateChemistProfile}>
             <ButtonComp text="Save" />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
+
+        <View style={{ height: moderateScale(100), justifyContent: 'center' }}>
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+            activeOpacity={0.7}
+
+            onPress={() => UpdateChemistProfile()}
+          >
+            {loading ? (
+              <ActivityIndicator size="large" color={colors.blackColor} />
+            ) : (
+              <Text style={styles.btnText}> Save </Text>
+            )}
+          </TouchableOpacity>
+        </View>
         {/* </KeyboardAwareScrollView> */}
       </ScrollView>
     </>
@@ -596,4 +610,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  btnText: {
+    paddingHorizontal: moderateScale(30),
+    paddingVertical: moderateScale(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16),
+  }
 });

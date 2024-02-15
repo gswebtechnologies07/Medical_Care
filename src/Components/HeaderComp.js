@@ -15,12 +15,12 @@ const HeaderComp = ({
         <View style={{ ...styles.container, ...style }}>
 
             <TouchableOpacity
-             onPress={() => navigation.goBack()}
-             style={{right:moderateScale(50)}}
-             >
+                onPress={() => navigation.goBack()}
+                style={{ right: moderateScale(55), top: moderateScale(3) }}
+            >
                 <Image source={imagePath.icCheckBlack} />
             </TouchableOpacity>
-            <Image source={imagePath.icLogo} style={{ }} />
+            <Image source={imagePath.icLogo} style={{}} />
 
         </View>
     );
@@ -29,11 +29,10 @@ const HeaderComp = ({
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        width:'100%',
-        justifyContent:'center',
+        width: '100%',
+        justifyContent: 'center',
         height: moderateScale(80),
         flexDirection: 'row',
-        marginHorizontal: moderateScale(10),
         alignItems: 'center',
         marginTop: moderateScale(10)
     },

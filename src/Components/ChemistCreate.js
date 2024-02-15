@@ -6,41 +6,40 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  Image,
+  ActivityIndicator
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderComp2 from './HeaderComp2';
 import {
-  height,
   moderateScale,
   moderateScaleVertical,
   textScale,
-  width,
 } from '../styles/responsiveSize';
 import colors from '../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 import fontFamily from '../styles/fontFamily';
-import ButtonComp from './ButtonComp';
-import {UpdateDoctorProfileAction} from '../redux/Action/DoctorProfileAction';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {androidCameraPermission} from '../../permissions';
-import {useSelector} from 'react-redux';
+import { androidCameraPermission } from '../../permissions';
+import { useSelector } from 'react-redux';
+import navigationStrings from '../Navigations/navigationStrings';
+import { useNavigation } from '@react-navigation/native';
 
 const options = [
-  {label: 'Alophatic', value: 'Alophatic'},
-  {label: 'Ayurvedic', value: 'Ayurvedic'},
-  {label: 'Homeopathic', value: 'Homeopathic'},
-  {label: 'Other', value: 'Other'},
+  { label: 'Alophatic', value: 'Alophatic' },
+  { label: 'Ayurvedic', value: 'Ayurvedic' },
+  { label: 'Homeopathic', value: 'Homeopathic' },
+  { label: 'Other', value: 'Other' },
 ];
 
-const ChemistCreate = props => {
+const ChemistCreate = (props) => {
+  const navigation = useNavigation();
   const [userData, setUserData] = useState({});
   const [isModalVisible, setModalVisible] = useState(false);
   // const [error, setError] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([options[0].value]);
+  const [loading, setLoading] = useState(false);
 
   const [salesPromoters, setSalesPromoters] = useState([]);
   const [selectedSalesPromoter, setSelectedSalesPromoter] = useState(null);
@@ -149,6 +148,7 @@ const ChemistCreate = props => {
     const checkValid = true;
     // isValidData() ? isValidData() :
     if (checkValid) {
+      setLoading(true);
       const formData = new FormData();
 
       if (selectedOptions.length) formData.append('deals_in', selectedOptions);
@@ -172,9 +172,9 @@ const ChemistCreate = props => {
       formData.append('close_time', 5);
       const userId = LoginData?.user?.id;
       const apiUrl = `https://demogswebtech.com/medicalcare/api/edit/profile/${userId}`;
-      console.log('API URL:', apiUrl);
+      console.log('API_URL:', apiUrl);
 
-      console.log('formData : ', formData);
+      console.log('formData_', formData);
 
       try {
         const response = await fetch(apiUrl, {
@@ -182,12 +182,16 @@ const ChemistCreate = props => {
           body: formData,
         });
         const data = await response.json();
-        console.log('Update Profile Response:', data);
+        console.log('Update_Profile_Response:', data);
 
-        if (data.status === 200) {
-          console.log('Profile Updated Successfully');
+        if (data?.message === "User Update Successfully") {
+          setLoading(false);
+          //  props?.navigation.navigate(navigationStrings.HomeChemist)
+          props?.navigation?.goBack();
+          console.log('Profile_Updated_Successfully');
         }
       } catch (error) {
+        setLoading(false);
         console.error('Error updating profile:', error);
       }
 
@@ -216,7 +220,7 @@ const ChemistCreate = props => {
     Drug_license_number,
     owner_name,
   } = input;
-  const updateState = data => setInput(() => ({...input, ...data}));
+  const updateState = data => setInput(() => ({ ...input, ...data }));
   const [gallary, setGallary] = useState('');
   const [image, setImage] = useState('');
 
@@ -225,8 +229,8 @@ const ChemistCreate = props => {
     if (permissionStatus || Platform.OS == 'android') {
       Alert.alert('Profile Picture', 'Choose an option', [
         // { text: 'Camera', onPress: onCamera },
-        {text: 'Gallery', onPress: onGallery()},
-        {text: 'Cancel', onPress: () => {}},
+        { text: 'Gallery', onPress: onGallery() },
+        { text: 'Cancel', onPress: () => { } },
       ]);
     }
   };
@@ -261,13 +265,13 @@ const ChemistCreate = props => {
     <>
       <HeaderComp2 text="Edit Profile" />
 
-      <ScrollView style={{paddingHorizontal: 10}}>
+      <ScrollView style={{ paddingHorizontal: 10 }}>
         {/* <KeyboardAwareScrollView> */}
         <View>
           <TextInput
             value={input.nameOfFirm}
             placeholder="Name"
-            onChangeText={nameOfFirm => updateState({nameOfFirm})}
+            onChangeText={nameOfFirm => updateState({ nameOfFirm })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -278,7 +282,7 @@ const ChemistCreate = props => {
           <TextInput
             value={owner_name}
             placeholder="Owner Name"
-            onChangeText={owner_name => updateState({owner_name})}
+            onChangeText={owner_name => updateState({ owner_name })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -289,7 +293,7 @@ const ChemistCreate = props => {
           <TextInput
             value={input.Degree}
             placeholder="Degree"
-            onChangeText={Degree => updateState({Degree})}
+            onChangeText={Degree => updateState({ Degree })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -301,7 +305,7 @@ const ChemistCreate = props => {
             value={mobileNum}
             placeholder="Mobile Number"
             maxLength={10}
-            onChangeText={mobileNum => updateState({mobileNum})}
+            onChangeText={mobileNum => updateState({ mobileNum })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -312,7 +316,7 @@ const ChemistCreate = props => {
           <TextInput
             value={email}
             placeholder="Email"
-            onChangeText={email => updateState({email})}
+            onChangeText={email => updateState({ email })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -323,7 +327,7 @@ const ChemistCreate = props => {
           <TextInput
             value={State}
             placeholder="State"
-            onChangeText={State => updateState({State})}
+            onChangeText={State => updateState({ State })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -334,7 +338,7 @@ const ChemistCreate = props => {
           <TextInput
             value={district}
             placeholder="District"
-            onChangeText={district => updateState({district})}
+            onChangeText={district => updateState({ district })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -345,7 +349,7 @@ const ChemistCreate = props => {
           <TextInput
             value={city}
             placeholder="city"
-            onChangeText={city => updateState({city})}
+            onChangeText={city => updateState({ city })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -356,7 +360,7 @@ const ChemistCreate = props => {
           <TextInput
             value={sector}
             placeholder="Sector"
-            onChangeText={sector => updateState({sector})}
+            onChangeText={sector => updateState({ sector })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -368,7 +372,7 @@ const ChemistCreate = props => {
           <TextInput
             value={address}
             placeholder="Address"
-            onChangeText={address => updateState({address})}
+            onChangeText={address => updateState({ address })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -379,7 +383,7 @@ const ChemistCreate = props => {
           <TextInput
             value={gstNumber}
             placeholder="GST Number"
-            onChangeText={gstNumber => updateState({gstNumber})}
+            onChangeText={gstNumber => updateState({ gstNumber })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -391,7 +395,7 @@ const ChemistCreate = props => {
             value={Drug_license_number}
             placeholder="Drug_license_number"
             onChangeText={Drug_license_number =>
-              updateState({Drug_license_number})
+              updateState({ Drug_license_number })
             }
             style={{
               borderBottomColor: colors.grayColor,
@@ -403,7 +407,7 @@ const ChemistCreate = props => {
           <TextInput
             value={regNumber}
             placeholder="Registration Number"
-            onChangeText={regNumber => updateState({regNumber})}
+            onChangeText={regNumber => updateState({ regNumber })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -417,8 +421,8 @@ const ChemistCreate = props => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{justifyContent: 'center'}}>
-            <Text style={{color: colors.grayColor}}>Deals in</Text>
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={{ color: colors.grayColor }}>Deals in</Text>
           </View>
 
           <View style={styles.container}>
@@ -448,7 +452,7 @@ const ChemistCreate = props => {
               </View>
             </Modal>
           </View>
-          <View style={{marginLeft: 10}}>
+          <View style={{ marginLeft: 10 }}>
             {/* Display the selected options */}
             {selectedOptions.map(selectedOption => (
               <Text
@@ -478,7 +482,7 @@ const ChemistCreate = props => {
               justifyContent: 'space-between',
               paddingVertical: moderateScaleVertical(8),
             }}>
-            <View style={{justifyContent: 'center'}}>
+            <View style={{ justifyContent: 'center' }}>
               <Text
                 style={{
                   alignSelf: 'center',
@@ -513,7 +517,7 @@ const ChemistCreate = props => {
           <TextInput
             value={desc}
             placeholder="AboutYourSelf"
-            onChangeText={desc => updateState({desc})}
+            onChangeText={desc => updateState({ desc })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -526,8 +530,8 @@ const ChemistCreate = props => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{justifyContent: 'center'}}>
-            <Text style={{color: colors.grayColor}}>Sales Promoter</Text>
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={{ color: colors.grayColor }}>Sales Promoter</Text>
           </View>
 
           <View style={styles.container}>
@@ -556,22 +560,35 @@ const ChemistCreate = props => {
               </View>
             </Modal>
           </View>
-          <View style={{marginLeft: 10}}>
+          <View style={{ marginLeft: 10 }}>
             {selectedSalesPromoter && (
-              <Text style={{color: colors.blueColor, padding: 20}}>
+              <Text style={{ color: colors.blueColor, padding: 20 }}>
                 {selectedSalesPromoter.name}
               </Text>
             )}
           </View>
         </View>
 
-        <View style={{height: moderateScale(100), justifyContent: 'center'}}>
-          <TouchableOpacity activeOpacity={0.7} onPress={UpdateChemistProfile}>
-            <ButtonComp text="Save" />
+
+
+        <View style={{ height: moderateScale(100), justifyContent: 'center' }}>
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+            activeOpacity={0.7}
+
+            onPress={() => UpdateChemistProfile()}
+          >
+            {loading ? (
+              <ActivityIndicator size="large" color={colors.blackColor} />
+            ) : (
+              <Text style={styles.btnText}> Save </Text>
+            )}
           </TouchableOpacity>
         </View>
 
-        {/* </KeyboardAwareScrollView> */}
       </ScrollView>
     </>
   );
@@ -630,4 +647,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  btnText: {
+    paddingHorizontal: moderateScale(30),
+    paddingVertical: moderateScale(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16),
+  }
 });

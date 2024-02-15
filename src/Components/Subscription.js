@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, Text, View} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
-import {useDispatch, useSelector} from 'react-redux';
-import {UpdateDoctorProfileAction} from '../redux/Action/DoctorProfileAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { UpdateDoctorProfileAction } from '../redux/Action/DoctorProfileAction';
 import ButtonComp from './ButtonComp';
+import colors from '../styles/colors';
 
 const Subscription = props => {
   const [subscriptionDetails, setSubscriptionDetails] = useState({});
@@ -25,7 +26,7 @@ const Subscription = props => {
         const response = await fetch(
           'https://demogswebtech.com/medicalcare/api/get/subcription',
         );
-        const {status, data} = await response.json();
+        const { status, data } = await response.json();
 
         if (status === 200 && data && data.length > 0) {
           const subscriptionData = data[0];
@@ -83,7 +84,7 @@ const Subscription = props => {
         contact: mobile,
         name: userName,
       },
-      theme: {color: '#F37254'},
+      theme: { color: colors.blueColor },
     };
 
     try {
@@ -101,7 +102,7 @@ const Subscription = props => {
               'Content-Type': 'application/json',
               Authorization: '33OwrpULESs3i43BBsBgHK2Z',
             },
-            body: JSON.stringify({is_subscribe: 'yes'}),
+            body: JSON.stringify({ is_subscribe: 'yes' }),
           },
         );
 
@@ -122,7 +123,7 @@ const Subscription = props => {
 
   return (
     <>
-      <View style={{justifyContent: 'center'}}>
+      <View style={{ justifyContent: 'center' }}>
         {!isSubscribed && (
           <TouchableOpacity activeOpacity={0.7} onPress={handlePayment}>
             <ButtonComp text={subscriptionButtonText} />

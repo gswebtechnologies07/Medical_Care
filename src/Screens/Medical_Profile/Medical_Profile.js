@@ -1,25 +1,20 @@
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import WrapperContainer from '../../Components/WrapperContainer';
 import {
-  height,
   moderateScale,
   textScale,
-  width,
   moderateScaleVertical,
 } from '../../styles/responsiveSize';
 import fontFamily from '../../styles/fontFamily';
-import imagePath from '../../constants/imagePath';
 import colors from '../../styles/colors';
-import ButtonComp from '../../Components/ButtonComp';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import HeaderComp from '../../Components/HeaderComp';
 import navigationStrings from '../../Navigations/navigationStrings';
-import {useDispatch, useSelector} from 'react-redux';
-import {GetChemistProfileAction} from '../../redux/Action/ChemistProfileAction';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const Medical_Profile = props => {
   console.log(props, 'propsMedical_Profile');
@@ -43,11 +38,11 @@ const Medical_Profile = props => {
 
   return (
     <WrapperContainer>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <HeaderComp />
 
-        <View style={{flex: 0.3}}>
-          <View style={{flex: 2, justifyContent: 'center'}}>
+        <View style={{ flex: 0.3 }}>
+          <View style={{ flex: 2, justifyContent: 'center' }}>
             <View
               style={{
                 paddingHorizontal: moderateScale(15),
@@ -71,7 +66,7 @@ const Medical_Profile = props => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <View style={{justifyContent: 'center', top: moderateScale(10)}}>
+            <View style={{ justifyContent: 'center', top: moderateScale(10) }}>
               <Image
                 source={{
                   uri: `https://demogswebtech.com/medicalcare/public/images/user/${medicalData?.img}`,
@@ -85,13 +80,13 @@ const Medical_Profile = props => {
               {/* <Image source={imagePath.icRectangle1} style={styles.swiperImage1} /> */}
             </View>
 
-            <View style={{justifyContent: 'center'}}>
-              <View style={{flexDirection: 'row'}}>
+            <View style={{ justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
                 <Ionicons
                   name="time"
                   color={colors.grayColor}
                   size={15}
-                  style={{alignSelf: 'center'}}
+                  style={{ alignSelf: 'center' }}
                 />
                 <Text
                   style={{
@@ -103,12 +98,12 @@ const Medical_Profile = props => {
                   Open unit 9:30 pm
                 </Text>
               </View>
-              <View style={{flexDirection: 'row', top: moderateScale(3)}}>
+              <View style={{ flexDirection: 'row', top: moderateScale(3) }}>
                 <EvilIcons
                   name="location"
                   color={colors.blackColor}
                   size={15}
-                  style={{alignSelf: 'center'}}
+                  style={{ alignSelf: 'center' }}
                 />
                 <Text
                   style={{
@@ -125,7 +120,7 @@ const Medical_Profile = props => {
           </View>
         </View>
 
-        <View style={{flex: 0.7}}>
+        <View style={{ flex: 0.7 }}>
           <View
             style={{
               paddingHorizontal: moderateScale(20),
@@ -172,8 +167,8 @@ const Medical_Profile = props => {
             </Text>
 
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{flexDirection: 'row'}}>
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row' }}>
                 <View
                   style={{
                     height: 8,
@@ -197,12 +192,12 @@ const Medical_Profile = props => {
                 name="checkcircle"
                 color={colors.blueColor}
                 size={15}
-                style={{alignSelf: 'center'}}
+                style={{ alignSelf: 'center' }}
               />
             </View>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{flexDirection: 'row'}}>
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row' }}>
                 <View
                   style={{
                     height: 8,
@@ -226,34 +221,21 @@ const Medical_Profile = props => {
                 name="checkcircle"
                 color={colors.blueColor}
                 size={15}
-                style={{alignSelf: 'center'}}
+                style={{ alignSelf: 'center' }}
               />
             </View>
           </View>
 
           <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              bottom: moderateScale(10),
-              alignSelf: 'center',
-              top: moderateScale(30),
-            }}
+            style={styles.btn}
             activeOpacity={0.7}
             onPress={() =>
               props?.navigation?.navigate(
                 navigationStrings.UPLOAD_PRESCIPTION,
-                {id: id},
+                { id: id },
               )
             }>
-            <Text
-              style={{
-                paddingHorizontal: moderateScale(20),
-                paddingVertical: moderateScaleVertical(10),
-                backgroundColor: colors.blueColor,
-                borderRadius: moderateScale(10),
-                color: colors.whiteColor,
-                fontSize: moderateScale(16),
-              }}>
+            <Text style={styles.btnText}>
               Place an order
             </Text>
           </TouchableOpacity>
@@ -289,4 +271,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: moderateScale(55),
   },
+  btn: {
+    justifyContent: 'center',
+    bottom: moderateScale(10),
+    alignSelf: 'center',
+    top: moderateScale(30),
+  },
+  btnText: {
+    paddingHorizontal: moderateScale(20),
+    paddingVertical: moderateScaleVertical(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16),
+  }
 });

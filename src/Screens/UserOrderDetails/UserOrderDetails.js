@@ -1,27 +1,23 @@
-import {React, useEffect, useState} from 'react';
+import { React, useEffect, useState } from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  TextInput,
-  SafeAreaView,
   Image,
   ScrollView,
   TouchableHighlight,
   Modal,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import HeaderComp from '../../Components/HeaderComp';
-import {height, moderateScale, textScale} from '../../styles/responsiveSize';
+import { height, moderateScale, textScale } from '../../styles/responsiveSize';
 import fontFamily from '../../styles/fontFamily';
 import colors from '../../styles/colors';
 import WrapperContainer from '../../Components/WrapperContainer';
 import RazorpayCheckout from 'react-native-razorpay';
-import {EditOrderPlaceAction} from '../../redux/Action/OrderPlaceAction';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
+import { EditOrderPlaceAction } from '../../redux/Action/OrderPlaceAction';
+import { useDispatch } from 'react-redux';
 
 const UserOrderDetails = props => {
   console.log(props, 'OrderDetailsOrderDetailsprops');
@@ -67,14 +63,14 @@ const UserOrderDetails = props => {
     orderstatus: order_status,
   });
 
-  const updateState = data => setState(prevState => ({...prevState, ...data}));
-  const {orderstatus} = state;
+  const updateState = data => setState(prevState => ({ ...prevState, ...data }));
+  const { orderstatus } = state;
   const handleOrderStatusChange = newStatus => {
     if (newStatus === 'completed') {
-      updateState({orderstatus: 'completed', isModalVisible: false});
-      updateOrderDetails();
+      updateState({ orderstatus: 'completed', isModalVisible: false });
+      // updateOrderDetails();
     } else {
-      updateState({orderstatus: 'pending', isModalVisible: false});
+      updateState({ orderstatus: 'pending', isModalVisible: false });
     }
     toggleOrderStatusModal();
   };
@@ -83,7 +79,10 @@ const UserOrderDetails = props => {
       order_status: orderstatus,
     };
     dispatch(EditOrderPlaceAction(item, Id)).then(async response => {
-      console.log('Response after updating order details:', response);
+      if (response?.message === "Order Update Successfully") {
+        props?.navigation?.goBack();
+      }
+      console.log('Response_after_updating_order_details:', response);
     });
   };
 
@@ -128,7 +127,7 @@ const UserOrderDetails = props => {
         contact: mobile,
         name: userName,
       },
-      theme: {color: '#53a20e'},
+      theme: { color: colors.blueColor },
     };
 
     RazorpayCheckout.open(options)
@@ -148,11 +147,11 @@ const UserOrderDetails = props => {
   };
 
   return (
-    <View style={{flex: 1, paddingBottom: moderateScale(20)}}>
+    <View style={{ flex: 1, paddingBottom: moderateScale(20) }}>
       <HeaderComp />
       <ScrollView>
-        <View style={{height: height / 2.7}}>
-          <View style={{paddingHorizontal: moderateScale(20)}}>
+        <View style={{ height: height / 2.7 }}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.UploadPrecriptionView}>
               Upload Prescription
             </Text>
@@ -170,7 +169,7 @@ const UserOrderDetails = props => {
           </View>
         </View>
         <View style={{}}>
-          <View style={{paddingHorizontal: moderateScale(20)}}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.MedicneText}>Medicine</Text>
             <View style={styles.orderDetailsView}>
               <Text
@@ -183,8 +182,8 @@ const UserOrderDetails = props => {
             </View>
           </View>
         </View>
-        <View style={{top: moderateScale(10)}}>
-          <View style={{paddingHorizontal: moderateScale(20)}}>
+        <View style={{ top: moderateScale(10) }}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.AddressText}>Delivery Address</Text>
             <View style={styles.AddressView}>
               <Text
@@ -197,8 +196,8 @@ const UserOrderDetails = props => {
             </View>
           </View>
         </View>
-        <View style={{height: height / 7, top: moderateScale(18)}}>
-          <View style={{paddingHorizontal: moderateScale(20)}}>
+        <View style={{ height: height / 7, top: moderateScale(18) }}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.AmountText}>Amount</Text>
             <View style={styles.amountView}>
               <Text
@@ -211,8 +210,8 @@ const UserOrderDetails = props => {
             </View>
           </View>
         </View>
-        <View style={{height: height / 7}}>
-          <View style={{paddingHorizontal: moderateScale(20)}}>
+        <View style={{ height: height / 7 }}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.paymentStatusText}>Payment Status</Text>
             <View style={styles.paymentStatusView}>
               <Text
@@ -225,11 +224,14 @@ const UserOrderDetails = props => {
             </View>
           </View>
         </View>
-        <View style={{height: height / 7}}>
-          <View style={{paddingHorizontal: moderateScale(20)}}>
-            <Text style={styles.order_statusText}>Order Status</Text>
+
+
+
+        <View style={{ height: height / 7 }}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
+            <Text style={styles.paymentStatusText}>Order Status</Text>
             <TouchableOpacity onPress={toggleOrderStatusModal}>
-              <View style={styles.order_statusView}>
+              <View style={styles.paymentStatusView}>
                 <Text
                   style={{
                     fontFamily: fontFamily.semiBold,
@@ -248,24 +250,23 @@ const UserOrderDetails = props => {
                   <TouchableOpacity
                     onPress={() => handleOrderStatusChange('pending')}>
                     <View style={styles.dropdownItem}>
-                      <Text>Pending</Text>
+                      <Text style={styles.dropdownText}>Pending</Text>
                     </View>
                   </TouchableOpacity>
                   <View style={styles.divider} />
                   <TouchableOpacity
                     onPress={() => handleOrderStatusChange('completed')}>
                     <View style={styles.dropdownItem}>
-                      <Text>Completed</Text>
+                      <Text style={styles.dropdownText}>Completed</Text>
                     </View>
                   </TouchableOpacity>
-                  <View style={styles.divider} />
                 </View>
               </View>
             </Modal>
           </View>
         </View>
 
-        <View style={{height: height / 10}}>
+        <View style={{ height: height / 10 }}>
           <TouchableOpacity
             style={{
               justifyContent: 'center',
@@ -294,9 +295,9 @@ const UserOrderDetails = props => {
         </View>
 
         {!isPaymentComplete ? (
-          <View style={{justifyContent: 'center', alignSelf: 'center'}}>
+          <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
             <TouchableHighlight
-              style={{flex: 1, opacity: isPaymentComplete ? 0.5 : 1}}
+              style={{ flex: 1, opacity: isPaymentComplete ? 0.5 : 1 }}
               onPress={handlePayment}
               disabled={isPaymentComplete}>
               <WrapperContainer>
@@ -315,8 +316,8 @@ const UserOrderDetails = props => {
             </TouchableHighlight>
           </View>
         ) : (
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{fontSize: textScale(16), color: colors.blackColor}}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: textScale(16), color: colors.blackColor }}>
               Payment completed
             </Text>
           </View>
@@ -330,7 +331,7 @@ const UserOrderDetails = props => {
             setSuccessModalVisible(false);
           }}>
           <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <View
               style={{
                 backgroundColor: 'white',
@@ -430,25 +431,31 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     paddingVertical: moderateScale(15),
   },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.blueColor,
+  },
+  dropdownText: {
+    fontSize: textScale(16),
+    color: colors.blackColor,
+    fontFamily: fontFamily.semiBold
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 100,
+    paddingHorizontal: moderateScale(20),
+    bottom: moderateScale(80)
   },
   modalContent: {
-    backgroundColor: colors.grayColor03,
-    padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 4,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-    width: 350,
+    backgroundColor: 'white',
+    paddingHorizontal: moderateScale(10),
+    borderRadius: moderateScale(10),
+    borderWidth: 1,
+    borderColor: colors.blueColor
   },
-  dropdownItem: {paddingVertical: moderateScale(10)},
-  divider: {
-    borderBottomWidth: 2,
-    borderBottomColor: 'red',
-    marginVertical: moderateScale(5),
+  dropdownItem: {
+    paddingVertical: moderateScale(8),
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });

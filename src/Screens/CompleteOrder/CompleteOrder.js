@@ -135,7 +135,6 @@ const CompleteOrder = ({ navigation }) => {
     <WrapperContainer>
       <HeaderComp />
 
-
       <View style={{ flex: 1 }}>
         <FlatList
           data={completeOrder}

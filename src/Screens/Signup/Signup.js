@@ -1,10 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import WrapperContainer from '../../Components/WrapperContainer'
 import HeaderComp from '../../Components/HeaderComp'
 import { height, moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
 import TextInputComp from '../../Components/TextInputComp'
-import ButtonComp from '../../Components/ButtonComp'
 import fontFamily from '../../styles/fontFamily'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import colors from '../../styles/colors'
@@ -20,35 +19,19 @@ import { List } from 'react-native-paper';
 
 const Signup = (props) => {
 
-
   const [expanded, setExpanded] = useState(false);
-  // const [selectedValue, setSelectedValue] = useState(null);
-
-  // const handlePress = () => setExpanded(!expanded);
 
   const [value, setValue] = useState('')
   console.log(value, 'valuevalue')
 
-
-  // const [expanded, setExpanded] = useState(false);
-  // const sendDataToOtherPage = (data) => {
-  //   console.log(data, 'datadata')
-  //   setValue(data)
-  //   // Navigate to the other page and pass the data
-  //   // navigation.navigate('OtherPage', { data });
-  // };
 
   const handlePress = () => {
     setExpanded(!expanded);
   };
 
   const sendDataToOtherPage = (data) => {
-
     console.log(data, 'woooohhooo')
-    // Add your code to handle the selected value
-    // ...
 
-    // After handling the selected value, close the dropdown
     setValue(data)
     setExpanded(false);
   };
@@ -56,17 +39,16 @@ const Signup = (props) => {
 
   const dispatch = useDispatch();
   const [secureText, setSecureText] = useState(false)
-  const [loader, setLoader] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [state, setState] = useState({
     name: '',
     mobile: '',
     email: '',
     password: '',
-    // password_confirmation: '',
   })
 
-  const { name, email, password, password_confirmation, mobile, } = state
+  const { name, email, password, mobile } = state
   const updateState = (data) => setState(() => ({ ...state, ...data }))
 
   const togglePasswordVisibility = () => {
@@ -80,7 +62,6 @@ const Signup = (props) => {
       mobile,
       email,
       password,
-      // password_confirmation
     })
     if (error) {
       showError(error)
@@ -99,7 +80,7 @@ const Signup = (props) => {
   }
 
   const SignupData = () => {
-    setLoader(true);
+    setLoading(true);
     const data = {
       name: state.name,
       mobile: state.mobile,
@@ -110,8 +91,8 @@ const Signup = (props) => {
     console.log(data, 'datadatadata')
     dispatch(SignupAction(data)).then(async (response) => {
       console.log("response_in_signup", response)
+      setLoading(false);
       if (response?.status === "success") {
-        setLoader(false);
         await AsyncStorage.setItem("token", response?.token);
         Alert.alert("Signup success")
         props?.navigation?.navigate(navigationStrings.LOGIN);
@@ -154,19 +135,26 @@ const Signup = (props) => {
               onChangeText={(email) => updateState({ email })}
             />
 
-
             <View style={{ flexDirection: 'row', left: moderateScale(20) }}>
               <TextInputComp
                 value={password}
                 maxLength={10}
-                placeholder='Password'
-                onChangeText={(password) => updateState({ password })}
+                placeholder="Password"
+                onChangeText={password => updateState({ password })}
+                secureTextEntry={!secureText}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility} style={{ right: moderateScale(40) }}>
-                <FontAwesome name={secureText ? "eye" : "eye-slash"}
-                  size={24} color={colors.blackColor} style={{ top: moderateScale(12) }} />
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={{ right: moderateScale(40) }}>
+                <FontAwesome
+                  name={secureText ? 'eye' : 'eye-slash'}
+                  size={24}
+                  color={colors.blackColor}
+                  style={{ top: moderateScale(12) }}
+                />
               </TouchableOpacity>
             </View>
+
 
             <View
               style={styles.AccordionMainView}
@@ -224,7 +212,11 @@ const Signup = (props) => {
               </View>
 
               <TouchableOpacity style={{ justifyContent: 'center', bottom: moderateScale(10), alignSelf: "center", top: moderateScale(40) }} activeOpacity={0.7} onPress={() => onSignup()}>
-                <Text style={styles.signUpBtn}>Sign up</Text>
+                {loading ? (
+                  <ActivityIndicator size="large" color={colors.blackColor} />
+                ) : (
+                  <Text style={styles.signUpBtn}>Sign up</Text>
+                )}
               </TouchableOpacity>
 
             </View>

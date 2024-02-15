@@ -7,15 +7,13 @@ import {
   Platform,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  TouchableHighlight,
+  ActivityIndicator,
   View,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import fontFamily from '../../styles/fontFamily';
 import WrapperContainer from '../../Components/WrapperContainer';
-import ButtonComp from '../../Components/ButtonComp';
-import HeaderComp from '../../Components/HeaderComp';
 import TextInputComp from '../../Components/TextInputComp';
 import {
   height,
@@ -26,28 +24,26 @@ import {
 import navigationStrings from '../../Navigations/navigationStrings';
 import colors from '../../styles/colors';
 import validator from '../../Utils/validations';
-import {showError} from '../../Utils/helperFunction';
+import { showError } from '../../Utils/helperFunction';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {LoginAction} from '../../redux/Action/LoginAction';
+import { useDispatch } from 'react-redux';
+import { LoginAction } from '../../redux/Action/LoginAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import imagePath from '../../constants/imagePath';
-import {useSelector} from 'react-redux';
-import * as Types from '../../redux/Types/Types';
+import { useSelector } from 'react-redux';
 
 const Login = props => {
   const dispatch = useDispatch();
   const [secureText, setSecureText] = useState(false);
-  const [userToken, setUserToken] = useState(null);
-  const [loader, setLoader] = useState(false);
+  const [loading, setLoading] = useState(false);
   // {console.log(userToken,'userTokenuserTokenuserToken')}
   const [state, setState] = useState({
     email: '',
     password: '',
   });
   console.log('_Props', props);
-  const {email, password} = state;
-  const updateState = data => setState(() => ({...state, ...data}));
+  const { email, password } = state;
+  const updateState = data => setState(() => ({ ...state, ...data }));
 
   const profileId = useSelector(state => state?.LoginReducer?.Login);
 
@@ -71,33 +67,36 @@ const Login = props => {
     if (checkValid) {
       await LoginData();
       console.log('_login', profileId);
-      // navigation.navigate(navigationStrings.TAB_ROUTES);
     }
   };
 
   const LoginData = () => {
-    setLoader(true);
+    setLoading(true);
     const data = {
       email: state.email,
       password: state.password,
     };
 
-    dispatch(LoginAction(data)).then(async response => {
-      console.log(data, 'response_inlogins', response);
-      if (response?.success === true) {
-        console.log(' userId ', response);
-        // .user?.id
-        console.log(' profile ', profileId);
-        setLoader(false);
-        await AsyncStorage.setItem('token', response?.token);
-        // Alert.alert("Login success")
-        // props?.navigation?.navigate(navigationStrings.TAB_ROUTES);
-      } else {
-        setLoader(true);
-        Alert.alert('Invalid Email or password');
-        console.log('email_passwordemail', response);
-      }
-    });
+    dispatch(LoginAction(data))
+      .then(async (response) => {
+        console.log("Response_in_login", response);
+
+        if (response?.success === true) {
+          try {
+            await AsyncStorage.setItem("token", response?.token);
+          } catch (error) {
+            console.error('Error_setting_token:', error);
+          }
+        } else {
+          Alert.alert("Invalid Email or password");
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('LoginAction failed with error:', error);
+        setLoading(false);
+        Alert.alert('Something went wrong. Please try again.');
+      });
   };
 
   return (
@@ -107,10 +106,10 @@ const Login = props => {
       </View>
 
       <KeyboardAvoidingView
-        style={{flex: 1, margin: moderateScale(16)}}
+        style={{ flex: 1, margin: moderateScale(16) }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{height: height / 1.4}}>
+          <View style={{ height: height / 1.4 }}>
             <View
               style={{
                 flex: 0.2,
@@ -123,31 +122,29 @@ const Login = props => {
               </Text>
               <Text style={styles.mainText2}>and password</Text>
             </View>
-            <View style={{flex: 0.5, top: moderateScale(20)}}>
+            <View style={{ flex: 0.5, top: moderateScale(20) }}>
               <TextInputComp
                 value={email}
                 placeholder="Enter Your Email Address"
-                // onChangeText={(value) => setEmail(value)}
-                onChangeText={email => updateState({email})}
+                onChangeText={email => updateState({ email })}
               />
 
-              <View style={{flexDirection: 'row', left: moderateScale(20)}}>
+              <View style={{ flexDirection: 'row', left: moderateScale(20) }}>
                 <TextInputComp
                   value={password}
                   maxLength={10}
                   placeholder="Password"
-                  // onChangeText={(value) => setPassword(value)}
-                  onChangeText={password => updateState({password})}
+                  onChangeText={password => updateState({ password })}
                   secureTextEntry={!secureText}
                 />
                 <TouchableOpacity
                   onPress={togglePasswordVisibility}
-                  style={{right: moderateScale(40)}}>
+                  style={{ right: moderateScale(40) }}>
                   <FontAwesome
                     name={secureText ? 'eye' : 'eye-slash'}
                     size={24}
                     color={colors.blackColor}
-                    style={{top: moderateScale(12)}}
+                    style={{ top: moderateScale(12) }}
                   />
                 </TouchableOpacity>
               </View>
@@ -161,21 +158,25 @@ const Login = props => {
                 }}
                 activeOpacity={0.7}
                 onPress={() => onLogin()}>
-                <Text
-                  style={{
-                    paddingHorizontal: moderateScale(35),
-                    paddingVertical: moderateScaleVertical(10),
-                    backgroundColor: colors.blueColor,
-                    borderRadius: moderateScale(10),
-                    color: colors.whiteColor,
-                    fontSize: moderateScale(16),
-                  }}>
-                  Log in
-                </Text>
+                {loading ? (
+                  <ActivityIndicator size="large" color={colors.blackColor} />
+                ) : (
+                  <Text
+                    style={{
+                      paddingHorizontal: moderateScale(35),
+                      paddingVertical: moderateScaleVertical(10),
+                      backgroundColor: colors.blueColor,
+                      borderRadius: moderateScale(10),
+                      color: colors.whiteColor,
+                      fontSize: moderateScale(16),
+                    }}>
+                    Log in
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
 
-            <View style={{flex: 0.3}}>
+            <View style={{ flex: 0.3 }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -208,7 +209,7 @@ const Login = props => {
                     props?.navigation?.navigate(navigationStrings.SIGNUP)
                   }>
                   <Text
-                    style={{color: '#3F6791', marginLeft: moderateScale(6)}}>
+                    style={{ color: '#3F6791', marginLeft: moderateScale(6) }}>
                     Sign up
                   </Text>
                   <View

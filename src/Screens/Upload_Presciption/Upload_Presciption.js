@@ -1,5 +1,5 @@
-import { Alert, StyleSheet, Text, View, TouchableOpacity, TextInput, SafeAreaView, Image } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { Alert, StyleSheet, Text, View, TouchableOpacity, TextInput, SafeAreaView, Image, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
 import HeaderComp from '../../Components/HeaderComp'
 import { height, moderateScale, moderateScaleVertical, textScale, width } from '../../styles/responsiveSize'
 import fontFamily from '../../styles/fontFamily'
@@ -15,6 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 
 const Upload_Presciption = (props) => {
     console.log(props, 'propspropspropspropsprops')
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -81,39 +83,58 @@ const Upload_Presciption = (props) => {
     }
 
     const imageUpload = (items) => {
-      const formData = new FormData();
-      formData.append('prescription', {
-        uri: items.uri,
-        type: items.type,
-        name: items.name,
-      });
-      formData.append('user_name', username);
-      formData.append('user_email', userEmail);
-      formData.append('user_mobile', userMobile);
-      formData.append('order_detail', state.name);
-      formData.append('chemist_id', id);
-      formData.append('user_id', userId);
+        setIsLoading(true);
+        const formData = new FormData();
 
-      dispatch(OrderPlaceAction(formData)).then(async response => {
-        console.log(' responseresponseresponse', response);
-        if (response?.status === 'Order created successfully') {
-          Alert.alert(
-            'Order Created',
-            'Your order has been successfully created!',
-            [{text: 'OK', onPress: () => {}}],
-          );
-          props?.navigation?.navigate(navigationStrings.MY_ORDER);
+        if (items.uri || state.name) {
+            if (items.uri) {
+                formData.append('prescription', {
+                    uri: items.uri,
+                    type: items.type,
+                    name: items.name,
+                });
+            }
+            if (state.name) {
+                formData.append('order_detail', state.name);
+            }
+
+            // Append other form data
+            formData.append('user_name', username);
+            formData.append('user_email', userEmail);
+            formData.append('user_mobile', userMobile);
+            formData.append('chemist_id', id);
+            formData.append('user_id', userId);
+
+            dispatch(OrderPlaceAction(formData)).then(async response => {
+                console.log('responseresponseresponse', response);
+                if (response?.status === 'Order created successfully') {
+                    Alert.alert(
+                        'Order Created',
+                        'Your order has been successfully created!',
+                        [{ text: 'OK', onPress: () => { } }],
+                    );
+                    props?.navigation?.navigate(navigationStrings.MY_ORDER);
+                } else {
+                    console.log('Order creation failed. Response:', response);
+                    Alert.alert(
+                        'Order Creation Failed',
+                        'There was an error while creating your order. Please try again later.',
+                        [{ text: 'OK', onPress: () => { } }],
+                    );
+                    console.log('email_passwordemail', response);
+                }
+            });
         } else {
-          console.log('Order creation failed. Response:', response);
-          Alert.alert(
-            'Order Creation Failed',
-            'There was an error while creating your order. Please try again later.',
-            [{text: 'OK', onPress: () => {}}],
-          );
-          console.log('email_passwordemail', response);
+            setIsLoading(false);
+            Alert.alert(
+                'Incomplete Information',
+                'Please select a prescription image or provide order details before proceeding...',
+                [{ text: 'OK', onPress: () => { } }],
+            );
         }
-      });
     }
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <HeaderComp />
@@ -139,9 +160,16 @@ const Upload_Presciption = (props) => {
                         />
                     </View>
                 </View>
-                <TouchableOpacity style={{ justifyContent: 'center', bottom: moderateScale(10), alignSelf: "center" }} activeOpacity={0.7} onPress={() => imageUpload(gallary)}>
-                    <Text style={{ paddingHorizontal: moderateScale(20), paddingVertical: moderateScaleVertical(10), backgroundColor: colors.blueColor, borderRadius: moderateScale(10), color: colors.whiteColor, fontSize: moderateScale(16) }}>Confirm Order</Text>
+
+                <TouchableOpacity style={styles.btnView} activeOpacity={0.7} onPress={() => imageUpload(gallary)}>
+
+                    {isLoading ? (
+                        <ActivityIndicator size="large" color={colors.blackColor} />
+                    ) : (
+                        <Text style={styles.btnText}>Confirm Order</Text>
+                    )}
                 </TouchableOpacity>
+
             </KeyboardAwareScrollView>
 
         </SafeAreaView>
@@ -150,7 +178,23 @@ const Upload_Presciption = (props) => {
 
 export default Upload_Presciption
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    btnView: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        backgroundColor: colors.blueColor,
+        borderRadius: moderateScale(10),
+    },
+    btnText: {
+        paddingHorizontal: moderateScale(30),
+        paddingVertical: moderateScaleVertical(10),
+        backgroundColor: colors.skyBuleColor,
+        borderRadius: moderateScale(20),
+        color: colors.whiteColor,
+        fontSize: moderateScale(14),
+        fontFamily: fontFamily.bold,
+    },
+})
 
 
 

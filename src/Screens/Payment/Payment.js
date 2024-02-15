@@ -4,10 +4,7 @@ import HeaderComp from '../../Components/HeaderComp'
 import { height, moderateScale, moderateScaleVertical, textScale } from '../../styles/responsiveSize'
 import fontFamily from '../../styles/fontFamily'
 import colors from '../../styles/colors'
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import ImagePicker from 'react-native-image-crop-picker';
-import { androidCameraPermission } from '../../../permissions';
 
 const Payment = () => {
 

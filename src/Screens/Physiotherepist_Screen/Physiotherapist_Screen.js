@@ -6,16 +6,16 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {textScale, moderateScale} from '../../styles/responsiveSize';
+import React, { useState, useEffect } from 'react';
+import { textScale, moderateScale, moderateScaleVertical } from '../../styles/responsiveSize';
 import Subscription from '../../Components/Subscription';
 import axios from 'axios';
 import imagePath from '../../constants/imagePath';
 import fontFamily from '../../styles/fontFamily';
 import ButtonComp from '../../Components/ButtonComp';
 import colors from '../../styles/colors';
-import {useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Physiotherapist_Screen = () => {
   const [profileData, setProfileData] = useState(null);
@@ -71,7 +71,7 @@ const Physiotherapist_Screen = () => {
 
   return (
     <>
-      <View>
+      <View style={styles.HeaderContainer}>
         <Image source={imagePath.icLogo} style={{}} />
       </View>
       <View style={styles.box}>
@@ -87,7 +87,7 @@ const Physiotherapist_Screen = () => {
                       source={{
                         uri: `https://demogswebtech.com/medicalcare/public/images/user/${profileData.user.img}`,
                       }}
-                      style={{width: 100, height: 100}}
+                      style={{ width: 100, height: 100 }}
                     />
                   ) : null}
                   <Text
@@ -107,7 +107,7 @@ const Physiotherapist_Screen = () => {
                       borderRadius: moderateScale(5),
                       marginLeft: 250,
                       alignSelf: 'center',
-                      marginTop: -20,
+                      marginTop: -15,
                     }}>
                     <Text
                       style={{
@@ -164,7 +164,7 @@ const Physiotherapist_Screen = () => {
                 </View>
               </>
             ) : (
-              <Text style={{fontSize: textScale(20)}}>Profile not found</Text>
+              <Text style={{ fontSize: textScale(20) }}>Profile not found</Text>
             )}
           </>
         )}
@@ -182,6 +182,16 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(50),
   },
   box: {
-    marginTop: moderateScale(100),
+    marginTop: moderateScale(50),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: moderateScale(10)
+  },
+  HeaderContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    marginVertical: moderateScaleVertical(20),
+    alignItems: 'center',
+    marginTop: moderateScale(10)
   },
 });

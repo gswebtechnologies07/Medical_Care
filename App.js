@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import SplashScreen from "react-native-splash-screen";
 import Routes from './src/Navigations/Routes'
@@ -11,6 +10,13 @@ const App = () => {
 
   useEffect(() => {
     SplashScreen.hide();
+    // }, []);
+    const delay = 5000;
+    const timeoutId = setTimeout(() => {
+      console.log('Navigating_to_login_screen_after_5_seconds');
+    }, delay);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (

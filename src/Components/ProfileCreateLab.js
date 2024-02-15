@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  Image,
+  ActivityIndicator
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderComp2 from './HeaderComp2';
 import {
   height,
@@ -22,14 +22,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 import fontFamily from '../styles/fontFamily';
 import ButtonComp from './ButtonComp';
-import {UpdateDoctorProfileAction} from '../redux/Action/DoctorProfileAction';
-import {useDispatch} from 'react-redux';
+import { UpdateDoctorProfileAction } from '../redux/Action/DoctorProfileAction';
+import { useDispatch } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {androidCameraPermission} from '../../permissions';
-import {useSelector} from 'react-redux';
+import { androidCameraPermission } from '../../permissions';
+import { useSelector } from 'react-redux';
 
-const ProfileCreateLab = props => {
+const ProfileCreateLab = (props) => {
   const [userData, setUserData] = useState({});
 
   const [salesPromoters, setSalesPromoters] = useState([]);
@@ -38,7 +38,7 @@ const ProfileCreateLab = props => {
     useState(false);
   const [isSpecialityModalVisible, setSpecialityModalVisible] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const LoginData = useSelector(state => state?.LoginReducer?.Login);
 
   const [input, setInput] = useState({
@@ -72,13 +72,15 @@ const ProfileCreateLab = props => {
         'https://demogswebtech.com/medicalcare/api/get/sales',
       );
       const data = await response.json();
-      if (data.status === 200) {
-        setSalesPromoters(data.sales);
-      } else {
-        console.error('Failed to fetch sales promoters data');
+
+      if (data?.message === "User Update Successfully") {
+        setLoading(false);
+        props?.navigation?.goBack();
+        console.log('Profile_Updated_Successfully');
       }
     } catch (error) {
-      console.error('Error fetching sales promoters data', error);
+      setLoading(false);
+      console.error('Error updating profile:', error);
     }
   };
 
@@ -167,6 +169,7 @@ const ProfileCreateLab = props => {
     const checkValid = true;
     // isValidData() ? isValidData() :
     if (checkValid) {
+      setLoading(true);
       const formData = new FormData();
 
       if (gstNumber.length) formData.append('gst_number', gstNumber);
@@ -202,10 +205,19 @@ const ProfileCreateLab = props => {
         const data = await response.json();
         console.log('Update Profile Response:', data);
 
-        if (data.status === 200) {
-          console.log('Profile Updated Successfully');
+        //   if (data.status === 200) {
+        //     console.log('Profile Updated Successfully');
+        //   }
+        // } catch (error) {
+        //   console.error('Error updating profile:', error);
+        // }
+        if (data?.message === "User Update Successfully") {
+          setLoading(false);
+          props?.navigation?.goBack();
+          console.log('Profile_Updated_Successfully');
         }
       } catch (error) {
+        setLoading(false);
         console.error('Error updating profile:', error);
       }
 
@@ -234,7 +246,7 @@ const ProfileCreateLab = props => {
     Drug_license_number,
     owner_name,
   } = input;
-  const updateState = data => setInput(() => ({...input, ...data}));
+  const updateState = data => setInput(() => ({ ...input, ...data }));
   const [gallary, setGallary] = useState('');
   const [image, setImage] = useState('');
 
@@ -243,8 +255,8 @@ const ProfileCreateLab = props => {
     if (permissionStatus || Platform.OS == 'android') {
       Alert.alert('Profile Picture', 'Choose an option', [
         // { text: 'Camera', onPress: onCamera },
-        {text: 'Gallery', onPress: onGallery()},
-        {text: 'Cancel', onPress: () => {}},
+        { text: 'Gallery', onPress: onGallery() },
+        { text: 'Cancel', onPress: () => { } },
       ]);
     }
   };
@@ -279,13 +291,13 @@ const ProfileCreateLab = props => {
     <>
       <HeaderComp2 text="Edit Profile" />
 
-      <ScrollView style={{paddingHorizontal: 10}}>
+      <ScrollView style={{ paddingHorizontal: 10 }}>
         {/* <KeyboardAwareScrollView> */}
         <View>
           <TextInput
             value={nameOfFirm}
             placeholder="Name"
-            onChangeText={nameOfFirm => updateState({nameOfFirm})}
+            onChangeText={nameOfFirm => updateState({ nameOfFirm })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -296,7 +308,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={owner_name}
             placeholder="Owner Name"
-            onChangeText={owner_name => updateState({owner_name})}
+            onChangeText={owner_name => updateState({ owner_name })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -307,7 +319,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={Degree}
             placeholder="Degree"
-            onChangeText={Degree => updateState({Degree})}
+            onChangeText={Degree => updateState({ Degree })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -319,7 +331,7 @@ const ProfileCreateLab = props => {
             value={mobileNum}
             placeholder="Mobile Number"
             maxLength={10}
-            onChangeText={mobileNum => updateState({mobileNum})}
+            onChangeText={mobileNum => updateState({ mobileNum })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -330,7 +342,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={email}
             placeholder="Email"
-            onChangeText={email => updateState({email})}
+            onChangeText={email => updateState({ email })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -341,7 +353,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={State}
             placeholder="State"
-            onChangeText={State => updateState({State})}
+            onChangeText={State => updateState({ State })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -352,7 +364,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={district}
             placeholder="District"
-            onChangeText={district => updateState({district})}
+            onChangeText={district => updateState({ district })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -363,7 +375,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={city}
             placeholder="city"
-            onChangeText={city => updateState({city})}
+            onChangeText={city => updateState({ city })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -374,7 +386,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={sector}
             placeholder="Sector"
-            onChangeText={sector => updateState({sector})}
+            onChangeText={sector => updateState({ sector })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -386,7 +398,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={address}
             placeholder="Address"
-            onChangeText={address => updateState({address})}
+            onChangeText={address => updateState({ address })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -397,7 +409,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={gstNumber}
             placeholder="GST Number"
-            onChangeText={gstNumber => updateState({gstNumber})}
+            onChangeText={gstNumber => updateState({ gstNumber })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -409,7 +421,7 @@ const ProfileCreateLab = props => {
             value={Drug_license_number}
             placeholder="Drug_license_number"
             onChangeText={Drug_license_number =>
-              updateState({Drug_license_number})
+              updateState({ Drug_license_number })
             }
             style={{
               borderBottomColor: colors.grayColor,
@@ -421,7 +433,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={regNumber}
             placeholder="Registration Number"
-            onChangeText={regNumber => updateState({regNumber})}
+            onChangeText={regNumber => updateState({ regNumber })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -442,7 +454,7 @@ const ProfileCreateLab = props => {
               justifyContent: 'space-between',
               paddingVertical: moderateScaleVertical(8),
             }}>
-            <View style={{justifyContent: 'center'}}>
+            <View style={{ justifyContent: 'center' }}>
               <Text
                 style={{
                   alignSelf: 'center',
@@ -477,7 +489,7 @@ const ProfileCreateLab = props => {
           <TextInput
             value={description}
             placeholder="AboutYourSelf"
-            onChangeText={description => updateState({description})}
+            onChangeText={description => updateState({ description })}
             style={{
               borderBottomColor: colors.grayColor,
               borderBottomWidth: 1,
@@ -490,8 +502,8 @@ const ProfileCreateLab = props => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{justifyContent: 'center'}}>
-            <Text style={{color: colors.grayColor}}>Sales Promoter</Text>
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={{ color: colors.grayColor }}>Sales Promoter</Text>
           </View>
 
           <View style={styles.container}>
@@ -520,22 +532,33 @@ const ProfileCreateLab = props => {
               </View>
             </Modal>
           </View>
-          <View style={{marginLeft: 10}}>
+          <View style={{ marginLeft: 10 }}>
             {selectedSalesPromoter && (
-              <Text style={{color: colors.blueColor, padding: 20}}>
+              <Text style={{ color: colors.blueColor, padding: 20 }}>
                 {selectedSalesPromoter.name}
               </Text>
             )}
           </View>
         </View>
 
-        <View style={{height: moderateScale(100), justifyContent: 'center'}}>
-          <TouchableOpacity activeOpacity={0.7} onPress={UpdateChemistProfile}>
-            <ButtonComp text="Save" />
+        <View style={{ height: moderateScale(100), justifyContent: 'center' }}>
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+            activeOpacity={0.7}
+
+            onPress={() => UpdateChemistProfile()}
+          >
+            {loading ? (
+              <ActivityIndicator size="large" color={colors.blackColor} />
+            ) : (
+              <Text style={styles.btnText}> Save </Text>
+            )}
           </TouchableOpacity>
         </View>
 
-        {/* </KeyboardAwareScrollView> */}
       </ScrollView>
     </>
   );
@@ -594,4 +617,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  btnText: {
+    paddingHorizontal: moderateScale(30),
+    paddingVertical: moderateScale(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16),
+  }
 });

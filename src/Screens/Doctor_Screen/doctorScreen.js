@@ -1,334 +1,332 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  TextInput,
-  ScrollView,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import WrapperContainer from '../../Components/WrapperContainer';
-import HeaderComp from '../../Components/HeaderComp';
 import {
-  height,
   moderateScale,
-  moderateScaleVertical,
   textScale,
+  moderateScaleVertical,
 } from '../../styles/responsiveSize';
-import colors from '../../styles/colors';
 import fontFamily from '../../styles/fontFamily';
-import imagePath from '../../constants/imagePath';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import colors from '../../styles/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import navigationStrings from '../../Navigations/navigationStrings';
-import {useDispatch, useSelector} from 'react-redux';
-import {getAllChemistProfile} from '../../redux/Action/ChemistProfileAction';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import HeaderComp from '../../Components/HeaderComp';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-const AllTabs = [
-  {id: 1, name: 'Medicine', image: imagePath.icDrugs},
-  {id: 2, name: 'Consult Doctor', image: imagePath.icStethoscope},
-  {id: 3, name: 'Lab Tests', image: imagePath.icBlood_test},
-  {id: 4, name: 'Physiotherapist', image: imagePath.icPsychotherapy},
-];
+const DoctorScreen = (props) => {
+  console.log(props, 'propsDoctorScreen');
 
-// const Homecards = [
-//   {
-//     id: 1,
-//     title: 'Bawa Medical Hall',
-//     subTitle: 'Zirakpur HO,Zirakpur',
-//     subTitle2: 'Open unit 9:30 pm',
-//     image: imagePath.icRectangle,
-//     image2: imagePath.icLocation,
-//     image3: imagePath.icClock,
-//   },
-//   {
-//     id: 2,
-//     title: 'Bawa Medical Hall',
-//     subTitle: 'Zirakpur HO,Zirakpur',
-//     subTitle2: 'Open unit 9:30 pm',
-//     image: imagePath.icRectangle,
-//     image2: imagePath.icLocation,
-//     image3: imagePath.icClock,
-//   }
+  const medicalData = props?.route?.params?.data;
+  console.log(medicalData, 'medicalDatamedicalData');
 
-// ];
+  const id = props?.route?.params?.data?.id;
 
-const TopServicesData = [
-  {
-    id: 1,
-    title: 'Bawa Medical Hall',
-    image: imagePath.icRectangle,
-  },
-  {
-    id: 2,
-    title: 'Bawa Medical Hall',
-    image: imagePath.icRectangle,
-  },
-];
-
-const doctor = props => {
-  console.log(props, 'propspropsHome');
-
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const getChemistData = useSelector(state => state);
+  console.log(getChemistData, 'getChemistDatagetChemistDatagetChemistData');
 
-  const [searchText, setSearchText] = useState('');
-
-  const handleSearch = () => {
-    onSearch(searchText);
-  };
-
-  const seeAll = () => {
-    props.navigation.navigate(navigationStrings.Nearby_Medical, {
-      mapData: mapData,
-    });
-  };
-
-  const [data, setData] = useState('');
-  console.log(data, 'datadatadatadatadatarrrr');
-
-  // const useSelector =((state)=>state)
-  const mapData = useSelector(
-    state => state?.getAllChemistProfileReducer?.GetAllChemistProfile?.order,
-  );
-  console.log(mapData, 'mapDatamapData');
-
-  useEffect(() => {
-    dispatch(getAllChemistProfile()).then(async response => {
-      console.log(response, 'response_ChemistProfileActionsss');
-
-      setData(response?.order);
-      // setData(data)
-
-      // console.log(data,'datadatadata')
-    });
-  }, []);
-
-  const renderItem = ({item}) => {
-    return (
-      <View style={{padding: moderateScale(10)}}>
-        <View style={styles.tabColor}>
-          <Image source={item?.image} style={styles.tabImageStyle} />
-        </View>
-        <Text style={styles.tabImageText}>{item?.name}</Text>
-      </View>
-    );
-  };
 
   return (
     <WrapperContainer>
-      <View style={{flexDirection: 'row', paddingHorizontal: moderateScale(5)}}>
-        <View style={styles.HeaderContainer}>
-          <Image source={imagePath.icLogo} style={{}} />
-        </View>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-        <View style={{flex: 0.65}}>
-          <View style={{marginHorizontal: moderateScale(15)}}>
-            <Text style={styles.headerText}>
-              Deliver to{' '}
-              <Text style={styles.headerText}>Patiala, Punjab, 140603</Text>
-            </Text>
-          </View>
-          <View style={styles.searchBarmainView}>
-            <TextInput
-              style={{width: '90%', placeholderTextColor: '#00000'}}
-              placeholder="Search medicine, doctor, lab tests &..."
-              onChangeText={text => setSearchText(text)}
-              value={searchText}
-            />
-            <Image
-              source={imagePath.icSearch}
-              style={{alignSelf: 'center'}}
-              onPress={handleSearch}
-            />
-          </View>
-          <View style={styles.flatListView}>
-            <FlatList
-              horizontal
-              data={AllTabs}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        </View>
+      <View style={{ flex: 1 }}>
+        <HeaderComp />
 
-        <View
-          style={{
-            paddingHorizontal: moderateScale(12),
-            marginVertical: moderateScaleVertical(40),
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: moderateScale(10),
-            }}>
-            <TouchableOpacity onPress={seeAll}>
+        <View style={{ flex: 0.3 }}>
+          <View style={{ flex: 2, justifyContent: 'center' }}>
+            <View
+              style={{
+                paddingHorizontal: moderateScale(15),
+                top: moderateScale(10),
+              }}>
               <Text
                 style={{
-                  fontFamily: fontFamily.regular,
-                  fontSize: textScale(16),
-                  color: colors.blueColor,
+                  fontFamily: fontFamily.semiBold,
+                  fontSize: textScale(20),
+                  color: colors.blackColor,
                 }}>
-                see all
+                Dr.{medicalData?.name}
               </Text>
-            </TouchableOpacity>
+            </View>
+          </View>
+          <View
+            style={{
+              flex: 3,
+              padding: moderateScale(20),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{ justifyContent: 'center', top: moderateScale(10) }}>
+              <Image
+                // source={{
+                //   uri: `https://demogswebtech.com/medicalcare/public/images/user/${medicalData?.img}`,
+                // }}
+                source={{ uri: medicalData?.img_url }}
+                style={styles.swiperImage1} />
+            </View>
+
+            <View style={{ justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Ionicons
+                  name="time"
+                  color={colors.grayColor}
+                  size={15}
+                  style={{ alignSelf: 'center' }}
+                />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.regular,
+                    fontSize: textScale(12),
+                    color: colors.blackColor,
+                    left: moderateScale(3),
+                  }}>
+                  Open unit 9:30 pm
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row', top: moderateScale(3) }}>
+                <EvilIcons
+                  name="location"
+                  color={colors.blackColor}
+                  size={15}
+                  style={{ alignSelf: 'center' }}
+                />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.regular,
+                    fontSize: textScale(12),
+                    color: colors.blackColor,
+                    left: moderateScale(3),
+                  }}>
+                  {medicalData?.city}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
 
-        <View
-          style={{
-            paddingHorizontal: moderateScale(12),
-            bottom: moderateScale(45),
-          }}>
+        <View style={{ flex: 0.05, justifyContent: 'center' }}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: moderateScale(10),
+              paddingHorizontal: moderateScale(20),
+              paddingVertical: moderateScale(5),
+              flexDirection: 'row'
             }}>
             <Text
               style={{
                 fontFamily: fontFamily.semiBold,
                 fontSize: textScale(18),
-                color: colors.blueColor,
+                color: colors.blackColor,
               }}>
-              Top Services
+              speciality -
             </Text>
-            <TouchableOpacity onPress={seeAll}>
+            <View>
               <Text
                 style={{
-                  fontFamily: fontFamily.regular,
+                  top: moderateScale(3),
+                  fontFamily: fontFamily.semiBold,
                   fontSize: textScale(16),
-                  color: colors.blueColor,
+                  color: colors.blueColor, left: 5
                 }}>
-                see all
+                {medicalData.speciality}
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{flexDirection: 'row'}}>
-            {TopServicesData?.map(item => {
-              return (
-                <View>
-                  <View style={styles.cardView}>
-                    <Image
-                      source={item?.image}
-                      style={{
-                        height: moderateScale(100),
-                        width: moderateScale(200),
-                        right: moderateScale(10),
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: fontFamily.semiBold,
-                        fontSize: textScale(16),
-                        color: colors.blackColor,
-                        alignSelf: 'center',
-                      }}>
-                      {item?.title}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })}
-          </ScrollView>
         </View>
-      </ScrollView>
+
+        <View style={{ flex: 0.05, justifyContent: 'center' }}>
+          <View
+            style={{
+              paddingHorizontal: moderateScale(20),
+              paddingVertical: moderateScale(5),
+              flexDirection: 'row'
+            }}>
+            <Text
+              style={{
+                fontFamily: fontFamily.semiBold,
+                fontSize: textScale(18),
+                color: colors.blackColor,
+              }}>
+              MobileNo. -
+            </Text>
+            <View>
+              <Text
+                style={{
+                  top: moderateScale(3),
+                  fontFamily: fontFamily.semiBold,
+                  fontSize: textScale(16),
+                  color: colors.blueColor, left: 5
+                }}>
+                {medicalData.mobile}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flex: 0.6 }}>
+          <View
+            style={{
+              paddingHorizontal: moderateScale(20),
+              justifyContent: 'center',
+              paddingVertical: moderateScale(5),
+            }}>
+            <Text
+              style={{
+                fontFamily: fontFamily.semiBold,
+                fontSize: textScale(18),
+                color: colors.blackColor,
+              }}>
+              About
+            </Text>
+            <View>
+              <Text
+                style={{
+                  top: moderateScale(3),
+                  fontFamily: fontFamily.regular,
+                  fontSize: textScale(12),
+                  color: colors.blackColor,
+                }}>
+                {medicalData.description ? medicalData.description :
+                  `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+      when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
+      but also the leap into electronic typesetting, remaining essentially unchanged.`}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              paddingHorizontal: moderateScale(20),
+              justifyContent: 'center',
+              paddingVertical: moderateScale(5),
+            }}>
+            <Text
+              style={{
+                fontFamily: fontFamily.semiBold,
+                fontSize: textScale(18),
+                color: colors.blackColor,
+              }}>
+              Info
+            </Text>
+
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    height: 8,
+                    width: 8,
+                    borderRadius: 8,
+                    backgroundColor: colors.blackColor,
+                    alignSelf: 'center',
+                  }}
+                />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.medium,
+                    fontSize: textScale(16),
+                    color: colors.blackColor,
+                    left: moderateScale(5),
+                  }}>
+                  GST Number
+                </Text>
+              </View>
+              <AntDesign
+                name="checkcircle"
+                color={colors.blueColor}
+                size={15}
+                style={{ alignSelf: 'center' }}
+              />
+            </View>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    height: 8,
+                    width: 8,
+                    borderRadius: 8,
+                    backgroundColor: colors.blackColor,
+                    alignSelf: 'center',
+                  }}
+                />
+                <Text
+                  style={{
+                    fontFamily: fontFamily.medium,
+                    fontSize: textScale(16),
+                    color: colors.blackColor,
+                    left: moderateScale(5),
+                  }}>
+                  Drug license number
+                </Text>
+              </View>
+              <AntDesign
+                name="checkcircle"
+                color={colors.blueColor}
+                size={15}
+                style={{ alignSelf: 'center' }}
+              />
+            </View>
+          </View>
+
+          {/* <TouchableOpacity
+            style={styles.btn}
+            activeOpacity={0.7}
+            onPress={() =>
+              props?.navigation?.navigate(
+                navigationStrings.UPLOAD_PRESCIPTION,
+                { id: id },
+              )
+            }>
+            <Text style={styles.btnText}>
+              Place an order
+            </Text>
+          </TouchableOpacity> */}
+        </View>
+      </View>
     </WrapperContainer>
   );
 };
 
-export default doctor;
+export default DoctorScreen;
 
 const styles = StyleSheet.create({
-  tabColor: {
-    backgroundColor: colors.whiteColor,
-    paddingHorizontal: moderateScale(15),
-    paddingVertical: moderateScale(8),
-    marginLeft: moderateScale(10),
-    borderRadius: moderateScale(8),
-    shadowColor: colors.blackColor,
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 7.68,
-    elevation: 8,
+  mainSwiper: {
+    flex: 0.25,
   },
-  flatListView: {
-    paddingVertical: moderateScaleVertical(10),
-    backgroundColor: '#F2F2F4',
-    justifyContent: 'space-around',
-    top: moderateScale(15),
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.21,
-    shadowRadiusBottom: 7.68,
-    elevation: 5,
+  swiperActiveDot: {
+    backgroundColor: colors.blueColor,
+    width: moderateScale(25),
+    height: moderateScale(8),
+    borderRadius: moderateScale(4),
+    margin: moderateScale(2),
   },
-  tabImageStyle: {
+  swiperDot: {
+    backgroundColor: colors.grayColor02,
+    width: moderateScale(25),
+    height: moderateScale(8),
+    borderRadius: moderateScale(4),
+    margin: moderateScale(2),
+  },
+  swiperImage1: {
+    height: moderateScale(110),
+    width: moderateScale(110),
     alignSelf: 'center',
-    height: moderateScale(35),
-    width: moderateScale(35),
+    borderRadius: moderateScale(55),
   },
-  tabImageText: {
-    fontSize: textScale(12),
-    fontFamily: fontFamily.bold,
-    alignSelf: 'center',
-    top: moderateScale(10),
-    color: colors.blackColor,
-  },
-  headerText: {
-    color: colors.blackColor,
-    fontSize: textScale(12),
-    fontFamily: fontFamily.semiBold,
-  },
-  searchBarmainView: {
-    borderColor: colors.blueColor,
-    borderWidth: 1,
-    width: '90%',
-    flexDirection: 'row',
-    marginHorizontal: moderateScale(15),
-    justifyContent: 'space-between',
-    paddingHorizontal: moderateScale(10),
-    borderRadius: moderateScale(8),
-    top: moderateScale(3),
-  },
-  cardView: {
-    backgroundColor: colors.whiteColor,
-    paddingVertical: moderateScaleVertical(7),
-    borderRadius: moderateScale(8),
-    width: moderateScale(180),
-    marginTop: moderateScale(15),
-    marginHorizontal: moderateScale(8),
-    marginBottom: moderateScale(35),
-    shadowColor: colors.blackColor,
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.21,
-    shadowRadiusBottom: 7.68,
-    elevation: 5,
-  },
-  HeaderContainer: {
-    width: '100%',
+  btn: {
     justifyContent: 'center',
-    flexDirection: 'row',
-    marginHorizontal: moderateScale(10),
-    marginVertical: moderateScaleVertical(20),
-    alignItems: 'center',
-    marginTop: moderateScale(10),
+    bottom: moderateScale(10),
+    alignSelf: 'center',
+    top: moderateScale(30),
   },
+  btnText: {
+    paddingHorizontal: moderateScale(20),
+    paddingVertical: moderateScaleVertical(10),
+    backgroundColor: colors.blueColor,
+    borderRadius: moderateScale(10),
+    color: colors.whiteColor,
+    fontSize: moderateScale(16),
+  }
 });

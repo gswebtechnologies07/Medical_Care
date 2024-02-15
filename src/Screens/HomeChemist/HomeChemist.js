@@ -125,7 +125,6 @@ const HomeChemist = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [pendingOrder, setPendingOrder] = useState('');
-  // console.log(pendingOrder, 'pendingOrderpendingOrder')
   const [completeOrder, setCompleteOrder] = useState('');
   console.log(completeOrder, 'completeOrdercompleteOrder');
 
