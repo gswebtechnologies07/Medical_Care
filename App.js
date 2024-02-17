@@ -11,7 +11,7 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
     // }, []);
-    const delay = 5000;
+    const delay = 1000;
     const timeoutId = setTimeout(() => {
       console.log('Navigating_to_login_screen_after_5_seconds');
     }, delay);

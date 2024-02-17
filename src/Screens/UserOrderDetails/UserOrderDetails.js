@@ -8,10 +8,11 @@ import {
   ScrollView,
   TouchableHighlight,
   Modal,
+  ActivityIndicator
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import HeaderComp from '../../Components/HeaderComp';
-import { height, moderateScale, textScale } from '../../styles/responsiveSize';
+import { height, moderateScale, textScale, width } from '../../styles/responsiveSize';
 import fontFamily from '../../styles/fontFamily';
 import colors from '../../styles/colors';
 import WrapperContainer from '../../Components/WrapperContainer';
@@ -25,24 +26,22 @@ const UserOrderDetails = props => {
   const navigation = useNavigation();
 
   const image = props?.route?.params?.item?.prescription;
+  const bill_file = props?.route?.params?.item?.bill_file;
   const orderDetails = props?.route?.params?.item?.order_detail;
   const totalAmount = props?.route?.params?.item?.total_amount;
   const order_status = props?.route?.params?.item?.order_status;
   const Id = props?.route?.params?.item?.id;
-  // const paymentStatus = props?.route?.params?.item?.payment_status;
-  // const OrderStatus = props?.route?.params?.item?.order_status;
   const userName = props?.route?.params?.item?.user_name;
   const userEmail = props?.route?.params?.item?.user_email;
   const mobile = props?.route?.params?.item?.user_mobile;
   const [orderId, setOrderId] = useState(null);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
-  const [buttonPressed, setButtonPressed] = useState(false);
 
   const [isPaymentComplete, setIsPaymentComplete] = useState(
     props?.route?.params?.item?.payment_status === 'paid',
   );
-  const [isOrderStatusModalVisible, setOrderStatusModalVisible] =
-    useState(false);
+  const [isOrderStatusModalVisible, setOrderStatusModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(
     props?.route?.params?.item?.payment_status,
   );
@@ -75,14 +74,20 @@ const UserOrderDetails = props => {
     toggleOrderStatusModal();
   };
   const updateOrderDetails = () => {
+    setLoading(true);
     const item = {
       order_status: orderstatus,
     };
     dispatch(EditOrderPlaceAction(item, Id)).then(async response => {
+      console.log(response, 'responseresponseEditOrder')
       if (response?.message === "Order Update Successfully") {
         props?.navigation?.goBack();
       }
       console.log('Response_after_updating_order_details:', response);
+    }).catch(error => {
+      console.error('Error updating order details:', error);
+    }).finally(() => {
+      setLoading(false);
     });
   };
 
@@ -227,7 +232,7 @@ const UserOrderDetails = props => {
 
 
 
-        <View style={{ height: height / 7 }}>
+        <View style={{ height: height / 7.5 }}>
           <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.paymentStatusText}>Order Status</Text>
             <TouchableOpacity onPress={toggleOrderStatusModal}>
@@ -266,6 +271,28 @@ const UserOrderDetails = props => {
           </View>
         </View>
 
+
+        <View style={{ height: height / 1.8 }}>
+          <View style={{ paddingHorizontal: moderateScale(20) }}>
+            <Text style={styles.UploadPrecriptionView}>
+              Bill
+            </Text>
+            <View style={[styles.imgView, { height: moderateScale(363) }]}>
+              <Image
+                source={{
+                  uri: `https://demogswebtech.com/medicalcare/public/images/order/${bill_file}`,
+                }}
+                style={{
+                  // height: moderateScale(230),
+                  height: height / 2.1, width: width / 1.11,
+                  borderRadius: moderateScale(10),
+                }}
+              />
+            </View>
+          </View>
+        </View>
+
+
         <View style={{ height: height / 10 }}>
           <TouchableOpacity
             style={{
@@ -278,18 +305,18 @@ const UserOrderDetails = props => {
               style={{
                 paddingHorizontal: moderateScale(20),
                 paddingVertical: moderateScale(10),
-                // backgroundColor: colors.blueColor,
-                backgroundColor: buttonPressed
-                  ? colors.grayColor
-                  : colors.blueColor,
+                backgroundColor: colors.blueColor,
                 borderRadius: moderateScale(10),
                 color: colors.whiteColor,
                 fontSize: moderateScale(16),
               }}
               onPress={() => updateOrderDetails()}
-              onPressIn={() => setButtonPressed(true)}
-              onPressOut={() => setButtonPressed(false)}>
-              Update Order
+            >
+              {loading ? (
+                <ActivityIndicator color={colors.whiteColor} />
+              ) : (
+                'Update Order'
+              )}
             </Text>
           </TouchableOpacity>
         </View>

@@ -8,13 +8,17 @@ import {
   ScrollView,
   Image,
   Modal,
+  Alert,
   ActivityIndicator
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import HeaderComp from '../../Components/HeaderComp';
-import { height, moderateScale, textScale } from '../../styles/responsiveSize';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { height, moderateScale, textScale, width } from '../../styles/responsiveSize';
 import fontFamily from '../../styles/fontFamily';
 import colors from '../../styles/colors';
+import ImagePicker from 'react-native-image-crop-picker';
+import { androidCameraPermission } from '../../../permissions';
 import { useDispatch } from 'react-redux';
 import { EditOrderPlaceAction } from '../../redux/Action/OrderPlaceAction';
 
@@ -34,12 +38,13 @@ const ChemistOrderDetails = (props) => {
   console.log(order_status, 'order_status')
   const Id = props?.route?.params?.data?.id;
   const total_amount = props?.route?.params?.data?.total_amount;
-  // const LoginData = useSelector((state) => state?.LoginReducer?.Login);
-  // console.log(LoginData, 'ididid');
   const [loading, setLoading] = useState(false);
   const [orderStatus, setOrderStatus] = useState('pending');
   const [isOrderStatusModalVisible, setOrderStatusModalVisible] =
     useState(false);
+
+  const [gallary, setGallary] = useState('')
+  const [image, setImage] = useState('')
 
   useEffect(() => {
     setOrderStatus(order_status);
@@ -89,14 +94,95 @@ const ChemistOrderDetails = (props) => {
     console.log('Updated_Order_Status:', updatedOrderStatus);
   };
 
+
+
+  const onSelectImage = async () => {
+    const permissionStatus = await androidCameraPermission()
+    if (permissionStatus || Platform.OS == 'android') {
+      Alert.alert(
+        'Profile Picture',
+        'Choose an option',
+        [
+          { text: 'Gallery', onPress: onGallery },
+          { text: 'Camera', onPress: onCamera },
+          { text: 'Cancel', onPress: () => { } }
+        ]
+      )
+    }
+  }
+
+  const onGallery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      if (image) {
+        console.log("bill_file", image)
+        let filename = image.path.substring(image.path.lastIndexOf('/') + 1)
+        let uploadFile = {
+          type: image.mime,
+          uri: image.path,
+          name: filename
+        }
+        console.log(uploadFile, 'uploadFileuploadFileuploadFile')
+        const img = image?.path
+        console.log("imgggg", img);
+        setGallary(uploadFile)
+        setImage(img)
+      }
+    });
+  };
+
+  const onCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      if (image) {
+        console.log("bill_file", image);
+        let filename = image.path.substring(image.path.lastIndexOf('/') + 1);
+        let uploadFile = {
+          type: image.mime,
+          uri: image.path,
+          name: filename
+        };
+        console.log(uploadFile, 'uploadFileuploadFileuploadFile');
+        const img = image?.path;
+        console.log("imgggg", img);
+        setGallary(uploadFile);
+        setImage(img);
+      }
+    });
+  };
+
   const updateOrderDetails = () => {
     setLoading(true);
-    const data = {
-      total_amount: state.amount,
-      payment_status: paymentStatus,
-    };
+    const formData = new FormData();
 
-    dispatch(EditOrderPlaceAction(data, Id))
+    if (gallary && gallary.uri) { // Check if gallary and gallary.uri are defined
+      formData.append('bill_file', {
+        uri: gallary.uri, // Use gallary.uri here
+        type: gallary.type,
+        name: gallary.name,
+      });
+    } else {
+      console.error('URI_is_undefined_or_null_in_items', gallary);
+      setLoading(false);
+      return;
+    }
+
+    formData.append('total_amount', state.amount,);
+    formData.append('payment_status', paymentStatus);
+    // const data = {
+    //   total_amount: state.amount,
+    //   payment_status: paymentStatus,
+    // };
+
+    console.log(formData, 'datadata');
+
+    dispatch(EditOrderPlaceAction(formData, Id))
       .then(async (response) => {
         console.log('Order_details_updated_successfully:', response);
         if (response?.message === "Order Update Successfully") {
@@ -110,10 +196,12 @@ const ChemistOrderDetails = (props) => {
       })
       .catch((error) => {
         console.error('Error updating order details:', error);
-      }).finally(() => {
-        setLoading(false); // Set loading back to false regardless of success or failure
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -208,7 +296,7 @@ const ChemistOrderDetails = (props) => {
           </View>
         </View>
 
-        <View style={{ height: height / 7 }}>
+        <View style={{ height: height / 7.5 }}>
           <View style={{ paddingHorizontal: moderateScale(20) }}>
             <Text style={styles.order_statusText}>Order Status</Text>
             <TouchableOpacity onPress={toggleOrderStatusModal}>
@@ -224,6 +312,17 @@ const ChemistOrderDetails = (props) => {
             </TouchableOpacity>
           </View>
         </View>
+
+
+        <View style={{ height: height / 1.8, paddingHorizontal: moderateScale(20) }}>
+          <Text style={{ fontSize: textScale(20), fontFamily: fontFamily.bold, color: colors.blackColor }}>Upload Bill</Text>
+          <View style={{ justifyContent: 'center', height: moderateScale(363), backgroundColor: colors.grayColor03, top: moderateScale(10), borderRadius: moderateScale(10) }}>
+            <TouchableOpacity style={{ alignSelf: "center", alignItems: 'center' }} onPress={() => onSelectImage()}>
+              {!image ? <AntDesign name="camera" color={colors.grayColor} size={50} /> : <Image source={{ uri: image }} style={{ height: height / 2.1, width: width / 1.12, borderRadius: 10 }} />}
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={{ height: height / 10 }}>
           <TouchableOpacity
             style={{
@@ -244,9 +343,9 @@ const ChemistOrderDetails = (props) => {
               onPress={() => updateOrderDetails()}
             >
               {loading ? (
-                <ActivityIndicator color={colors.whiteColor} /> // Loader
+                <ActivityIndicator color={colors.whiteColor} />
               ) : (
-                'Update Order' // Text
+                'Update Order'
               )}
             </Text>
           </TouchableOpacity>
